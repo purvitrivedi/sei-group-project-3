@@ -1,0 +1,26 @@
+{
+  "name": "sei-group-project-3",
+  "version": "1.0.0",
+  "description": "Main repo for SEI Group Project 3 Andy Bradshaw Purvi Trivedi Kuriko IWAI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purvitrivedi/sei-group-project-3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/purvitrivedi/sei-group-project-3/issues"
+  },
+  "homepage": "https://github.com/purvitrivedi/sei-group-project-3#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.14",
+    "nodemon": "^2.0.4"
+  }
+}
