@@ -16,20 +16,20 @@ Kuriko IWAI
 - Hikes
 
 ## Pages
-Home - has button in the middle 
+<!-- Home - has button in the middle 
 Hike Index - list of filtered 
 Show Hike
 User Profile
 Login/Register
 Group index
-Group Profile
+Group Profile -->
 
 ### Third party Info
 - Fake users ?
 - Hikes ?
 
 ### Models
-Users
+User
 - username
 - email
 - password
@@ -39,15 +39,15 @@ Users
 - favourited hikes - embedded
 (group members, user added images, user created hike)
 
-Groups
+Group
 - group name
 - group members - referenced (to user)
-- list of events/meetups - form (add new event - date, time, selection of hikes)
+- events/meetups - form (add new event - date, time, selection of hikes) - referenced
 - imageHeader - 
 - user added images - embedded
 - group messages - embedded
 
-Hikes
+Hike
 - name
 - location (lat/long)
 - country
@@ -90,3 +90,21 @@ Hikes
 
 
 ### Routes
+
+/hikes - index page GET/POST
+/hikes/:id - hike show page GET/PUT/DELETE
+/hikes/:id/comments - hike comments page POST
+/hikes/:id/comments/:id - delete comment DELETE/PUT
+
+/register - POST
+/login - POST
+
+/groups groups index page GET/POST
+/groups/:id group profile page GET/PUT/DELETE
+/groups/:id/messages - groups messages page POST
+/groups/:id/messages/:id - delete/edit messages DELETE/PUT
+/groups/:id/events index and create events GET/POST    
+/groups/:id/events/:id GET/PUT/DELETE
+
+/profiles  idex of users GET
+/profiles/:username users profile pages GET/POST/PUT/DELETE
