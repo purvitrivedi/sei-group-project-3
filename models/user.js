@@ -15,7 +15,7 @@ const completedHikesSchema = new mongoose.Schema({
 })
 
 const userSchema = new mongoose.Schema({
-  username: { Type: String, required: true, unique: true, maxlength: 50 },
+  username: { type: String, required: true, unique: true, maxlength: 50 },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   fullName: { type: String },
