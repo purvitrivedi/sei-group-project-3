@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-console.log('hello world routes')
-=======
 const router = require('express').Router()
 const hikes = require('../controllers/hikes')
 const auth = require('../controllers/auth')
@@ -104,4 +101,3 @@ router.route('/profiles/:id/completed/compId')
 
 
 module.exports = router
->>>>>>> 5609fb9e3338afe034c7d6146734cc56bc0d1095
