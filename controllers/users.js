@@ -52,12 +52,12 @@ async function userUpdate(req, res, next) {
 }
 
 
-// * URL: /profiles/:userId/favourites
+// * URL: /profiles/:id/favourites
 
 async function userFavoriteHikeCreate(req, res, next) {
   try {
     req.body.user = req.currentUser
-    const userId = req.params.userId
+    const userId = req.params.id
 
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)

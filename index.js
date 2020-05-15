@@ -19,7 +19,7 @@ mongoose.connect(dbURI,
 
 app.use(bodyParser.json())
 
-// app.use('/', router)
+app.use('/', router)
 
 app.use(errorHandler)
 
