@@ -14,7 +14,6 @@ async function userIndex(req, res, next) {
 }
 
 
-
 //* for URL: profiles/:id --
 
 async function userShow(req, res, next) {
@@ -150,11 +149,3 @@ module.exports = {
   createCompHike: userCompletedHikeCreate,
   deleteCompHike: userCompletedHikeDelete
 }
-
-
-
-
-
-
-
-
