@@ -92,7 +92,7 @@ router.route('/profiles/:id')
 router.route('/profiles/:id/favorites')
   .post(secureRoute, users.createFavHike)
 
-router.route('/profiles/:id/favorites/favId')
+router.route('/profiles/:id/favorites/:favId')
   .delete(secureRoute, users.deleteFavHike)
 
 

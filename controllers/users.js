@@ -20,8 +20,6 @@ async function userShow(req, res, next) {
   const userId = req.params.id
   try {
     const user = await (await User.findById(userId)
-      .populate('favoritedHikes')
-      .populate('completedHikes')
     )
     if (!user) throw new Error(notFound)
     res.status(200).json(user)
@@ -38,8 +36,10 @@ async function userUpdate(req, res, next) {
   try {
     const userToUpdate = await User.findById(userId)
     if (!userToUpdate) throw new Error(notFound)
+    
 
-    if (!userToUpdate.user.equals(req.currentUser._id)) throw new Error(unauthorized)
+    if (!userToUpdate.equals(req.currentUser._id)) throw new Error(unauthorized)
+    console.log('this')
 
     Object.assign(userToUpdate, req.body)
     await userToUpdate.save()
@@ -49,7 +49,6 @@ async function userUpdate(req, res, next) {
     next(err)
   }
 }
-
 
 // * URL: /profiles/:id/favourites
 
@@ -76,14 +75,17 @@ async function userFavoriteHikeDelete(req, res, next) {
   try {
     const userId = req.params.id
     const favId = req.params.favId
-
+    console.log(favId)
+    
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)
 
-    const favHikeToRemove = user.favoritedHike.id(favId)
+    const favHikeToRemove = user.favoritedHikes.id(favId)
     if (!favHikeToRemove) throw new Error(notFound)
 
-    if (!favHikeToRemove.user.equals(req.currentUser._id)) throw new Error(unauthorized)
+    console.log('this')
+
+    if (!user.equals(req.currentUser._id)) throw new Error(unauthorized)
 
     await favHikeToRemove.remove()
     await user.save()
@@ -94,12 +96,12 @@ async function userFavoriteHikeDelete(req, res, next) {
 }
 
 
-// * URL: /profiles/:userId/completed
+// * URL: /profiles/:id/completed
 
 async function userCompletedHikeCreate(req, res, next) {
   try {
     req.body.user = req.currentUser
-    const userId = req.params.userId
+    const userId = req.params.id
 
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)
