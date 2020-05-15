@@ -17,20 +17,28 @@ const groupMessageSchema = new mongoose.Schema({
   timestamps: true
 })
 
-const userAddedGroupImageSchema = new mongoose.Schema({
+const userAddedImageSchema = new mongoose.Schema({
   images: { type: String, required: true },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
   timestamps: true
 })
 
+const groupMemberSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+}, {
+  timestamps: true
+})
+
+
 const groupSchema = new mongoose.Schema({
-  groupName: { type: String, required: true, unique: true },
-  groupMembers: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+  name: { type: String, required: true, unique: true },
+  createdMember: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+  members: [ groupMemberSchema ],
   headerImage: { type: String, required: true }, 
   description: { type: String, required: true, maxlength: 500 },
-  userAddedGroupImage: [ userAddedGroupImageSchema ],
-  groupMessage: [ groupMessageSchema ],
+  userAddedImages: [ userAddedImageSchema ],
+  messages: [ groupMessageSchema ],
   events: [ eventSchema ]
 }, {
   timestamps: true
