@@ -37,9 +37,9 @@ async function hikesCreate(req, res, next) {
 //* /hikes/:id
 
 async function hikesShow(req, res,next) {
-  const hikeId = req.params.index
+  const hikeId = req.params.id
   try {
-    const hike = await Hike.findById(hikeId).populate('user')
+    const hike = await Hike.findById(hikeId).populate('user').populate('reviews.user')
     if (!hike) throw new Error(notFound)
     res.status(200).json(hike)
   } catch (err) {
