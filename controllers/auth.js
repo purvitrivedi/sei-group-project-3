@@ -1,10 +1,38 @@
-console.log('hello auth controller')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const { secret } = require('../config/environment')
 
-// const User = require('../models/user')
+
+async function register(req, res) {
+  try {
+    const newUser = await User.create(req.body)
+    const token = jwt.sign({ sub: newUser._id }, secret, { expiresIn: '7 days' })
+    res.status(201).json({ message: `⛰️ Welcome ${newUser.username} ⛰️!`, token })
+  } catch (err) {
+    res.status(422).json(err)
+  }
+}
+
+async function login(req, res) {
+  try {
+    const user = await User.findOne({ email: req.body.email })
+    if (!user || !user.validatePassword(req.body.password)) {
+      throw new Error()
+    }
+
+    const token = jwt.sign({ sub: user._id }, secret, { expiresIn: '7 days' })
+
+    res.status(202).json({
+      message: `⛰️ Welcome back ${user.username} ⛰️`,
+      token
+    })
+  } catch (err) {
+    res.status(401).json({ message: 'Unauthorized' })
+  }
+}
 
 
-// async function require(req, res) {
-//   try {
-
-//   }
-// }
+module.exports = {
+  register,
+  login
+}
