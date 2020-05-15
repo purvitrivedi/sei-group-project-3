@@ -126,10 +126,12 @@ async function userCompletedHikeDelete(req, res, next) {
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)
 
+    console.log('this')
+
     const compHikeToRemove = user.completedHike.id(compId)
     if (!compHikeToRemove) throw new Error(notFound)
 
-    if (!compHikeToRemove.user.equals(req.currentUser._id)) throw new Error(unauthorized)
+    if (!user.equals(req.currentUser._id)) throw new Error(unauthorized)
 
     await compHikeToRemove.remove()
     await user.save()
