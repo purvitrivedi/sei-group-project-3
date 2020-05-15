@@ -21,7 +21,7 @@ const userAddedGroupImageSchema = new mongoose.Schema({
   images: { type: String, required: true },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
-  tipestamps: true
+  timestamps: true
 })
 
 const groupSchema = new mongoose.Schema({
