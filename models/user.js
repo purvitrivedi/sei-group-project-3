@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   fullName: { type: String },
   bio: { type: String },
   profileImage: { type: String },
-  favouritedHikes: [favoriteHikesSchema], 
+  favoritedHikes: [favoriteHikesSchema], 
   completedHikes: [completedHikesSchema]
 }
 )
