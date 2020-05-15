@@ -3,7 +3,7 @@ const app = express()
 const mongoose = require('mongoose')
 const { dbURI, port } = require('./config/environment')
 const bodyParser = require('body-parser')
-
+const errorHandler = require('./lib/errorHandler')
 const router = require('./config/routes')
 
 
@@ -20,6 +20,8 @@ mongoose.connect(dbURI,
 app.use(bodyParser.json())
 
 // app.use('/', router)
+
+app.use(errorHandler)
 
 
 app.listen(port, () => console.log(`Express is listening on port ${port}`))
