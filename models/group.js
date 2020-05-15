@@ -5,7 +5,8 @@ const eventSchema = new mongoose.Schema({
   endDate: { type: Date, required: true },
   description: { type: String, required: true },
   hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true },
-  participants: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+  participants: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  createdMember: { type: mongoose.Schema.ObjectId, ref: 'User' }
 }, {
   timestamps: true
 })

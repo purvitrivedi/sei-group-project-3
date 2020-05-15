@@ -47,29 +47,33 @@ router.route('/groups/:id')
   .put(secureRoute, groups.update)
   .delete(secureRoute, groups.delete)
 
+// useraddedimages
 router.route('/groups/:id/user-images')
   .post(secureRoute, groups.createGroupImage)
 
 router.route('/groups/:id/user-images/:userImageId')
   .delete(secureRoute, groups.deleteGroupImage)
 
+// messages
 router.route('/groups/:id/messages')
   .post(secureRoute, groups.createMessage)
 
 router.route('/groups/:id/messages/:messageId')
   .delete(secureRoute, groups.deleteMessage)
 
+// events
 router.route('/groups/:id/events')
   .post(secureRoute, groups.createEvent)
 
 router.route('/groups/:id/events/:eventId')
-  .delete(secureRoute, groups.deleteEvent)
   .put(secureRoute, groups.updateEvent)
+  .delete(secureRoute, groups.deleteEvent)
 
-router.route('groups/:id/members')
+// members
+router.route('/groups/:id/members')
   .post(secureRoute, groups.createMember)
 
-router.route('groups/:id/members/:memberId')
+router.route('/groups/:id/members/:memberId')
   .delete(secureRoute, groups.deleteMember)
 
 
@@ -85,7 +89,6 @@ router.route('/login')
 
 
 // * Users
-
 router.route('/profiles')
   .get(secureRoute, users.userIndex)
 
