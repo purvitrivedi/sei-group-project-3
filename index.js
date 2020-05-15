@@ -19,7 +19,7 @@ mongoose.connect(dbURI,
 
 app.use(bodyParser.json())
 
-app.use('/', router)
+// app.use('/', router)
 
 
 app.listen(port, () => console.log(`Express is listening on port ${port}`))
