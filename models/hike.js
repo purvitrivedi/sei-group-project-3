@@ -15,7 +15,8 @@ const reviewSchema = new mongoose.Schema({
 
 //user can rate the hike from 1 to 5
 const ratingSchema = new mongoose.Schema({
-  rating: { type: Number, required: true, min: 1, max: 5 }
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 })
 
 
