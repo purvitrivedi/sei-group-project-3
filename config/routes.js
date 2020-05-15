@@ -59,13 +59,20 @@ router.route('/groups/:id/messages')
 router.route('/groups/:id/messages/:messageId')
   .delete(secureRoute, groups.deleteMessage)
 
-
 router.route('/groups/:id/events')
   .post(secureRoute, groups.createEvent)
 
 router.route('/groups/:id/events/:eventId')
   .delete(secureRoute, groups.deleteEvent)
   .put(secureRoute, groups.updateEvent)
+
+router.route('groups/:id/members')
+  .post(secureRoute, groups.createMember)
+
+router.route('groups/:id/members/:memberId')
+  .delete(secureRoute, groups.deleteMember)
+
+
 
 
 //* auth
@@ -96,7 +103,7 @@ router.route('/profiles/:id/favorites/:favId')
 router.route('/profiles/:id/completed')
   .post(secureRoute, users.createCompHike)
 
-router.route('/profiles/:id/completed/compId')
+router.route('/profiles/:id/completed/:compId')
   .delete(secureRoute, users.deleteCompHike)
 
 

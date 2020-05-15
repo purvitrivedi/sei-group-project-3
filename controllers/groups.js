@@ -36,7 +36,7 @@ async function groupsShow(req, res, next) {
 // URL api/groups
 async function groupsCreate(req, res, next) {
   try {
-    req.body.user = req.currentUser
+    req.body.createdMember = req.currentUser
     const createdGroup = await Group.create(req.body)
     res.status(201).json(createdGroup)
   } catch (err) {
@@ -49,7 +49,7 @@ async function groupsCreate(req, res, next) {
 async function groupsUpdate(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await (await Group.findById(groupId))
+    const group = await Group.findById(groupId)
       .populate('members')
       .populate('createdMember')
       .populate('messages')
@@ -240,6 +240,52 @@ async function groupsEventDelete(req, res, next) {
   }
 }
 
+
+//* Gr memebers
+// POST
+// URL = api/groups/:id/members
+async function groupsMemberCreate(req, res, next) {
+  try {
+    req.body.user = req.currentUser
+    const groupId = req.params.id
+    const group = await Group.findById(groupId)
+
+    if (!group) throw new Error(notFound)
+    group.members.push(req.body)
+    await group.save()
+    res.status(201).json(group)
+  } catch (err) {
+    next(err)
+  }
+}
+
+// DELETE
+// URL = api/groups/:id/members/memberId
+async function groupsMemberDelete(req, res, next) {
+  try {
+    // find group
+    const groupId = req.params.id
+    const memberId = req.params.memberId
+    const group = await Group.findById(groupId)
+    if (!group) throw new Error(notFound)
+
+    // delete
+    const memberToRemove = group.messages.id(memberId)
+    const adminId = group.createdMember._id
+    if (!memberToRemove) throw new Error(notFound)
+    if (!memberToRemove.user.equals(req.currentUser._id) 
+      || !adminId.equals(req.currentUser._id)) { // admin has right to del msg
+      throw new Error(unauthorized) 
+    }
+    await memberToRemove.remove()
+    await group.save()
+    res.sendStatus(204).json(group)
+  } catch (err) {
+    next(err)
+  }
+}
+
+
 module.exports = {
   index: groupsIndex,
   show: groupsShow,
@@ -258,5 +304,9 @@ module.exports = {
   // events
   createEvent: groupsEventCreate,
   updateEvent: groupsEventUpdate,
-  deleteEvent: groupsEventDelete
+  deleteEvent: groupsEventDelete,
+
+  // members
+  createMember: groupsMemberCreate,
+  deleteMember: groupsMemberDelete
 }
