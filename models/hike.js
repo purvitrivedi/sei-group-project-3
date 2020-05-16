@@ -51,6 +51,13 @@ hikeSchema
     foreignField: 'completedHikes'
   })
 
+hikeSchema
+  .virtual('usersFavorited', {
+    ref: 'User',
+    localField: '_id',
+    foreignField: 'favoritedHikes'
+  })
+
 hikeSchema.plugin(require('mongoose-unique-validator'))
 
 module.exports = mongoose.model('Hike', hikeSchema)

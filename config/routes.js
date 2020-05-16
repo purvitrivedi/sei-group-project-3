@@ -26,7 +26,7 @@ router.route('/hikes/:id/reviews/:reviewId')
 router.route('/hikes/:id/user-images')
   .post(secureRoute, hikes.createUserImage)
 
-router.route('/hikes/:id/user-images/:userImageId')
+router.route('/hikes/:id/user-images/:imageId')
   .delete(secureRoute, hikes.deleteUserImage)
 
 router.route('/hikes/:id/ratings')

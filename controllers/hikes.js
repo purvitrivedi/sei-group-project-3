@@ -37,9 +37,12 @@ async function hikesCreate(req, res, next) {
 //* /hikes/:id
 
 async function hikesShow(req, res,next) {
-  const hikeId = req.params.index
+  const hikeId = req.params.id
   try {
-    const hike = await Hike.findById(hikeId).populate('user')
+    const hike = await Hike.findById(hikeId)
+      .populate('user')
+      .populate('reviews.user')
+      .populate('imagesUser.user')
     if (!hike) throw new Error(notFound)
     res.status(200).json(hike)
   } catch (err) {
@@ -157,7 +160,7 @@ async function hikesUserImageDelete(req, res, next) {
     const hike = await Hike.findById(hikeId)
     if (!hike) throw new Error(notFound)
 
-    const imageToRemove = hike.images.id(imageId)
+    const imageToRemove = hike.imagesUser.id(imageId)
     if (!imageToRemove) throw new Error(notFound)
     if (!imageToRemove.user.equals(req.currentUser._id)) throw new Error(unauthorized)
     await imageToRemove.remove()
@@ -202,7 +205,7 @@ async function hikesUserRatingUpdate(req, res, next) {
     if (!ratingToUpdate) throw new Error(notFound)
     if (!ratingToUpdate.user.equals(req.currentUser._id)) throw new Error(unauthorized)
     Object.assign(ratingToUpdate, req.body)
-    await ratingToUpdate.save()
+    await hike.save()
     res.status(202).json(ratingToUpdate)
   } catch (err) {
     next(err)
