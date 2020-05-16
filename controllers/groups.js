@@ -55,16 +55,18 @@ async function groupsUpdate(req, res, next) {
   try {
     const groupId = req.params.id
     const group = await Group.findById(groupId)
-      .populate('members')
+      .populate('members.user')
       .populate('createdMember')
-      .populate('messages')
-      .populate('userAddedImages')
-      .populate('events')
+      .populate('messages.user')
+      .populate('userAddedImages.user')
+      // .populate('events.hike')
+      .populate('events.participants')
+      .populate('events.createdMember')
     if (!group) throw new Error(notFound)
     if (!group.createdMember.equals(req.currentUser._id)) throw new Error(unauthorized)
     Object.assign(group, req.body)
     await group.save()
-    res.status(202).json(`Edited: ${group}`)
+    res.status(202).json(group)
   } catch (err) {
     next(err)
   }
