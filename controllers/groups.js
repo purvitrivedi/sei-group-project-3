@@ -27,7 +27,7 @@ async function groupsShow(req, res, next) {
       .populate('createdMember')
       .populate('messages.user')
       .populate('userAddedImages.user')
-      .populate('events.hike')
+      // .populate('events.hike')
       .populate('events.participants')
       .populate('events.createdMember')
     if (!group) throw new Error(notFound)
@@ -86,21 +86,20 @@ async function groupsDelete(req, res, next) {
 }
 
 
-//! --------- test again from here !!
 
 //* UserAddedImages
 // POST
-// URL = api/groups/:id/userImages
+// URL = api/groups/:id/user-images
 async function userAddedImageCreate(req, res, next) {
   try {
-    req.body.user = req.currentUser
     const groupId = req.params.id
     const group = await Group.findById(groupId).populate('userAddedImages.user')
     if (!group) throw new Error(notFound)
 
+    req.body.user = req.currentUser
     const adminId = group.createdMember._id
-    if (!group.members.some(member => member.user._id.toString() === req.body.user._id.toString())
-      && !adminId.equals(req.body.user._id) ) {
+    if (!group.members.some(member => member.user._id.equals(req.body.user._id))
+      && !adminId.equals(req.body.user._id) ) { 
       throw new Error(unauthorized)
     } // only group members or admin can add imgs
 
@@ -113,7 +112,7 @@ async function userAddedImageCreate(req, res, next) {
 }
 
 // DELETE
-// URL = api/groups/:id/userImages/:userImageId
+// URL = api/groups/:id/user-images/:userImageId
 async function userAddedImageDelete(req, res, next) {
   try {
     // find group
@@ -144,14 +143,14 @@ async function userAddedImageDelete(req, res, next) {
 // URL = api/groups/:id/messages
 async function groupsMessageCreate(req, res, next) {
   try {
-    req.body.user = req.currentUser
     const groupId = req.params.id
     const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
  
+    req.body.user = req.currentUser
     const adminId = group.createdMember._id
-    if (!group.members.some(member => member.user._id.toString() === req.body.user._id.toString())
-      && (adminId.toString() !== req.body.user._id.toString()) ) {
+    if (!group.members.some(member => member.user._id.equals(req.body.user._id))
+      && !adminId.equals(req.body.user._id) ) {
       throw new Error(unauthorized)
     } // only group members or admin can send msg
 
@@ -167,21 +166,20 @@ async function groupsMessageCreate(req, res, next) {
 // URL = api/groups/:id/messages/:messageId
 async function groupsMessageDelete(req, res, next) {
   try {
-    // find group
     const groupId = req.params.id
     const messageId = req.params.messageId
     const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
 
-    // delete
     const messageToRemove = group.messages.id(messageId)
     if (!messageToRemove) throw new Error(notFound)
 
+    req.body.user = req.currentUser
     const adminId = group.createdMember._id
-    if ((messageToRemove.user.toString() !== req.currentUser._id.toString())
-      && (adminId.toString() !== req.params.id.toString()) ) {
-      throw new Error(unauthorized) 
-    } // group admin or msg creator can delete
+    if (!group.members.some(member => member.user._id.equals(req.body.user._id))
+      && !adminId.equals(req.body.user._id) ) {
+      throw new Error(unauthorized)
+    } // only group members or admin can delete msg
 
     await messageToRemove.remove()
     await group.save()
@@ -199,15 +197,16 @@ async function groupsEventCreate(req, res, next) {
     const groupId = req.params.id
     const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
-    if (group.events.some( event =>  event._id === req.body._id)) throw new Error('Already exist') //avoid double reg.
 
-    const adminId = group.createdMember._id
-    if (!group.members.some( member => member.user._id.toString() === req.currentUser.toString())
-      && adminId.toString() !== req.currentUser.toString()) { 
-      throw new Error(unauthorized) 
-    }// only group members can create events
-    
+    if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name
+
     req.body.createdMember = req.currentUser
+    const adminId = group.createdMember._id
+    if (!group.members.some(member => member.user._id.equals(req.body.createdMember._id))
+      && !adminId.equals(req.body.createdMember._id) ) {
+      throw new Error(unauthorized)
+    } // only group members or admin can send msg
+
     group.events.push(req.body)
     await group.save()
     res.status(201).json(group)
@@ -216,26 +215,29 @@ async function groupsEventCreate(req, res, next) {
   }
 }
 
-// ! PUT (add participants)
+// PUT
 // URL = api/groups/:id/events/:eventId
 async function groupsEventUpdate(req, res, next) {
   try {
-    // find group
     const groupId = req.params.id
-    const eventId = req.params.eventId
     const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
 
-    // update
+    const eventId = req.params.eventId
     const eventToUpdate = group.events.id(eventId)
-    const adminId = group.createdMember._id
- 
     if (!eventToUpdate) throw new Error(notFound)
+
+    const adminId = group.createdMember._id
     if (!eventToUpdate.createdMember._id.equals(req.currentUser._id)
       && !adminId.equals(req.currentUser._id)) { // admin has right to update
       throw new Error(unauthorized) 
     }
 
+    if (req.body.participants
+      && !group.members.some( member => member.user._id.equals(req.body.participants._id)) ) {
+      throw new Error('Participant need to join the group')
+    } // only group members can participate events
+    
     Object.assign(eventToUpdate, req.body)
     await group.save()
     res.status(202).json(group)
@@ -273,21 +275,18 @@ async function groupsEventDelete(req, res, next) {
 
 
 //* Group memebers
-// POST //!完成
+// POST
 // URL = api/groups/:id/members
 async function groupsMemberCreate(req, res, next) {
   try {
-    req.body.user = req.currentUser
-
     const groupId = req.params.id
-    const group = await Group.findById(groupId)
+    const group = await (await Group.findById(groupId)).populate('members.user')
     if (!group) throw new Error(notFound)
 
     const adminId = group.createdMember._id
-    if (group.members.find( member =>  member.user.toString() === req.body.user._id.toString())
-      || adminId.toString() !== req.body.user._id.toString() ) {
-      throw new Error('Already exist') 
-    }//avoid double reg.
+    if (!req.currentUser._id.equals(adminId)) req.body.user = req.currentUser //admin can add members
+
+    if (group.members.some( member =>  member.user._id.equals(req.body.user._id))) throw new Error('Already exist') //avoid double reg.
 
     group.members.push(req.body)
     await group.save()
@@ -297,7 +296,7 @@ async function groupsMemberCreate(req, res, next) {
   }
 }
 
-// DELETE //!完成
+// DELETE
 // URL = api/groups/:id/members/memberId
 async function groupsMemberDelete(req, res, next) {
   try {
