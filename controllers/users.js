@@ -19,8 +19,7 @@ async function userIndex(req, res, next) {
 async function userShow(req, res, next) {
   const userId = req.params.id
   try {
-    const user = await (await User.findById(userId)
-    )
+    const user = await User.findById(userId).populate('completedHikes.hike').populate('favoritedHikes.hike')
     if (!user) throw new Error(notFound)
     res.status(200).json(user)
   } catch (err) {
@@ -36,10 +35,9 @@ async function userUpdate(req, res, next) {
   try {
     const userToUpdate = await User.findById(userId)
     if (!userToUpdate) throw new Error(notFound)
-    
+
 
     if (!userToUpdate.equals(req.currentUser._id)) throw new Error(unauthorized)
-    console.log('this')
 
     Object.assign(userToUpdate, req.body)
     await userToUpdate.save()
@@ -89,7 +87,7 @@ async function userFavoriteHikeDelete(req, res, next) {
 
     await favHikeToRemove.remove()
     await user.save()
-    res.status(201).json(user)
+    res.status(204).json(user)
   } catch (err) {
     next(err)
   }
