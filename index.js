@@ -5,6 +5,7 @@ const { dbURI, port } = require('./config/environment')
 const bodyParser = require('body-parser')
 const errorHandler = require('./lib/errorHandler')
 const router = require('./config/routes')
+const logger = require('./lib/logger')
 
 
 mongoose.connect(dbURI,
@@ -18,6 +19,8 @@ mongoose.connect(dbURI,
 
 
 app.use(bodyParser.json())
+
+app.use(logger)
 
 app.use('/', router)
 
