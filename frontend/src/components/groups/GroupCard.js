@@ -22,7 +22,7 @@ class GroupCard extends React.Component {
               <div class="media-content">
                 <div class="content">
                   <p>
-                    <strong>{group.createdMember.username}</strong> <small>{group.createdMember.email}</small>
+                    <strong>{group.createdMember.username.toUpperCase()}</strong> <small>{group.createdMember.email}</small>
                     <br />
                     {group.createdMember.bio}
                   </p>
