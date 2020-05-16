@@ -6,22 +6,30 @@ import { isAuthenticated, logout } from '../../lib/auth'
 
 class Navbar extends React.Component{
   state = { isOpen: false }
+
+
   handleToggle = () => {
     this.setState({ isOpen: !this.state.isOpen })
   }
+
+
   handleLogout = () => {
     logout()
     this.props.history.push('/')
   }
+
+
   componentDidUpdate(prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.setState({ isOpen: false })
     }
   }
+
+
   render() {
-    const { isOpen } = this.state
+    // const { isOpen } = this.state
     return (
-      <nav className="navbar is-dark">
+      <nav className="navbar is-clear">
         <div className="container">
             <div className="navbar-end">
               <Link to="/hikes" className="navbar-item">Hikes</Link>
