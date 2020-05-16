@@ -6,7 +6,8 @@ import ProfilesList from './ProfilesList'
 class ProfilesIndex extends React.Component {
 
   state = {
-    profiles: []
+    profiles: [],
+    search: ''
   }
 
   async componentDidMount() {
@@ -24,13 +25,39 @@ class ProfilesIndex extends React.Component {
     }
   }
 
+  handleChange = (event) => {
+    this.setState({[event.target.name]: event.target.value})
+
+  }
+
+  filteredNames = () => {
+    const { profiles, search } = this.state
+    const regexp = new RegExp(search, 'i')
+    return profiles.filter(profile => {
+      return regexp.test(profile.fullName)
+    })
+  }
+
+
   render() {
     return (
       <section className="section">
         <div className="container">
-          {/* <h1 className="packs-index-title title">All Packs</h1> */}
+          <h1 className="title">The Hikr Community</h1>
+          <div className="field">
+            <div className="control">
+              <input
+                className="input is-primary"
+                name="search"
+                type="text"
+                placeholder="Search for a Hikr"
+                onChange={this.handleChange}
+                value={this.state.searchTerm}
+              />
+            </div>
+          </div>
           <div className="columns is-multiline">
-            {this.state.profiles.map(profile => <ProfilesList key={profile._id} {...profile} />)}
+            {this.filteredNames().map(profile => <ProfilesList key={profile._id} {...profile} />)}
           </div>
         </div>
       </section>
@@ -39,4 +66,4 @@ class ProfilesIndex extends React.Component {
 
 }
 
-  export default ProfilesIndex
+export default ProfilesIndex
