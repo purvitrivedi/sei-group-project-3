@@ -56,7 +56,7 @@ userSchema
   .virtual('test', {
     ref: 'Group',
     localField: '_id',
-    foreignField: 'members'
+    foreignField: 'members.user'
   })
 
 
