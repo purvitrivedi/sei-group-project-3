@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 
 const eventSchema = new mongoose.Schema({
+  eventName: { type: String, required: true, unique: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   description: { type: String, required: true },
   hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true },
-  participants: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+  participants: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  createdMember: { type: mongoose.Schema.ObjectId, ref: 'User' }
 }, {
   timestamps: true
 })
