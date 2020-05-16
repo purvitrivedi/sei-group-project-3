@@ -200,7 +200,7 @@ async function groupsEventCreate(req, res, next) {
     const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
 
-    if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name
+    // if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name 
 
     req.body.createdMember = req.currentUser
     const adminId = group.createdMember._id
@@ -279,17 +279,16 @@ async function groupsEventDelete(req, res, next) {
 //* Group memebers
 // POST
 // URL = api/groups/:id/members
+// memo - only currentUser can become member
 async function groupsMemberCreate(req, res, next) {
   try {
     const groupId = req.params.id
     const group = await (await Group.findById(groupId)).populate('members.user')
     if (!group) throw new Error(notFound)
 
-    const adminId = group.createdMember._id
-    if (!req.currentUser._id.equals(adminId)) req.body.user = req.currentUser //admin can add members
-
     if (group.members.some( member =>  member.user._id.equals(req.body.user._id))) throw new Error('Already exist') //avoid double reg.
 
+    req.body.user = req.currentUser
     group.members.push(req.body)
     await group.save()
     res.status(201).json(group)

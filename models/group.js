@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const eventSchema = new mongoose.Schema({
-  eventName: { type: String, required: true, unique: true },
+  eventName: { type: String, required: true }, //! here - adding 'uniquie : true' collapse everything 
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   description: { type: String, required: true },
@@ -46,6 +46,14 @@ const groupSchema = new mongoose.Schema({
   timestamps: true
 })
 
+// groupSchema
+//   .virtual('', {
+//     ref: 'User',
+//     localField: 'members.user',
+//     foreignField: 'groupsJoined'
+//   })
+
+eventSchema.plugin(require('mongoose-unique-validator'))
 groupSchema.plugin(require('mongoose-unique-validator'))
 module.exports = mongoose.model('Group', groupSchema)
 
