@@ -47,7 +47,7 @@ const groupSchema = new mongoose.Schema({
 })
 
 // groupSchema
-//   .virtual('members', {
+//   .virtual('userJoined', {
 //     ref: 'User',
 //     localField: '_id',
 //     foreignField: 'groupsJoined'
