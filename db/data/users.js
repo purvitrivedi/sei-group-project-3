@@ -7,7 +7,8 @@ module.exports = [
     password: 'pass',
     passwordConfirmation: 'pass',
     fullName: 'Purvi Trivedi',
-    profileImage: 'https://ca.slack-edge.com/T0351JZQ0-USUJBDV5K-2f32610034a1-512'
+    profileImage: 'https://ca.slack-edge.com/T0351JZQ0-USUJBDV5K-2f32610034a1-512',
+    bio: 'i love mountains. and they love me. Honestly I would marry them, am already married to guy who actually looks a lot like a mountain. I lovingly call him Slieve'
 
   },
   {
@@ -16,7 +17,8 @@ module.exports = [
     password: 'pass',
     passwordConfirmation: 'pass', 
     fullName: 'Andy Bradshaw',
-    profileImage: 'https://ca.slack-edge.com/T0351JZQ0-UU102331A-b57d0b0c7344-512'
+    profileImage: 'https://ca.slack-edge.com/T0351JZQ0-UU102331A-b57d0b0c7344-512',
+    bio: 'I am a keen outdoorsman with a zest for mountain life. I use the strongest expedition strength moustache wax. I have currently only summited peaks in the UK including Snowdonia and Pen Y Fan. I\'ll always pack my boots and my leatherman and I\'m ready to ROCK (if you\'ll pardon the pun).'
   },
   {
     username: 'kuriko',
