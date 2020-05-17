@@ -33,19 +33,19 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
-        <SecureRoute path="/profiles" component={ProfileIndex} />
         <SecureRoute path="/profiles/:id/edit" component={ProfileEdit} />
         <SecureRoute path="/profiles/:id" component={ProfileShow} />
+        <SecureRoute path="/profiles" component={ProfileIndex} />
 
-        <Route path="/hikes" component={HikesIndex} />
         <Route path="/hikes/:id" component={HikeShow} />
+        <Route path="/hikes" component={HikesIndex} />
 
-        <Route path="/groups" component={GroupIndex} />
-        <Route path="/groups/:id" component={GroupCard} />
         <Route path="/groups/:id/members" component={GroupMembersIndex} />
         <Route path="/groups/:id/user-images" component={GroupImagesIndex} />
         <Route path="/groups/:id/messages" component={GroupMessagesIndex} />
         <Route path="/groups/:id/events" component={GroupEventsIndex} />
+        <Route path="/groups/:id" component={GroupCard} />
+        <Route path="/groups" component={GroupIndex} />
       </Switch>
     </BrowserRouter>
   )

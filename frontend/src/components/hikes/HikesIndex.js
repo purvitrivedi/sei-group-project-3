@@ -22,15 +22,34 @@ class HikesIndex extends React.Component {
     if (!this.state.hikes) return null
 
     return (
-      <section className="section Home-list">
-        <div className="container">
-          {this.state.hikes.map(hike => {
-            return (
-              <HikeListCard key={hike._id} {...hike}/>
-            )
-          })}
+      <div className="HikesIndex">
+        <div className="hero is-medium is-primary is-bold">
+          <div className="hero-body">
+            <h1>Hero image goes here!</h1>
+          </div>
         </div>
-      </section>
+        <div className="field box">
+          <div className="control">
+            <input
+              className="input is-rounded is-primary"
+              type="text"
+              placeholder="Search for Country..."
+            />
+            <button className="button">Map View</button>
+            <button className="button">List View</button>
+            <button className="button">Card View</button>
+          </div>
+        </div>
+        <section className="section Home-list">
+          <div className="container">
+            {this.state.hikes.map(hike => {
+              return (
+                <HikeListCard key={hike._id} {...hike} />
+              )
+            })}
+          </div>
+        </section>
+      </div>
     )
   }
 }
