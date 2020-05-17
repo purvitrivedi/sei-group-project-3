@@ -28,7 +28,7 @@ class ProfileShow extends React.Component {
   render() {
     const { profile } = this.state
     return (
-<div className="tile is-ancestor">
+<div className="tile is-ancestor box">
   <div className="tile is-vertical is-5">
     <div className="tile">
       <div className="tile is-parent is-vertical">
