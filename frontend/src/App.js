@@ -40,10 +40,10 @@ const App = () => {
         <Route path="/hikes/:id" component={HikeShow} />
         <Route path="/hikes" component={HikesIndex} />
 
-        <Route path="/groups/:id/members" component={GroupMembersIndex} />
-        <Route path="/groups/:id/user-images" component={GroupImagesIndex} />
-        <Route path="/groups/:id/messages" component={GroupMessagesIndex} />
-        <Route path="/groups/:id/events" component={GroupEventsIndex} />
+        <SecureRoute path="/groups/:id/members" component={GroupMembersIndex} />
+        <SecureRoute path="/groups/:id/user-images" component={GroupImagesIndex} />
+        <SecureRoute path="/groups/:id/messages" component={GroupMessagesIndex} />
+        <SecureRoute path="/groups/:id/events" component={GroupEventsIndex} />
         <Route path="/groups/:id" component={GroupCard} />
         <Route path="/groups" component={GroupIndex} />
       </Switch>
