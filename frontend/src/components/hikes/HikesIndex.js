@@ -38,8 +38,6 @@ class HikesIndex extends React.Component {
 
   handleViewChange = event => {
     event.preventDefault()
-
-
     if (event.target.name === 'hideList') {
       this.setState({ hideList: false, hideGrid: true, hideMap: true })
     } else if (event.target.name === 'hideGrid') {

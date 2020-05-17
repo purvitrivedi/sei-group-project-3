@@ -5,7 +5,7 @@ const ProfileComplete = (props) => {
   return (
     <div className="column is-full completed">
       <div className="columns">
-        <img className="column" src={props.hike.images[0]} />
+        <img className="column" src={props.hike.images[0]} alt="hikeImage" />
       <p className="column">{props.hike.name}</p></div> 
     </div>
   )
