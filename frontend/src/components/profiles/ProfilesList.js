@@ -15,7 +15,6 @@ const ProfilesList = (props) => {
             <div className="column"> Hikes Completed ⛰: {props.completedHikes.length}</div>}
         </div>
       </div>
-
     </div>
   )
 }
