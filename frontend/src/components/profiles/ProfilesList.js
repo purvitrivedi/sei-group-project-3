@@ -5,7 +5,7 @@ const ProfilesList = (props) => {
   return (
     <div className="column is-full">
       <div className="columns">
-        <img src={props.profileImage} className="column is-one-quarter is-mobile" />
+        <img src={props.profileImage} alt="profileImage" className="column is-one-quarter is-mobile" />
         <div className="column columns is-multiline">
           <div className="column is-full">
             <Link to={`/profiles/${props._id}`}><div className="subtitle">{props.fullName}</div></Link>
@@ -15,7 +15,6 @@ const ProfilesList = (props) => {
             <div className="column"> Hikes Completed ⛰: {props.completedHikes.length}</div>}
         </div>
       </div>
-
     </div>
   )
 }

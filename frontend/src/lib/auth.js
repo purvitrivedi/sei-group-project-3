@@ -20,6 +20,10 @@ export const isOwner = id => {
   return id === userId
 }
 
+export const getUserId = () => {
+  return getPayload().sub
+}
+
 
 export const isAuthenticated = () => {
   const payload = getPayload()
