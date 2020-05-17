@@ -2,9 +2,9 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 
-const HikeListCard = ({ name, description, difficulty, location, timeToComplete, seasons, images }) => {
+const HikeListCard = ({ name, description, difficulty, location, timeToComplete, seasons, images, _id }) => {
   return (
-    <Link to="/hikes/:id" className="box">
+    <Link to={`/hikes/${_id}`} className="box">
       <img src={images[0]} alt={name} />
       <h1>Name of Hike: {name}</h1>
       <h1>Difficulty: {difficulty}</h1>
