@@ -1,6 +1,6 @@
 import React from 'react'
 
-class GroupEventsIndex extends React.Component {
+class GroupEventsShow extends React.Component {
   render() {
     return(
       'hey GROUP EVENTS INDEX' 
@@ -8,4 +8,4 @@ class GroupEventsIndex extends React.Component {
   }
 }
 
-export default GroupEventsIndex
+export default GroupEventsShow
