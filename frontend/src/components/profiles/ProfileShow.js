@@ -30,7 +30,7 @@ class ProfileShow extends React.Component {
     }
   }
 
-  handleSubmit = async (event, selectedHike) => {
+  addCompHike = async (event, selectedHike) => {
     event.preventDefault()
     try {
       const userId = this.state.profile._id
@@ -50,14 +50,41 @@ class ProfileShow extends React.Component {
 
   }
 
+
+  removeCompHike = async (e) => {
+    const completedId = e.target.value
+
+    try {
+      const userId = this.state.profile._id
+      const withHeaders = () => {
+        return {
+          headers: { Authorization: `Bearer ${getToken()}` }
+        }
+      }
+      await axios.delete(`/api/profiles/${userId}/completed/${completedId}`, withHeaders())
+      const res = await axios.get(`/api/profiles/${userId}`, withHeaders())
+      this.setState({ profile: res.data })
+
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
   render() {
-    console.log(this.state.submitted)
 
     const { profile } = this.state
     let completedHikes
     if (profile.completedHikes) {
       completedHikes = profile.completedHikes.map(hike => {
-        return <ProfileComplete key={hike._id} {...hike} />
+        return <ProfileComplete key={hike._id} {...hike} handleClick={this.removeCompHike}/>
+      })
+    }
+    let favoritedHikes
+    if (profile.favoritedHikes) {
+      favoritedHikes = profile.favoritedHikes.map(hike => {
+        return <ProfileFav key={hike._id} {...hike} />
       })
     }
     return (
@@ -72,27 +99,30 @@ class ProfileShow extends React.Component {
                   </figure>
                 </article>
               </div>
-              <article className="tile is-child bio">
-                <p>{profile.bio}</p>
-              </article>
-              <article className="tile is-child notification">
+              <article className="tile is-child notification groups">
                 <ProfileGroups />
               </article>
             </div>
           </div>
         </div>
-        <div className="tile is-parent">
-          <article className="tile is-child notification is-success">
-            <div className="content">
-              <ProfileFav />
-              <div className="content">
-              </div>
-            </div>
-          </article>
-        </div>
+
         <div className="tile">
           <div className="tile is-parent is-vertical">
-            <div className="tile is-parent notification is-warning columns is-multiline">
+            <div className="notification is-success columns is-multiline fav-tile">
+              <article className="column is-full">
+                <h1 className="subtitle">I'd like to go to...</h1>
+              </article>
+              <div className="column columns is-multiline">
+                {favoritedHikes}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="tile">
+          <div className="tile is-parent is-vertical">
+            <div className="notification is-warning columns is-multiline">
               <article className="column is-full">
                 <h1 className="subtitle">Where I've been...</h1>
               </article>
@@ -100,12 +130,9 @@ class ProfileShow extends React.Component {
                 {completedHikes}
               </div>
               {isOwner(profile._id) &&
-                <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.handleSubmit} /></div>
+                <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.addCompHike} /></div>
               }
-
             </div>
-            <article className="tile is-child notification">
-            </article>
           </div>
         </div>
       </div>

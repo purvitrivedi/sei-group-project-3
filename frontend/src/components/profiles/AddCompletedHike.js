@@ -38,7 +38,7 @@ class AddCompletedHike extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={(event) => this.props.handleSubmit(event, this.state.selectedHike)} className="columns" >
+        <form onSubmit={(event) => this.props.handleSubmit(event, this.state.selectedHike)} className="columns comp-form" >
           <Select
             className="column is-four-fifths"
             placeholder="Add a new hike..."
@@ -46,7 +46,6 @@ class AddCompletedHike extends React.Component {
             onChange={this.handleMultiChange}
           />
           <div className="column"> <button type="submit" className="button">+</button></div>
-
         </form>
       </div>
     )
