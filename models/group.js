@@ -34,7 +34,7 @@ const groupMemberSchema = new mongoose.Schema({
 
 
 const groupSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true }, //! here - adding 'uniquie : true' collapse everything 
   createdMember: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
   members: [ groupMemberSchema ],
   headerImage: { type: String, required: true }, 
