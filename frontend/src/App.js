@@ -20,7 +20,7 @@ import HikeShow from './components/hikes/HikeShow'
 
 // groups
 import GroupIndex from './components/groups/GroupIndex'
-import GroupCard from './components/groups/GroupCard'
+import GroupShow from './components/groups/GroupShow'
 import GroupMembersIndex from './components/groups/GroupMembersIndex'
 import GroupImagesIndex from './components/groups/GroupImagesIndex'
 import GroupEventShow from './components/groups/GroupEventShow'
@@ -34,19 +34,19 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
-        <SecureRoute path="/profiles" component={ProfileIndex} />
         <SecureRoute path="/profiles/:id/edit" component={ProfileEdit} />
         <SecureRoute path="/profiles/:id" component={ProfileShow} />
+        <SecureRoute path="/profiles" component={ProfileIndex} />
 
-        <Route path="/hikes" component={HikesIndex} />
         <Route path="/hikes/:id" component={HikeShow} />
+        <Route path="/hikes" component={HikesIndex} />
 
         <Route path="/groups/:id/members" component={GroupMembersIndex} />
-        <Route path="/groups/:id/messages" component={GroupMessagesIndex} />
+        <Route path="/groups/:id/images" component={GroupImagesIndex} />
         <Route path="/groups/:id/events" component={GroupEventShow} />
         <Route path="/groups/register" component={GroupNew} />
         <Route path="/groups/:id/edit" component={GroupEdit} />
-        <Route path="/groups/:id" component={GroupCard} />
+        <Route path="/groups/:id" component={GroupShow} />
         <Route path="/groups" component={GroupIndex} />
 
       </Switch>
