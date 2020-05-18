@@ -20,6 +20,12 @@
   .is-hidden {
     display: none;
   }
+.HikeMap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
   .map-pin {
     font-size: 20px;
   }
@@ -30,6 +36,11 @@
    height: 50px;
    width: 80px;
  }
+
+ .map-controls {
+   position: absolute;
+ }
+
 }
 
 

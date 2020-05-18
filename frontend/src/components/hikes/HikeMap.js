@@ -1,5 +1,5 @@
 import React from 'react'
-import MapGL, { Popup, ScaleControl } from 'react-map-gl'
+import MapGL, { Popup, NavigationControl } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Link } from 'react-router-dom'
 
@@ -24,13 +24,13 @@ class HikeMap extends React.Component {
       <div className="HikeMap box">
         <MapGL
           {...this.state.viewport}
-          width="96vw"
-          height="90vh"
+          width="95vw"
+          height="95vh"
           mapStyle="mapbox://styles/mapbox/outdoors-v11"
           onViewportChange={viewport => this.setState({ viewport })}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+          scrollZoom={false}
         >
-
           {hikes.map(hike => {
             return (
               <>
@@ -49,8 +49,7 @@ class HikeMap extends React.Component {
               </>
             )
           })}
-
-          <ScaleControl unit='metric' position='bottom-right' />
+          <NavigationControl showZoom position='top-left' className="map-controls"/>
         </MapGL>
       </div>
 

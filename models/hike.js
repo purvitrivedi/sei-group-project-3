@@ -8,6 +8,7 @@ const userImagesSchema = new mongoose.Schema({
 // user can review the hike
 const reviewSchema = new mongoose.Schema({
   text: { type: String, required: true, maxlength: 1000 },
+  rating: { type: Number, required: true },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
   timestamps: true

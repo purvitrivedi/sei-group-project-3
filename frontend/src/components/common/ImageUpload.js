@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 
-const uploadUrl = 'https://api.cloudinary.com/v1_1/andy8rad/image/upload'
-const uploadPreset = 'jqchs40m'
+const uploadUrl = process.env.REACT_APP_IMAGE_UPLOAD_URL
+const uploadPreset = process.env.REACT_APP_IMAGE_UPLOAD_PRESET
 
 class ImageUpload extends React.Component {
   state = {
