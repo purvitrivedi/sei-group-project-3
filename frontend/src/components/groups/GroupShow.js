@@ -3,17 +3,19 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId } from '../../lib/auth'
 
-import GroupShowNavbar from './GroupShowNavbar'
+import GroupShowNavbar from './x GroupShowNavbar'
 import GroupShowBody from './GroupShowBody'
 
 class GroupShow extends React.Component {
   state = {
     group: '',
-    showInfo: true,
-    showMembers: false,
-    showPictures: false,
-    showEvents: false,
-    showChat: false
+    displayController: { 
+      Information: true,
+      Members: false,
+      Pictures: false,
+      Events: false,
+      Chat: false
+    }
   }
 
   // fetch
@@ -57,71 +59,109 @@ class GroupShow extends React.Component {
     else return false
   }
 
-  // handleViewChange = event => {
-  //   event.preventDefault()
-  //   if (event.target.name === 'showInfo') {
-  //     this.setState({ hideList: false, hideGrid: true, hideMap: true })
-  //   } else if (event.target.name === 'hideGrid') {
-  //     this.setState({ hideList: true, hideGrid: false, hideMap: true })
-  //   } else {
-  //     this.setState({ hideList: true, hideGrid: true, hideMap: false })
-  //   }
-  //   showInfo: true,
-  //   showMembers: false,
-  //   showPictures: false,
-  //   showEvents: false,
-  //   showChat: false
-  // }
+  // control views
+  handleViewChange = event => {
+    event.preventDefault()
+
+    const displayController = { ...this.state.displayController }
+    const source = `{ ${event.target.name} : true }`
+    Object.assign(displayController, source)
+    this.setState({ displayController })
+  }
 
   render() {
-    // console.log(this.state)
-    // console.log(this.props)
-    // const group = this.state.group
-    return(
-      'hey'
-    //   <div class="GroupShow">
-    //     <section class="GroupShow hero">
-    //       <div class="hero-body">
-    //         <div class="container"><figure className="image is-2by1"><img src={group.headerImage} alt={group.name} /></figure></div>
-    //       </div>
-    //     </section>
+    console.log(this.state)
+    console.log(this.props)
+    const group = this.state.group
+    return (
+      <div class="GroupShow">
+        <section class="GroupShow hero">
+          <div class="hero-body">
+            <div class="container"><figure className="image is-2by1"><img src={group.headerImage} alt={group.name} /></figure></div>
+          </div>
+        </section>
 
-    //     <div class="columns">
-    //       <div class="buttons column">
-    //         <button class="button" name="show.,..." onClick={this.handleViewChange}>Information</button>
-    //         <button class="button" name="" onClick={this.handleViewChange}>Members</button>
-    //         <button class="button" name="" onClick={this.handleViewChange}>Pictures</button>
-    //         {isGroupMember() && <button class="button" name="" onClick={this.handleViewChange}>Events</button> }
-    //         {isGroupMember() && <button class="button" name="" onClick={this.handleViewChange}>Chat</button> }
-    //       </div>
+        <div class="columns">
+          <div class="buttons column">
+            <button class="button" name="Information" onClick={this.handleViewChange}>Information</button>
+            <button class="button" name="Members" onClick={this.handleViewChange}>Members</button>
+            <button class="button" name="Pictures" onClick={this.handleViewChange}>Pictures</button>
+            {isGroupMember() && <button class="button" name="Events" onClick={this.handleViewChange}>Events</button> }
+            {isGroupMember() && <button class="button" name="Chats" onClick={this.handleViewChange}>Chat</button> }
+          </div>
 
-    //       <div className="buttons is-right column">
-    //         { isAuthenticated() && <Link to={`/groups/${group._id}/join`}><a className="button is-primary"><strong>Join the Group!</strong></a></Link>}
-    //         { isAdmin() && <Link to={`/groups/${group._id}/edit`}><a className="button is-light">Edit</a></Link>}
-    //       </div>
-    //     </div>
+          <div className="buttons is-right column">
+            { isAuthenticated() && <Link to={`/groups/${group._id}/join`}><a className="button is-primary"><strong>Join the Group!</strong></a></Link>}
+            { isAdmin() && <Link to={`/groups/${group._id}/edit`}><a className="button is-light">Edit</a></Link>}
+          </div>
+        </div>
 
-    //     <a className="navbar-item" name="Information" href=".Information">Information</a>
-    //     <a className="navbar-item" name="Members" href=".Members">Members</a>
-    //     <a className="navbar-item" name="Pictures" href=".Pictures">Pictures</a>
-    //     {isGroupMember() && <a className="navbar-item" name="Events" href=".Event">Events</a> }
-    //     {isGroupMember() && <a className="navbar-item" name="Chat" href=".Chat">Chat</a> }
-    //     <button
-    //             className="button"
-    //             name="hideList"
-    //             onClick={this.handleViewChange}
-    //           >
-    //             List
-    //             </button>
-    //     <GroupShowNavbar 
-    //       key={group._id}
-    //       group={ group }
-    //       isGroupMember={ this.isGroupMember } 
-    //       isAdmin={ this.isAdmin }
-    //     />
-    //     <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } />
-    //     { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
-    //   </div>
+        {/* <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } /> */}
+
+
+        <div class={`${this.state.displayController.Information ? "Information" : "is-hidden" }`} >
+          <section class="section">
+            <div class="container">
+              <h1 class="title"><strong>{group.name}</strong></h1>
+              <p class="title">Description</p>
+              <div class="content">{group.description}</div>
+            </div>
+          </section>
+        </div>
+
+        <div class={`${this.state.displayController.Members ? "Members" : "is-hidden" }`}>
+          {group.members.flatMap( member => (
+             <article class="media" key={member._id}>
+             <div class="media-left">
+               <figure class="image is-64x64">
+                 <img src={member.profileImage} alt={member.username} />
+               </figure>
+             </div>
+             <div class="media-content">
+               <div class="content">
+                 <p>
+                  <strong>{member.username}</strong><small>{member.email}</small>
+                   <br />
+                   {member.bio}
+                 </p>
+               </div>
+
+               <nav class="level is-mobile">
+                <div class="level-left">
+
+                  <a class="level-item" aria-label="1.profile">
+                    <span class="icon is-small">
+                      <Link to={`/profile/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
+                    </span>
+                  </a>
+
+                  <a class="level-item" aria-label="2.reply">
+                    <span class="icon is-small">
+                      //! link to message sent w populated field
+                      <i class="fas fa-reply" aria-hidden="true"></i>
+                    </span>
+                  </a>
+
+                   <a class="level-item" aria-label="3.favHike">
+                     <span class="icon is-small">
+                      <Link to={`/hikes/${member.favoriteHikes[0]._id}`}>
+                       <i class="fas fa-heart" aria-hidden="true"></i></Link>
+                    </span>
+                  </a>
+                </div>
+              </nav>
+
+             </div>
+           </article>
+          ))}
+         
+        </div>
+
+
+
+
+        { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
+      </div>
     )
   }
 }
