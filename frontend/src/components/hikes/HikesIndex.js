@@ -17,7 +17,10 @@ class HikesIndex extends React.Component {
   async componentDidMount() {
     try {
       const res = await getAllHikes()
-      this.setState({ hikes: res.data })
+      const search = this.props.location.search.split('=')[1]
+      console.log(search)
+      
+      this.setState({ hikes: res.data, search })
     } catch (err) {
       console.log(err)
     }
@@ -49,6 +52,9 @@ class HikesIndex extends React.Component {
 
   render() {
     if (!this.state.hikes) return null
+    
+    console.log(this.props.location)
+    
 
     return (
       <div className="HikesIndex">
