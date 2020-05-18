@@ -141,18 +141,16 @@ class GroupShow extends React.Component {
     let events
     if (group.events) {
       events = group.events.map( event => (
-        <div class="section box" key={event._id}>
-          
-          <figure className="image is-square"><img src={img.images} alt={group.name} /></figure>
-        </div>
+        <section class="section box" key={event._id}>
+          <div class="container">
+            <h1 class="subtitle">{event.eventName}</h1>
+            <p>{event.description}</p>
+            <p>Event Host: {event.createdMember.username}</p>
+            <p>{event.participants.length} members will participate!</p>
 
-eventName: { type: String, required: true }, 
-startDate: { type: Date, required: true },
-endDate: { type: Date, required: true },
-description: { type: String, required: true },
-hike: { type: mongoose.Schema.ObjectId, ref: 'Hike' },
-participants: { type: mongoose.Schema.ObjectId, ref: 'User' },
-createdMember: { type: mongoose.Schema.ObjectId, ref: 'User' }
+            <Link to={`groups/${group._id}/events/${event._id}`} ><button>Check the event details!</button></Link>
+          </div>
+        </section>
       ))
     }
 
