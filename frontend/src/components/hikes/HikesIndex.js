@@ -9,9 +9,9 @@ class HikesIndex extends React.Component {
   state = {
     hikes: null,
     search: '',
-    hideMap: true,
+    hideMap: false,
     hideGrid: true,
-    hideList: false
+    hideList: true
   }
 
   async componentDidMount() {

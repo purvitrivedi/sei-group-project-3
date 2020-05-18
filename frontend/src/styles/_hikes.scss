@@ -21,8 +21,16 @@
     display: none;
   }
   .map-pin {
-    font-size: 24px;
+    font-size: 20px;
   }
+  .is-popup-hidden {
+    display: none;
+  }
+ .map-image {
+   height: 50px;
+   width: 80px;
+ }
 }
+
 
 
