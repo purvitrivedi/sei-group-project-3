@@ -1,13 +1,32 @@
 .profile-show {
+  margin-left: 10%;
+  height: 100vh;
   figure {
     text-align: center;
+    margin-bottom: 80px;
     img {
-      width: 200px;
+      width: 150px;
+    }
+
+    .fullname {
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    .edit {
+      font-size: 13px;
+      padding: 2px 20px;
+      margin: 0 auto;
+      background-color: rgb(192, 173, 255);
+      border-radius: 10px;
     }
   }
 
   .groups {
     background-color: rgb(178, 178, 212);
+    img {
+      width: 150px;
+    }
   }
 }
 
@@ -15,32 +34,53 @@
   img {
     width: 100px;
   }
+  column {
+    width: 50%;
+  }
 
   p {
     font-size: 14px;
-    text-align: center;
+    text-align: left;
   }
-
-  .remove {
-    background-color: rgb(255, 173, 173);
-    border-radius: 10px;
-    padding: 0px;
-    border: none;
-    font-size: 10px;
-  }
-
-}
-
-.fav-tile {
-  margin: 10px;
-  margin-top: 50%;
 }
 
 .comp-form {
   font-size: 14px;
 
   button {
-    margin: 0px;
     font-size: 14px;
   }
+}
+
+.tile-pad {
+  margin: 12px;
+}
+
+.bio-box {
+  background-color: rgb(212, 239, 251);
+}
+
+.bio {
+  margin-top: 50px;
+  // padding: 50px;
+}
+
+.remove {
+  background-color: rgba(251, 152, 149, 0.966);
+  border-radius: 10px;
+  border: none;
+  font-size: 12px;
+  text-align: center;
+  padding: 3px 5px;
+}
+
+.edit-bio {
+  font-size: 13px;
+  padding: 2px 0px;
+  background-color: rgb(192, 173, 255);
+  border-radius: 10px;
+  text-align: center;
+  width: 40%;
+  margin-top: 0px;
+  margin-left: 60%;
 }
