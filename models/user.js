@@ -14,9 +14,9 @@ const completedHikesSchema = new mongoose.Schema({
   hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true }
 })
 
-const groupsJoinedSchema = new mongoose.Schema({
-  group: { type: mongoose.Schema.ObjectId, ref: 'Group', required: true }
-})
+// const groupsJoinedSchema = new mongoose.Schema({
+//   group: { type: mongoose.Schema.ObjectId, ref: 'Group', required: true }
+// })
 
 
 const userSchema = new mongoose.Schema({
@@ -27,12 +27,25 @@ const userSchema = new mongoose.Schema({
   bio: { type: String },
   profileImage: { type: String },
   favoritedHikes: [favoriteHikesSchema], 
-  completedHikes: [completedHikesSchema],
-  groupsJoined: [groupsJoinedSchema]
+  completedHikes: [completedHikesSchema]
+  // groupsJoined: [groupsJoinedSchema]
 }
 )
 
 // * for images added by users on the Hike page
+userSchema
+  .virtual('joinedGroups', {
+    ref: 'Group',
+    localField: '_id',
+    foreignField: 'members.user'
+  })
+
+userSchema
+  .virtual('eventsGoing', {
+    ref: 'Group',
+    localField: '_id',
+    foreignField: 'events.participants'
+  })
 
 
 userSchema

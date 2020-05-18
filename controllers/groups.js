@@ -236,7 +236,7 @@ async function groupsEventUpdate(req, res, next) {
     }
 
     if (req.body.participants
-      && !group.members.some( member => member.user._id.equals(req.body.participants._id)) ) {
+      && !group.members.some( member => member.user._id.equals(req.body.participants)) ) {
       throw new Error('Participant need to join the group')
     } // only group members can participate events
     

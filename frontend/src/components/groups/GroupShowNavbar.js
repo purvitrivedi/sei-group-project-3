@@ -2,7 +2,7 @@ import React from 'react'
 import { isAuthenticated } from '../../lib/auth'
 
 const GroupNavbar = () => (
-  console.log(this.props)
+  'hey'
   // <nav className="navbar" role="navigation" aria-label="main navigation">
   //   <div className="navbar-brand">
   //     <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">

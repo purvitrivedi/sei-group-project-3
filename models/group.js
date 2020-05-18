@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const eventSchema = new mongoose.Schema({
-  eventName: { type: String, required: true }, //! here - adding 'uniquie : true' collapse everything 
+  eventName: { type: String, required: true }, 
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   description: { type: String, required: true },
@@ -34,7 +34,7 @@ const groupMemberSchema = new mongoose.Schema({
 
 
 const groupSchema = new mongoose.Schema({
-  name: { type: String, required: true }, //! here - adding 'uniquie : true' collapse everything 
+  name: { type: String, required: true, unique: true },
   createdMember: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
   members: [ groupMemberSchema ],
   headerImage: { type: String, required: true }, 
@@ -56,6 +56,7 @@ const groupSchema = new mongoose.Schema({
 eventSchema.plugin(require('mongoose-unique-validator'))
 groupSchema.plugin(require('mongoose-unique-validator'))
 module.exports = mongoose.model('Group', groupSchema)
+module.exports = mongoose.model('Event', eventSchema)
 
 // updated readme
 // - groupName
