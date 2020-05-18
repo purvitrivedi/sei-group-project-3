@@ -18,7 +18,6 @@ class ProfilesIndex extends React.Component {
         }
       }
       const res = await axios.get('/api/profiles', withHeaders())
-      console.log(res.data)
       this.setState({ profiles: res.data })
     } catch (err) {
       console.log(err.response)

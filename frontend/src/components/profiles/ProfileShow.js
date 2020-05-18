@@ -75,6 +75,7 @@ class ProfileShow extends React.Component {
   render() {
 
     const { profile } = this.state
+    console.log(profile)
     let completedHikes
     if (profile.completedHikes) {
       completedHikes = profile.completedHikes.map(hike => {
