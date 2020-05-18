@@ -31,3 +31,4 @@ export const isAuthenticated = () => {
   const now = Math.round(Date.now() / 1000)
   return now < payload.exp
 }
+

@@ -19,7 +19,30 @@ async function userIndex(req, res, next) {
 async function userShow(req, res, next) {
   const userId = req.params.id
   try {
-    const user = await User.findById(userId).populate('completedHikes.hike').populate('favoritedHikes.hike')
+    const user = await (await User.findById(userId).populate('completedHikes.hike').populate('favoritedHikes.hike').populate('joinedGroups')).populate('eventsGoing')
+    if (user.joinedGroups) {
+      user.joinedGroups = user.joinedGroups.flatMap(item => item._id).reduce((arr, curr) => {
+        if (arr.length === 0) {
+          arr.push(curr)
+        }
+        if (!arr.find(item => item._id === curr._id)) {
+          arr.push(curr)
+        }
+        return arr
+      }, []) 
+    }
+    // if (user.eventsGoing) {
+    //   user.eventsGoing = user.eventsGoing.flatMap(item => item._id).reduce((arr, curr) => {
+    //     if (arr.length === 0) {
+    //       arr.push(curr)
+    //     }
+    //     if (!arr.find(item => item._id === curr._id)) {
+    //       arr.push(curr)
+    //     }
+    //     return arr
+    //   }, []) 
+    // }
+
     if (!user) throw new Error(notFound)
     res.status(200).json(user)
   } catch (err) {
