@@ -23,6 +23,14 @@ export const createHike = formData => {
   return axios.post(`${baseUrl}/hikes`, formData, withHeaders())
 }
 
+export const reviewHike = (id, reviewData) => {
+  return axios.post(`${baseUrl}/hikes/${id}/reviews`, reviewData, withHeaders())
+}
+
+export const deleteHikeReview = (id, reviewId) => {
+  return axios.delete(`${baseUrl}/hikes/${id}/reviews/${reviewId}`, withHeaders())
+}
+
 
 //User
 
