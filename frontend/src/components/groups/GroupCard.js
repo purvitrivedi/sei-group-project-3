@@ -28,7 +28,7 @@ class GroupCard extends React.Component {
                       <br />
                       {group.createdMember.bio}
                     </p>
-                    <Link to={`/profile/${group.createdMember._id}`}><i className="fas fa-address-card"></i></Link>
+                    <Link to={`/profiles/${group.createdMember._id}`}><i className="fas fa-address-card"></i></Link>
                   </div>
                 </div>
               </article>

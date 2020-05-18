@@ -3,6 +3,8 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId } from '../../lib/auth'
 
+import bulmaCalendar from '~bulma-calendar/dist/js/bulma-calendar.min.js';
+
 import GroupShowNavbar from './x GroupShowNavbar'
 import GroupShowBody from './GroupShowBody'
 
@@ -102,7 +104,7 @@ class GroupShow extends React.Component {
 
             <a class="level-item" aria-label="1.profile">
               <span class="icon is-small">
-                <Link to={`/profile/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
+                <Link to={`/profiles/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
               </span>
             </a>
 
@@ -154,15 +156,14 @@ class GroupShow extends React.Component {
       ))
     }
 
-    let chats
+    let chat
     if (group.messages) {
-      group.messages.map( msg => (
-        <div class="columns is-fullwidth box">
-          <div class="column is-2"><figure><img src={msg.user.profileImage} alt={msg.user._id} /></figure></div>
+      chat = group.messages.map( msg => (
+        <div class="columns box">
+          <div class="column is-2"><figure><img src={msg.user.profileImage} alt={msg.user._id} class="is-rounded" /></figure></div>
           <div class="column is-10" key={msg._id}>{msg.text}</div>
-
+          <p>Updated at {msg.updatedAt}</p>
         </div>
-
       ))
     }
 
@@ -216,8 +217,12 @@ class GroupShow extends React.Component {
           </div>
 
           <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`} style={{height: 500}}>
-            <h1 class="subtitle">Group Members</h1>
-            { members }
+            <section class="section" >
+                <div class="container">
+                  <h1 class="subtitle">Group Members</h1>
+                  { members }
+                </div>
+            </section>
           </div>
 
           <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{height: 500}}>
@@ -246,16 +251,12 @@ class GroupShow extends React.Component {
             <section class="section" >
               <div class="container">
                 <h1 class="subtitle">Chat Board</h1>
-                <div class="columns is-multi">
-                  { chats }
-                </div>
+                { chat }
               </div>
             </section>
           </div>
-        
-        
     
-    
+
           { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
         </div>
       </div>
