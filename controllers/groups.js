@@ -281,28 +281,20 @@ async function groupsEventDelete(req, res, next) {
 }
 
 
-//* Group memebers
+//* Group members
 // POST
 // URL = api/groups/:id/members
 // memo - only currentUser can become member
 async function groupsMemberCreate(req, res, next) {
   try {
-    req.body.user = req.currentUser
     const groupId = req.params.id
     const group = await Group.findById(groupId).populate('members.user')
     if (!group) throw new Error(notFound)
    
     // if (group.members.some( member =>  member.user._id.equals(req.body.user._id))) throw new Error('Already exist') //avoid double reg.
-
+    req.body.user = req.currentUser
     group.members.push(req.body)
     await group.save()
-
-    // const user = await User.findById(req.body.user._id)
-    // console.log(user.groupsJoined)
-    // user.groupsJoined.group = groupId
-    // // user.groupsJoined.push(groupId)
-    // await user.save()
-    // // console.log(user)
 
     res.status(201).json(group)
   } catch (err) {

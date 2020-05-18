@@ -7,7 +7,8 @@ class ProfilesIndex extends React.Component {
 
   state = {
     profiles: [],
-    search: ''
+    search: '',
+    defaultprofile: './defaultProfilePic.png'
   }
 
   async componentDidMount() {

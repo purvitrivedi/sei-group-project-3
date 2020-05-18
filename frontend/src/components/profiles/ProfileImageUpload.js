@@ -26,7 +26,6 @@ class ProfileImageUpload extends React.Component {
     const { image } = this.state
     return (
         <>
-          <label>Change Image</label>
           <input
             className="input"
             type="file"
