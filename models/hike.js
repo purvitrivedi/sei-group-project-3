@@ -5,20 +5,20 @@ const userImagesSchema = new mongoose.Schema({
   image: { type: String, required: true },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 })
-// user can review the hike
+// user can review the hike and rate from 1-5
 const reviewSchema = new mongoose.Schema({
   text: { type: String, required: true, maxlength: 1000 },
-  rating: { type: Number, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
   timestamps: true
 })
 
 //user can rate the hike from 1 to 5
-const ratingSchema = new mongoose.Schema({
-  rating: { type: Number, required: true, min: 1, max: 5 },
-  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
-})
+// const ratingSchema = new mongoose.Schema({
+//   rating: { type: Number, required: true, min: 1, max: 5 },
+//   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+// })
 
 
 //general hike profile
@@ -34,7 +34,7 @@ const hikeSchema = new mongoose.Schema({
   images: { type: Array, required: true },
   imagesUser: [userImagesSchema],
   reviews: [reviewSchema],
-  ratings: [ratingSchema],
+  // ratings: [ratingSchema],
   seasons: { type: Array, required: true },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
