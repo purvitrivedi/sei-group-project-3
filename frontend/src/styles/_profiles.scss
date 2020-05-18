@@ -1,25 +1,46 @@
 .profile-show {
-
   figure {
     text-align: center;
     img {
-      width: 200px;  
-  }
+      width: 200px;
+    }
   }
 
-  .bio {
-    margin-bottom: 0px;
+  .groups {
+    background-color: rgb(178, 178, 212);
   }
 }
 
-
-.completed {
+.fav-comp {
   img {
     width: 100px;
   }
 
   p {
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
+  }
+
+  .remove {
+    background-color: rgb(255, 173, 173);
+    border-radius: 10px;
+    padding: 0px;
+    border: none;
+    font-size: 10px;
+  }
+
+}
+
+.fav-tile {
+  margin: 10px;
+  margin-top: 50%;
+}
+
+.comp-form {
+  font-size: 14px;
+
+  button {
+    margin: 0px;
+    font-size: 14px;
   }
 }
