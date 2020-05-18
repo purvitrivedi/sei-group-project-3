@@ -17,7 +17,10 @@ class HikesIndex extends React.Component {
   async componentDidMount() {
     try {
       const res = await getAllHikes()
-      this.setState({ hikes: res.data })
+      const search = this.props.location.search.split('=')[1]
+      console.log(search)
+      
+      this.setState({ hikes: res.data, search })
     } catch (err) {
       console.log(err)
     }
@@ -32,24 +35,26 @@ class HikesIndex extends React.Component {
     const { hikes, search } = this.state
     const regexp = new RegExp(search, 'i')
     return hikes.filter(hike => {
-      return regexp.test(hike.name) || regexp.test(hike.location.country) || regexp.test(hike.difficulty)
+      return regexp.test(hike.name) || regexp.test(hike.country) || regexp.test(hike.difficulty)
     })
   }
 
   handleViewChange = event => {
     event.preventDefault()
-    if (event.target.name === 'hideList') {
+    if (event.target.name === 'showList') {
       this.setState({ hideList: false, hideGrid: true, hideMap: true })
-    } else if (event.target.name === 'hideGrid') {
+    } else if (event.target.name === 'showGrid') {
       this.setState({ hideList: true, hideGrid: false, hideMap: true })
     } else {
       this.setState({ hideList: true, hideGrid: true, hideMap: false })
     }
-
   }
 
   render() {
     if (!this.state.hikes) return null
+    
+    console.log(this.props.location)
+    
 
     return (
       <div className="HikesIndex">
@@ -70,21 +75,21 @@ class HikesIndex extends React.Component {
 
               <button
                 className="button"
-                name="hideList"
+                name="showList"
                 onClick={this.handleViewChange}
               >
                 List
                 </button>
               <button
                 className="button"
-                name="hideGrid"
+                name="showGrid"
                 onClick={this.handleViewChange}
               >
                 Grid
               </button>
               <button
                 className="button"
-                name="hideMap"
+                name="showMap"
                 onClick={this.handleViewChange}
               >
                 Map

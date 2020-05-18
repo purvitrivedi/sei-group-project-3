@@ -5,6 +5,11 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+  .title-logo {
+    font-family: 'Amatic SC', cursive;
+    font-size: 150px;
+    text-shadow: 0 0 10px #000000;
+  }
 }
 
 
@@ -20,6 +25,12 @@
   .is-hidden {
     display: none;
   }
+.HikeMap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
   .map-pin {
     font-size: 20px;
   }
@@ -30,6 +41,11 @@
    height: 50px;
    width: 80px;
  }
+
+ .map-controls {
+   position: absolute;
+ }
+
 }
 
 
