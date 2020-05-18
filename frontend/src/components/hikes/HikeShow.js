@@ -22,23 +22,23 @@ class HikeShow extends React.Component {
   }
 
 
-  handleAddToFavorites = async() => {
+  handleAddToFavorites = async () => {
     try {
-    console.log(getUserId())
-    const userId = getUserId()
-    const hikeId = { hike: this.props.match.params.id}
+      console.log(getUserId())
+      const userId = getUserId()
+      const hikeId = { hike: this.props.match.params.id }
 
-    const withHeaders = () => {
-      return {
-        headers: { Authorization: `Bearer ${getToken()}` }
+      const withHeaders = () => {
+        return {
+          headers: { Authorization: `Bearer ${getToken()}` }
+        }
       }
-    }
 
-    const res = await axios.post(`/api/profiles/${userId}/favorites`, hikeId, withHeaders())
-    console.log(res.data)
-  } catch(err) {
-    console.log(err)
-  }
+      const res = await axios.post(`/api/profiles/${userId}/favorites`, hikeId, withHeaders())
+      console.log(res.data)
+    } catch (err) {
+      console.log(err)
+    }
 
   }
 
@@ -59,11 +59,17 @@ class HikeShow extends React.Component {
         <div className="box">
           <img src={hike.images[0]} alt={hike.name} />
           <h1>Name of Hike: {hike.name}</h1>
-          <h1>Difficulty: {hike.difficulty}</h1>
+          <h1>Difficulty: {hike.difficulty.map(difficulty => {
+            return `${difficulty}, `
+          })}</h1>
+          <h1>Seasons: {hike.seasons.map(season => {
+            return `${season}, `
+          })}
+          </h1>
           <h1>Description: {hike.description}</h1>
-          <h1>Country: {hike.location.country}</h1>
+          <h1>Country: {hike.country}</h1>
           <h1>Time the hike takes: {hike.timeToComplete}</h1>
-          <h1>Suitable in the following seasons: {hike.seasons[0]}</h1>
+
           <hr />
           {isAuthenticated() &&
             <button

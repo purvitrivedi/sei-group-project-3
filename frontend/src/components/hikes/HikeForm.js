@@ -3,19 +3,31 @@ import Select from 'react-select'
 
 import ImageUpload from '../common/ImageUpload'
 
-const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handleImageChange, btnTxt }) => {
-  // const { location } = formData
+const HikeForm = ({  
+  formData, 
+  handleChange, 
+  handleSubmit, 
+  handleAddImage, 
+  handleImageChange, 
+  handleMultiChangeSeasons, 
+  handleMultiChangeDifficulty, 
+  btnTxt 
+}) => {
+
   const seasonOptions = [
     { value: 'Spring', label: 'Spring' },
     { value: 'Summer', label: 'Summer' },
     { value: 'Autumn', label: 'Autumn' },
     { value: 'Winter', label: 'Winter' }
   ]
-  handleMultiChange = selected => {
-    const selectedItems = selected ? selected.map(item => item.value) : []
-    const formData = { ...this.state.formData, breakfastOrder: selectedItems }
-    this.setState({ formData })
-  }
+
+  const difficultyOptions = [
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Moderate', label: 'Moderate' },
+    { value: 'Advanced', label: 'Advanced' },
+    { value: 'Expert', label: 'Expert' }
+  ]
 
   return (
     <div className="columns">
@@ -37,12 +49,13 @@ const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handl
         <div className="field">
           <label className="label">Difficulty</label>
           <div className="control">
-            <input
-              className="input"
-              placeholder="THIS SHOULD BE A SELECTION OF OPTIONS"
+            <Select
+              options={difficultyOptions}
+              placeholder="Difficulty..."
               name="difficulty"
-              onChange={handleChange}
-              value={formData.difficulty}
+              isMulti
+              onChange={handleMultiChangeDifficulty}
+              
             />
           </div>
         </div>
@@ -76,7 +89,10 @@ const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handl
             <Select
               options={seasonOptions}
               isMulti
-              onChange={this.handleMultiChange}
+              placeholder="Seasons..."
+              name="seasons"
+              onChange={handleMultiChangeSeasons}
+            
             />
           </div>
         </div>
@@ -86,9 +102,9 @@ const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handl
             <input
               className="input"
               placeholder="Country"
-              name="location.country"
+              name="country"
               onChange={handleChange}
-              // value={location.country}
+              value={formData.country}
             />
           </div>
         </div>
@@ -98,9 +114,9 @@ const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handl
             <input
               className="input"
               placeholder="Latitude"
-              name="location.lat"
+              name="lat"
               onChange={handleChange}
-              // value={location.lat}
+              value={formData.lat}
             />
           </div>
         </div>
@@ -110,9 +126,9 @@ const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handl
             <input
               className="input"
               placeholder="Longitude"
-              name="location.lon"
+              name="lon"
               onChange={handleChange}
-              // value={location.lon}
+              value={formData.lon}
             />
           </div>
         </div>

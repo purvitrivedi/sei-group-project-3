@@ -35,13 +35,13 @@ class HikeMap extends React.Component {
             return (
               <>
                 <Popup
-                  latitude={hike.location.lat}
-                  longitude={hike.location.lon}
+                  latitude={hike.lat}
+                  longitude={hike.lon}
                   key={`${hike._id}${hike.name}`}
                   >
                   <Link to={`/hikes/${hike._id}`}>
                     <p>{hike.name}</p> 
-                    <p>{hike.location.country}</p>
+                    <p>{hike.country}</p>
                     <img className="map-image" src={hike.images[0]} alt={hike.name} />
                   </Link>
 

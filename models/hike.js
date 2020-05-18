@@ -24,12 +24,10 @@ const ratingSchema = new mongoose.Schema({
 const hikeSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true },
-  location: { 
-    country: { type: String, required: true },
-    lat: { type: Number, required: true },
-    lon: { type: Number, required: true }
-  },
-  difficulty: { type: String, required: true },
+  country: { type: String, required: true },
+  lat: { type: Number, required: true },
+  lon: { type: Number, required: true },
+  difficulty: { type: Array, required: true },
   distance: { type: String, required: true },
   timeToComplete: { type: String, required: true },
   images: { type: Array, required: true },
@@ -38,7 +36,7 @@ const hikeSchema = new mongoose.Schema({
   ratings: [ratingSchema],
   seasons: { type: Array, required: true },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
-}, { 
+}, {
   timestamps: true
 })
 

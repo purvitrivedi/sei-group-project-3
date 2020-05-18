@@ -32,7 +32,7 @@ class HikesIndex extends React.Component {
     const { hikes, search } = this.state
     const regexp = new RegExp(search, 'i')
     return hikes.filter(hike => {
-      return regexp.test(hike.name) || regexp.test(hike.location.country) || regexp.test(hike.difficulty)
+      return regexp.test(hike.name) || regexp.test(hike.country) || regexp.test(hike.difficulty)
     })
   }
 
