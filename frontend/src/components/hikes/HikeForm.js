@@ -1,9 +1,22 @@
 import React from 'react'
+import Select from 'react-select'
 
 import ImageUpload from '../common/ImageUpload'
 
 const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handleImageChange, btnTxt }) => {
   // const { location } = formData
+  const seasonOptions = [
+    { value: 'Spring', label: 'Spring' },
+    { value: 'Summer', label: 'Summer' },
+    { value: 'Autumn', label: 'Autumn' },
+    { value: 'Winter', label: 'Winter' }
+  ]
+  handleMultiChange = selected => {
+    const selectedItems = selected ? selected.map(item => item.value) : []
+    const formData = { ...this.state.formData, breakfastOrder: selectedItems }
+    this.setState({ formData })
+  }
+
   return (
     <div className="columns">
       <form onSubmit={handleSubmit} className="column is-half is-offset-one-quarter box">
@@ -60,12 +73,10 @@ const HikeForm = ({  formData, handleChange, handleSubmit, handleAddImage, handl
         <div className="field">
           <label className="label">Seasons</label>
           <div className="control">
-            <input
-              className="input"
-              placeholder="Seasons... SELECT AGAIN HERE"
-              name="seasons"
-              onChange={handleChange}
-              value={formData.seasons}
+            <Select
+              options={seasonOptions}
+              isMulti
+              onChange={this.handleMultiChange}
             />
           </div>
         </div>
