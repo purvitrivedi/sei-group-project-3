@@ -154,72 +154,110 @@ class GroupShow extends React.Component {
       ))
     }
 
+    let chats
+    if (group.messages) {
+      group.messages.map( msg => (
+        <div class="columns is-fullwidth box">
+          <div class="column is-2"><figure><img src={msg.user.profileImage} alt={msg.user._id} /></figure></div>
+          <div class="column is-10" key={msg._id}>{msg.text}</div>
+
+        </div>
+
+      ))
+    }
+
+
     return (
       <div class="GroupShow">
-        <section class="GroupShow hero">
+        <section class="hero">
           <div class="hero-body">
-            <div class="container"><figure className="image is-2by1"><img src={group.headerImage} alt={group.name} /></figure></div>
+            <div class="container">
+              <figure className="image">
+                <img src={group.headerImage} alt={group.name} style={{
+                  resizeMode: "cover",
+                  height: 300
+                }} />
+              </figure>
+            </div>
           </div>
         </section>
 
-        <div class="columns">
-          <div class="buttons column is-8">
-            <button class="button is-active" name="Information" onClick={this.handleViewChange}>Information</button>
-            <button class="button is-active" name="Members" onClick={this.handleViewChange}>Members</button>
-            <button class="button is-active" name="Pictures" onClick={this.handleViewChange}><i class="fas fa-image" aria-hidden="true"></i>&nbsp;Pictures</button>
-            {this.isGroupMember() && <button class="button is-active" name="Events" onClick={this.handleViewChange}>Events</button> }
-            {this.isGroupMember() && <button class="button is-active" name="Chats" onClick={this.handleViewChange}>Chat</button> }
-          </div>
-
-          <div class="buttons is-right column">
-            { !this.isGroupMember() && <Link to={`/groups/${group._id}/join`}><a class="button is-primary"><strong>Join the Group!</strong></a></Link>}
-            { this.isAdmin() && <Link to={`/groups/${group._id}/edit`}><a class="button is-light">Edit</a></Link>}
-          </div>
-        </div>
-
-        {/* <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } /> */}
-
-
-        <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} >
-          <section class="section">
-            <div class="container">
-              <h1 class="title"><strong>Welcome to {group.name}! </strong></h1>
-              <p class="subtitle">Description</p>
-              <div class="content">{group.description}</div>
-            </div>
-          </section>
-        </div>
-
-        <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`}>
-          <h1 class="subtitle">Group Members</h1>
-          { members }
-        </div>
-
-        <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`}>
-          <section class="section">
-            <div class="container">
-              <h1 class="subtitle">Group Pics</h1>
-              <div class="columns is-multi">
-                { pictures }
+        <div class="container">
+          
+          <div class="columns">
+            <div class="column">
+              <div class="buttons is-left">
+                <button class="button is-active is-2" name="Information" onClick={this.handleViewChange}><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;Information</button>
+                <button class="button is-active is-2" name="Members" onClick={this.handleViewChange}><i class="fas fa-users" aria-hidden="true"></i>&nbsp;Members</button>
+                <button class="button is-active is-2" name="Pictures" onClick={this.handleViewChange}><i class="fas fa-image" aria-hidden="true"></i>&nbsp;Pictures</button>
+                {this.isGroupMember() && <button class="button is-active is-2" name="Events" onClick={this.handleViewChange}><i class="far fa-calendar-check" aria-hidden="true"></i>&nbsp;Events</button> }
+                {this.isGroupMember() && <button class="button is-active is-2" name="Chats" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
               </div>
             </div>
-          </section>
+            <div class="column">
+              <div class="buttons is-right">
+                { this.isAdmin() && <Link to={`/groups/${group._id}/edit`}><a class="button is-light">Edit</a></Link>}
+                { !this.isGroupMember() && <Link to={`/groups/${group._id}/join`}><a class="button is-danger"><strong>Join the Group!</strong></a></Link>}
+              </div>
+            </div>
+          </div>
+
+          {/* <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } /> */}
+
+
+          <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} style={{height: 500}}>
+            <section class="section">
+              <div class="container">
+                <h1 class="title"><strong>Welcome to {group.name}! </strong></h1>
+                <p class="subtitle">Description</p>
+                <div class="content">{group.description}</div>
+              </div>
+            </section>
+          </div>
+
+          <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`} style={{height: 500}}>
+            <h1 class="subtitle">Group Members</h1>
+            { members }
+          </div>
+
+          <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{height: 500}}>
+            <section class="section">
+              <div class="container">
+                <h1 class="subtitle">Group Pics</h1>
+                <div class="columns is-multi">
+                  { pictures }
+                </div>
+              </div>
+            </section>
+          </div>
+        
+          <div class={`${this.state.display.Events ? "Events" : "is-hidden" }`} style={{height: 500}}>
+            <section class="section" >
+              <div class="container">
+                <h1 class="subtitle">Events</h1>
+                <div class="columns is-multi">
+                  { events }
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class={`${this.state.display.Chat ? "Chat" : "is-hidden" }`} style={{height: 500}}>
+            <section class="section" >
+              <div class="container">
+                <h1 class="subtitle">Chat Board</h1>
+                <div class="columns is-multi">
+                  { chats }
+                </div>
+              </div>
+            </section>
+          </div>
+        
+        
+    
+    
+          { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
         </div>
-      
-        <div class={`${this.state.display.Events ? "Events" : "is-hidden" }`}>
-           <section class="section">
-             <div class="container">
-               <h1 class="subtitle">Events</h1>
-               <div class="columns is-multi">
-                 { events }
-               </div>
-             </div>
-           </section>
-         </div>
-      
-  
-  
-        { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
       </div>
       )
   }
