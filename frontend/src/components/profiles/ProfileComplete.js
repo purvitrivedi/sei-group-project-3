@@ -4,7 +4,6 @@ import { isOwner, getUserId } from '../../lib/auth'
 const ProfileComplete = (props) => {
   const userId = getUserId()
   const { edit } = props
-  console.log(edit)
   return (
     <div className="column is-full fav-comp">
       <div className="columns">

@@ -13,7 +13,9 @@ class ProfileShow extends React.Component {
   state = {
     profile: [],
     edit: false,
-    editTerm: 'Edit'
+    editTerm: 'Edit',
+    showBio: true,
+    bio: ''
   }
 
   async componentDidMount() {
@@ -25,7 +27,7 @@ class ProfileShow extends React.Component {
         }
       }
       const res = await axios.get(`/api/profiles/${id}`, withHeaders())
-      this.setState({ profile: res.data })
+      this.setState({ profile: res.data, bio: res.data.bio })
     } catch (err) {
       console.log(err.response)
     }
@@ -77,27 +79,57 @@ class ProfileShow extends React.Component {
     this.setState({ edit: !this.state.edit, editTerm })
   }
 
+  enableEditBio = () => {
+    this.setState({ showBio: !this.state.showBio })
+  }
+
+  changeBio = e => {
+    const bio = e.target.value
+    this.setState({ bio })
+  }
+
+  sendPutRequest = async () => {
+    const bio = this.state.bio
+    try {
+      const id = this.props.match.params.id
+      const withHeaders = () => {
+        return {
+          headers: { Authorization: `Bearer ${getToken()}` }
+        }
+      }
+      const res = await axios.put(`/api/profiles/${id}`,{bio: bio}, withHeaders())
+
+      const resGet = await axios.get(`/api/profiles/${id}`, withHeaders())
+      this.setState({ profile: resGet.data, bio: resGet.data.bio, showBio:true })
+
+
+    } catch (err) {
+      console.log(err.response)
+    }
+  }
+
+
+
   render() {
     const { profile } = this.state
-    console.log(profile)
+    console.log(this.state.editBio)
     let completedHikes
     if (profile.completedHikes) {
       completedHikes = profile.completedHikes.map(hike => {
-        return <ProfileComplete key={hike._id} {...hike} handleClick={this.removeCompHike} edit={this.state.edit}/>
+        return <ProfileComplete key={hike._id} {...hike} handleClick={this.removeCompHike} edit={this.state.edit} />
       })
     }
     let favoritedHikes
     if (profile.favoritedHikes) {
       favoritedHikes = profile.favoritedHikes.map(hike => {
-        return <ProfileFav key={hike._id} {...hike} edit={this.state.edit}/>
+        return <ProfileFav key={hike._id} {...hike} edit={this.state.edit} />
       })
     }
 
     let joinedGroups
     if (profile.joinedGroups) {
-      joinedGroups = profile.joinedGroups.map(groupId => (<ProfileGroups id={groupId} edit={this.state.edit}/>))
+      joinedGroups = profile.joinedGroups.map(groupId => (<ProfileGroups key={groupId} id={groupId} edit={this.state.edit} />))
     }
-
     return (
       <div className="profile-show">
         <div className="tile is-ancestor">
@@ -133,10 +165,21 @@ class ProfileShow extends React.Component {
                 </article>
               </div>
               <article className="box bio-box">
-              { this.state.edit && <p className="edit-bio">Edit bio</p>}
-                <div className="bio">
+                {this.state.edit && <p onClick={this.enableEditBio} className="edit-bio">Edit bio</p>}
+                {this.state.showBio && <div className="bio">
                   {profile.bio}
-                </div>
+                </div>}
+                {!this.state.showBio &&
+                  <div className="bio">
+                    <input
+                      className="textarea"
+                      type="textarea"
+                      value={this.state.bio}
+                      onChange={this.changeBio}
+
+                    />
+                    <p className="edit-bio" onClick={this.sendPutRequest}>Change</p>
+                  </div>}
               </article>
             </div>
           </div>
@@ -151,7 +194,7 @@ class ProfileShow extends React.Component {
                   {completedHikes}
                 </div>
                 {isOwner(profile._id) &&
-                  <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.addCompHike}/></div>
+                  <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.addCompHike} /></div>
                 }
               </div>
             </div>
