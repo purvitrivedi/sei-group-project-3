@@ -23,12 +23,8 @@ class GroupIndex extends React.Component {
         <section className="GroupIndex hero">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">
-                Welcome to Group Pages
-              </h1>
-              <h2 className="subtitle">
-                Find your groups and join today!
-              </h2>
+              <h1 className="title">The Hikr Groups</h1>
+              <h2 className="subtitle">Find your groups and join today!</h2>
             </div>
           </div>
         </section>
@@ -37,7 +33,7 @@ class GroupIndex extends React.Component {
           <div className="container">
             <div className="columns is-multiline">
               {this.state.groups.map(group => (
-                <GroupCard key={group._id} {...group}/>
+                <GroupCard key={group._id} { ...group }/>
               ))}
             </div>
           </div>
