@@ -43,6 +43,10 @@ async function groupsCreate(req, res, next) {
   try {
     req.body.createdMember = req.currentUser
     const createdGroup = await Group.create(req.body)
+    console.log(createdGroup)
+    createdGroup.members.push(req.body.createdMember) //push to the member
+    console.log(createdGroup)
+
     res.status(201).json(createdGroup)
   } catch (err) {
     next(err)
