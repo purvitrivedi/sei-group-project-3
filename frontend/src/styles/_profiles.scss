@@ -1,16 +1,67 @@
 .profile-show {
-  margin-left: 10%;
+  margin-left: 20%;
+  margin-top: 2%;
   height: 100vh;
-  figure {
-    text-align: center;
-    margin-bottom: 80px;
+
+  .left-tile {
+    min-height: 30vh;
+    width: 30vh;
+  }
+
+  .groups {
+    background-color: rgba(136, 167, 255, 0.644);
+    min-height: 46.5vh;
+    width: 30vh;
     img {
       width: 150px;
     }
+  }
+  .bio-box {
+    color: white;
+    margin-top: 20px;
+    background-color: rgb(49, 101, 126);
+    min-height: 22.3vh;
+    width: 40vh;
+  }
+  .fav {
+    color: white;
+    min-height: 45vh;
+    width: 40vh;
+  }
 
+  .comp {
+    background-color: rgba(255, 232, 102, 0.685);
+    margin-left: 0px;
+    min-height: 82vh;
+    width: 40vh;
+  }
+
+  .tile-pad {
+    margin: 15px;
+  }
+
+  .name {
+    margin-top: 10px;
+  }
+  .bio {
+    width: 100%;
+    text-align: center;
+  }
+
+  figure {
+    margin-bottom: 35px;
+    text-align: center;
+    img {
+      width: 150px;
+    }
     .fullname {
       margin: 10px;
-      font-size: 16px;
+      margin-left: 12px;
+      width: 300px;
+    }
+
+    .name-btn {
+      font-size: 20px;
     }
 
     .edit {
@@ -22,11 +73,16 @@
     }
   }
 
-  .groups {
-    background-color: rgb(178, 178, 212);
-    img {
-      width: 150px;
-    }
+  .no-hikes {
+    margin: 55% auto;
+    text-align: center;
+  }
+
+  .no-group {
+    margin: 65% auto;
+    color: rgb(244, 255, 146);
+    text-align: center;
+    // font-weight: bold;
   }
 }
 
@@ -52,20 +108,6 @@
   }
 }
 
-.tile-pad {
-  margin: 12px;
-}
-
-.bio-box {
-  background-color: rgb(212, 239, 251);
-}
-
-.bio {
-  margin-top: 50px;
-  text-align: center;
-  // padding: 50px;
-}
-
 .remove {
   background-color: rgba(251, 152, 149, 0.966);
   border-radius: 10px;
@@ -76,12 +118,25 @@
 }
 
 .edit-bio {
+  position: absolute;
+  width: 80px;
   font-size: 13px;
-  padding: 2px 0px;
-  background-color: rgb(192, 173, 255);
+  background-color: rgb(212, 206, 235);
   border-radius: 10px;
   text-align: center;
-  width: 40%;
-  margin-top: 0px;
-  margin-left: 60%;
+  margin-left: 250px;
+  margin-top: 5px;
+}
+
+.edit-bio-btn {
+  width: 80px;
+  font-size: 13px;
+  background-color: rgb(212, 206, 235);
+  border-radius: 10px;
+  text-align: center;
+  margin: 10px auto;
+}
+
+.list-image {
+  max-width: 200px;
 }
