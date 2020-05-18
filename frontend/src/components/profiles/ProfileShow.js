@@ -78,7 +78,7 @@ class ProfileShow extends React.Component {
     let completedHikes
     if (profile.completedHikes) {
       completedHikes = profile.completedHikes.map(hike => {
-        return <ProfileComplete key={hike._id} {...hike} handleClick={this.removeCompHike}/>
+        return <ProfileComplete key={hike._id} {...hike} handleClick={this.removeCompHike} />
       })
     }
     let favoritedHikes
