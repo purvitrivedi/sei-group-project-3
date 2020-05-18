@@ -1,12 +1,9 @@
 import React from 'react'
+import Calendar from 'react-calendar'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId } from '../../lib/auth'
 
-import bulmaCalendar from '~bulma-calendar/dist/js/bulma-calendar.min.js';
-
-import GroupShowNavbar from './x GroupShowNavbar'
-import GroupShowBody from './GroupShowBody'
 
 class GroupShow extends React.Component {
   state = {
@@ -17,7 +14,8 @@ class GroupShow extends React.Component {
       Pictures: false,
       Events: false,
       Chat: false
-    }
+    },
+    date: new Date()
   }
 
   // fetch
@@ -71,6 +69,9 @@ class GroupShow extends React.Component {
     display[event.target.name] = true
     this.setState({ display })
   }
+
+  //calendar
+  controlCalendar = date => this.setState({ date })
 
   render() {
     console.log(this.state)
@@ -148,22 +149,113 @@ class GroupShow extends React.Component {
             <h1 class="subtitle">{event.eventName}</h1>
             <p>{event.description}</p>
             <p>Event Host: {event.createdMember.username}</p>
-            <p>{event.participants.length} members will participate!</p>
+            { event.participants ? <p>{event.participants.length} members will participate!</p> : '' }
 
             <Link to={`groups/${group._id}/events/${event._id}`} ><button>Check the event details!</button></Link>
+
+            <Calendar
+              onChange={this.controlCalendar}
+              value={this.state.date} />
           </div>
         </section>
       ))
     }
 
+
+
     let chat
     if (group.messages) {
       chat = group.messages.map( msg => (
-        <div class="columns box">
-          <div class="column is-2"><figure><img src={msg.user.profileImage} alt={msg.user._id} class="is-rounded" /></figure></div>
-          <div class="column is-10" key={msg._id}>{msg.text}</div>
-          <p>Updated at {msg.updatedAt}</p>
+        // <div class="columns box">
+        //   <div class="column is-2"><figure><img src={msg.user.profileImage} alt={msg.user._id} class="is-rounded" /></figure></div>
+        //   <div class="column is-10" key={msg._id}>{msg.text}</div>
+        //   <p>Updated at {msg.updatedAt}</p>
+        // </div>
+        <>
+        <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img src="https://bulma.io/images/placeholders/128x128.png" />
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>Barbara Middleton</strong>
+              <br />
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
+              <br />
+              <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
+            </p>
+          </div>
+      
+          <article class="media">
+            <figure class="media-left">
+              <p class="image is-48x48">
+                <img src="https://bulma.io/images/placeholders/96x96.png" />
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>Sean Brown</strong>
+                  <br />
+                  Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
+                  <br />
+                  <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                </p>
+              </div>
+      
+              <article class="media">
+                Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa.
+              </article>
+      
+              <article class="media">
+                Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor.
+              </article>
+            </div>
+          </article>
+      
+          <article class="media">
+            <figure class="media-left">
+              <p class="image is-48x48">
+                <img src="https://bulma.io/images/placeholders/96x96.png" />
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>Kayli Eunice </strong>
+                  <br />
+                  Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat.
+                  <br />
+                  <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                </p>
+              </div>
+            </div>
+          </article>
         </div>
+      </article>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img src="https://bulma.io/images/placeholders/128x128.png" />
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="field">
+            <p class="control">
+              <textarea class="textarea" placeholder="Add a comment..."></textarea>
+            </p>
+          </div>
+          <div class="field">
+            <p class="control">
+              <button class="button">Post comment</button>
+            </p>
+          </div>
+        </div>
+      </article>
+        </>
       ))
     }
 
@@ -192,7 +284,7 @@ class GroupShow extends React.Component {
                 <button class="button is-active is-2" name="Members" onClick={this.handleViewChange}><i class="fas fa-users" aria-hidden="true"></i>&nbsp;Members</button>
                 <button class="button is-active is-2" name="Pictures" onClick={this.handleViewChange}><i class="fas fa-image" aria-hidden="true"></i>&nbsp;Pictures</button>
                 {this.isGroupMember() && <button class="button is-active is-2" name="Events" onClick={this.handleViewChange}><i class="far fa-calendar-check" aria-hidden="true"></i>&nbsp;Events</button> }
-                {this.isGroupMember() && <button class="button is-active is-2" name="Chats" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
+                {this.isGroupMember() && <button class="button is-active is-2" name="Chat" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
               </div>
             </div>
             <div class="column">
@@ -228,7 +320,7 @@ class GroupShow extends React.Component {
           <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{height: 500}}>
             <section class="section">
               <div class="container">
-                <h1 class="subtitle">Group Pics</h1>
+                <h1 class="subtitle">Group Pictures</h1>
                 <div class="columns is-multi">
                   { pictures }
                 </div>
