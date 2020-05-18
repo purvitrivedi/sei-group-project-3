@@ -57,70 +57,71 @@ class GroupShow extends React.Component {
     else return false
   }
 
-  handleViewChange = event => {
-    event.preventDefault()
-    if (event.target.name === 'showInfo') {
-      this.setState({ hideList: false, hideGrid: true, hideMap: true })
-    } else if (event.target.name === 'hideGrid') {
-      this.setState({ hideList: true, hideGrid: false, hideMap: true })
-    } else {
-      this.setState({ hideList: true, hideGrid: true, hideMap: false })
-    }
-    showInfo: true,
-    showMembers: false,
-    showPictures: false,
-    showEvents: false,
-    showChat: false
-  }
+  // handleViewChange = event => {
+  //   event.preventDefault()
+  //   if (event.target.name === 'showInfo') {
+  //     this.setState({ hideList: false, hideGrid: true, hideMap: true })
+  //   } else if (event.target.name === 'hideGrid') {
+  //     this.setState({ hideList: true, hideGrid: false, hideMap: true })
+  //   } else {
+  //     this.setState({ hideList: true, hideGrid: true, hideMap: false })
+  //   }
+  //   showInfo: true,
+  //   showMembers: false,
+  //   showPictures: false,
+  //   showEvents: false,
+  //   showChat: false
+  // }
 
   render() {
-    console.log(this.state)
-    console.log(this.props)
-    const group = this.state.group
+    // console.log(this.state)
+    // console.log(this.props)
+    // const group = this.state.group
     return(
-      <div class="GroupShow">
-        <section class="GroupShow hero">
-          <div class="hero-body">
-            <div class="container"><figure className="image is-2by1"><img src={group.headerImage} alt={group.name} /></figure></div>
-          </div>
-        </section>
+      'hey'
+    //   <div class="GroupShow">
+    //     <section class="GroupShow hero">
+    //       <div class="hero-body">
+    //         <div class="container"><figure className="image is-2by1"><img src={group.headerImage} alt={group.name} /></figure></div>
+    //       </div>
+    //     </section>
 
-        <div class="columns">
-          <div class="buttons column">
-            <button class="button" name="show.,..." onClick={this.handleViewChange}>Information</button>
-            <button class="button" name="" onClick={this.handleViewChange}>Members</button>
-            <button class="button" name="" onClick={this.handleViewChange}>Pictures</button>
-            {isGroupMember() && <button class="button" name="" onClick={this.handleViewChange}>Events</button> }
-            {isGroupMember() && <button class="button" name="" onClick={this.handleViewChange}>Chat</button> }
-          </div>
+    //     <div class="columns">
+    //       <div class="buttons column">
+    //         <button class="button" name="show.,..." onClick={this.handleViewChange}>Information</button>
+    //         <button class="button" name="" onClick={this.handleViewChange}>Members</button>
+    //         <button class="button" name="" onClick={this.handleViewChange}>Pictures</button>
+    //         {isGroupMember() && <button class="button" name="" onClick={this.handleViewChange}>Events</button> }
+    //         {isGroupMember() && <button class="button" name="" onClick={this.handleViewChange}>Chat</button> }
+    //       </div>
 
-          <div className="buttons is-right column">
-            { isAuthenticated() && <Link to={`/groups/${group._id}/join`}><a className="button is-primary"><strong>Join the Group!</strong></a></Link>}
-            { isAdmin() && <Link to={`/groups/${group._id}/edit`}><a className="button is-light">Edit</a></Link>}
-          </div>
-        </div>
+    //       <div className="buttons is-right column">
+    //         { isAuthenticated() && <Link to={`/groups/${group._id}/join`}><a className="button is-primary"><strong>Join the Group!</strong></a></Link>}
+    //         { isAdmin() && <Link to={`/groups/${group._id}/edit`}><a className="button is-light">Edit</a></Link>}
+    //       </div>
+    //     </div>
 
-        <a className="navbar-item" name="Information" href=".Information">Information</a>
-        <a className="navbar-item" name="Members" href=".Members">Members</a>
-        <a className="navbar-item" name="Pictures" href=".Pictures">Pictures</a>
-        {isGroupMember() && <a className="navbar-item" name="Events" href=".Event">Events</a> }
-        {isGroupMember() && <a className="navbar-item" name="Chat" href=".Chat">Chat</a> }
-        <button
-                className="button"
-                name="hideList"
-                onClick={this.handleViewChange}
-              >
-                List
-                </button>
-        <GroupShowNavbar 
-          key={group._id}
-          group={ group }
-          isGroupMember={ this.isGroupMember } 
-          isAdmin={ this.isAdmin }
-        />
-        <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } />
-        { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
-      </div>
+    //     <a className="navbar-item" name="Information" href=".Information">Information</a>
+    //     <a className="navbar-item" name="Members" href=".Members">Members</a>
+    //     <a className="navbar-item" name="Pictures" href=".Pictures">Pictures</a>
+    //     {isGroupMember() && <a className="navbar-item" name="Events" href=".Event">Events</a> }
+    //     {isGroupMember() && <a className="navbar-item" name="Chat" href=".Chat">Chat</a> }
+    //     <button
+    //             className="button"
+    //             name="hideList"
+    //             onClick={this.handleViewChange}
+    //           >
+    //             List
+    //             </button>
+    //     <GroupShowNavbar 
+    //       key={group._id}
+    //       group={ group }
+    //       isGroupMember={ this.isGroupMember } 
+    //       isAdmin={ this.isAdmin }
+    //     />
+    //     <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } />
+    //     { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
+    //   </div>
     )
   }
 }
