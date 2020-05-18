@@ -1,5 +1,5 @@
 import React from 'react'
-import MapGL, { Popup, NavigationControl, ScaleControl } from 'react-map-gl'
+import MapGL, { Popup, ScaleControl } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Link } from 'react-router-dom'
 
@@ -14,9 +14,9 @@ class HikeMap extends React.Component {
     }
   }
 
-  handleShowPopup = event => {
-    console.log(event.target.className)
-  }
+  // handleShowPopup = event => {
+  //   console.log(event.target.className)
+  // }
 
   render() {
     const hikes = this.props.hikes
@@ -28,7 +28,7 @@ class HikeMap extends React.Component {
           height="90vh"
           mapStyle="mapbox://styles/mapbox/outdoors-v11"
           onViewportChange={viewport => this.setState({ viewport })}
-          mapboxApiAccessToken='pk.eyJ1IjoiYW5keThyYWRzaGF3IiwiYSI6ImNrYTU1ZnpoaDA2OXgzbW9kc3pqa3FrMXAifQ.v5LMEUumd8V04cvx7ed5ug'
+          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         >
 
           {hikes.map(hike => {
@@ -37,8 +37,8 @@ class HikeMap extends React.Component {
                 <Popup
                   latitude={hike.location.lat}
                   longitude={hike.location.lon}
-                  key={hike.name}
-                >
+                  key={`${hike._id}${hike.name}`}
+                  >
                   <Link to={`/hikes/${hike._id}`}>
                     <p>{hike.name}</p> 
                     <p>{hike.location.country}</p>

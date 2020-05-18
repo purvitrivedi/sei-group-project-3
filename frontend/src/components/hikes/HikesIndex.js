@@ -38,14 +38,13 @@ class HikesIndex extends React.Component {
 
   handleViewChange = event => {
     event.preventDefault()
-    if (event.target.name === 'hideList') {
+    if (event.target.name === 'showList') {
       this.setState({ hideList: false, hideGrid: true, hideMap: true })
-    } else if (event.target.name === 'hideGrid') {
+    } else if (event.target.name === 'showGrid') {
       this.setState({ hideList: true, hideGrid: false, hideMap: true })
     } else {
       this.setState({ hideList: true, hideGrid: true, hideMap: false })
     }
-
   }
 
   render() {
@@ -70,21 +69,21 @@ class HikesIndex extends React.Component {
 
               <button
                 className="button"
-                name="hideList"
+                name="showList"
                 onClick={this.handleViewChange}
               >
                 List
                 </button>
               <button
                 className="button"
-                name="hideGrid"
+                name="showGrid"
                 onClick={this.handleViewChange}
               >
                 Grid
               </button>
               <button
                 className="button"
-                name="hideMap"
+                name="showMap"
                 onClick={this.handleViewChange}
               >
                 Map
