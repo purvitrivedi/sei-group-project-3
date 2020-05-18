@@ -7,6 +7,7 @@ import ProfileGroups from './ProfileGroups'
 import ProfileFav from './ProfileFav'
 import ProfileComplete from './ProfileComplete'
 import AddCompletedHike from './AddCompletedHike'
+import ProfileImageUpload from './ProfileImageUpload'
 
 class ProfileShow extends React.Component {
 
@@ -15,7 +16,8 @@ class ProfileShow extends React.Component {
     edit: false,
     editTerm: 'Edit',
     showBio: true,
-    bio: ''
+    bio: '',
+    image: ''
   }
 
   async componentDidMount() {
@@ -27,7 +29,7 @@ class ProfileShow extends React.Component {
         }
       }
       const res = await axios.get(`/api/profiles/${id}`, withHeaders())
-      this.setState({ profile: res.data, bio: res.data.bio })
+      this.setState({ profile: res.data, bio: res.data.bio, image: res.data.profileImage })
     } catch (err) {
       console.log(err.response)
     }
@@ -97,10 +99,10 @@ class ProfileShow extends React.Component {
           headers: { Authorization: `Bearer ${getToken()}` }
         }
       }
-      const res = await axios.put(`/api/profiles/${id}`,{bio: bio}, withHeaders())
+      const res = await axios.put(`/api/profiles/${id}`, { bio: bio }, withHeaders())
 
       const resGet = await axios.get(`/api/profiles/${id}`, withHeaders())
-      this.setState({ profile: resGet.data, bio: resGet.data.bio, showBio:true })
+      this.setState({ profile: resGet.data, bio: resGet.data.bio, showBio: true })
 
 
     } catch (err) {
@@ -108,11 +110,16 @@ class ProfileShow extends React.Component {
     }
   }
 
+  handleImageChange = (e) => {
+    this.setState({[e.target.name]: e.target.value})
+  }
+
+
 
 
   render() {
     const { profile } = this.state
-    console.log(this.state.editBio)
+    console.log(this.state.image)
     let completedHikes
     if (profile.completedHikes) {
       completedHikes = profile.completedHikes.map(hike => {
@@ -137,9 +144,18 @@ class ProfileShow extends React.Component {
             <div className="tile">
               <div className="tile is-parent is-vertical">
                 <figure>
-                  <img src={profile.profileImage} alt="profileImage" />
+                  <img src={this.state.image} alt="profileImage" />
+                  {this.state.edit &&
+                    <div className="control">
+                      <ProfileImageUpload
+                        onChange={this.handleImageChange}
+                        name="image"
+                      />
+                    </div>
+                  }
                   {(profile.fullName) && <p className="subtitle fullname">{profile.fullName}</p>}
                   <p className="column">@{profile.username}</p>
+
                   {isOwner(profile._id) && <p onClick={this.enableEdit} className="edit">{this.state.editTerm}</p>}
                 </figure>
 
