@@ -3,6 +3,7 @@ import React from 'react'
 import { getAllHikes } from '../../lib/api'
 
 import HikeListCard from './HikeListCard'
+import HikeCard from './HikeCard'
 import HikeMap from './HikeMap'
 
 class HikesIndex extends React.Component {
@@ -19,7 +20,7 @@ class HikesIndex extends React.Component {
       const res = await getAllHikes()
       const search = this.props.location.search.split('=')[1]
       console.log(search)
-      
+
       this.setState({ hikes: res.data, search })
     } catch (err) {
       console.log(err)
@@ -41,9 +42,9 @@ class HikesIndex extends React.Component {
 
   handleViewChange = event => {
     event.preventDefault()
-    if (event.target.name === 'showList') {
+    if (event.currentTarget.name === 'showList') {
       this.setState({ hideList: false, hideGrid: true, hideMap: true })
-    } else if (event.target.name === 'showGrid') {
+    } else if (event.currentTarget.name === 'showGrid') {
       this.setState({ hideList: true, hideGrid: false, hideMap: true })
     } else {
       this.setState({ hideList: true, hideGrid: true, hideMap: false })
@@ -60,60 +61,84 @@ class HikesIndex extends React.Component {
             <h1 className="title-logo has-text-centered">HIKR</h1>
           </div>
         </div>
-        <div className="field box">
-          <div className="control">
+        <div className="field box index-search">
+          <div className="control index-search-bar">
             <input
-              className="input is-primary"
+              className="input is-primary is-rounded"
               name="search"
               type="text"
               placeholder="Search for a Hike, Country, Season or Difficulty..."
               onChange={this.handleChange}
               value={this.state.search}
             />
-            <div className="view-change">
+          </div>
 
+          <div className="view-change buttons field has-addons">
+            <p className="control">
               <button
                 className="button"
                 name="showList"
-                onClick={this.handleViewChange}
-              >
-                List
-                </button>
+                onClick={this.handleViewChange}>
+                <span className="icon is-small">
+                  <i
+                    className="fas fa-list"
+                  ></i>
+                </span>
+              </button>
+            </p>
+            <p className="control">
               <button
                 className="button"
                 name="showGrid"
-                onClick={this.handleViewChange}
-              >
-                Grid
+                onClick={this.handleViewChange}>
+                <span className="icon is-small">
+                  <i
+                    className="fas fa-th"
+                  ></i>
+                </span>
               </button>
+            </p>
+            <p className="control">
               <button
                 className="button"
                 name="showMap"
-                onClick={this.handleViewChange}
-              >
-                Map
+                onClick={this.handleViewChange}>
+                <span className="icon is-small">
+                  <i
+                    className="fas fa-map-pin"
+                  ></i>
+                </span>
               </button>
-            </div>
+            </p>
+
+
+
+
+
+
           </div>
+
         </div>
         <section className={`${this.state.hideList ? 'section Hike-list is-hidden' : 'section Hike-list'}`}>
           <div className="colmns is-multiline">
             {this.filteredHikes().map(hike => {
               return (
-                <HikeListCard key={hike._id} {...hike} />
+                <HikeListCard key={`List${hike._id}`} {...hike} />
               )
             })}
           </div>
         </section>
-        {/* <section className="section Hike-grid">
+        <section className={`${this.state.hideGrid ? 'section Hike-grid is-hidden' : 'Hike-grid'}`}>
           <div className="container">
-            {this.state.hikes.map(hike => {
-              return (
-                <HikeListCard key={hike._id} {...hike} />
-              )
-            })}
+            <div className="columns is-multiline">
+              {this.state.hikes.map(hike => {
+                return (
+                  <HikeCard key={`Grid${hike._id}`} {...hike} />
+                )
+              })}
+            </div>
           </div>
-        </section> */}
+        </section>
         <section className={`${this.state.hideMap ? 'section Hike-map is-hidden' : 'Hike-map'}`}>
           <HikeMap
             hikes={this.filteredHikes()}

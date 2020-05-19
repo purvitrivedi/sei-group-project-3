@@ -64,8 +64,6 @@ class ProfileShow extends React.Component {
     const linkName = e.target.name
     const id = e.target.value
 
-
-
     try {
       const userId = this.state.profile._id
       const withHeaders = () => {
@@ -131,8 +129,25 @@ class ProfileShow extends React.Component {
 
   }
 
+  leaveGroup = async(event) => {
+    const groupId = event.target.value
+    const memberId = event.target.name
+    const id = this.state.profile._id
 
+    try {
+      const withHeaders = () => {
+        return {
+          headers: { Authorization: `Bearer ${getToken()}` }
+        }
+      }
+      await axios.delete(`/api/groups/${groupId}/members/${memberId}`, withHeaders())
 
+      const res = await axios.get(`/api/profiles/${id}`, withHeaders())
+      this.setState({ profile: res.data})
+    } catch (err) {
+      console.log(err.response)
+    }
+  }
 
   render() {
     const { profile } = this.state
@@ -165,7 +180,9 @@ class ProfileShow extends React.Component {
     let joinedGroups
     if (profile.joinedGroups) {
       if (profile.joinedGroups.length > 0) {
-        joinedGroups = profile.joinedGroups.map(groupId => (<ProfileGroups key={groupId} id={groupId} edit={this.state.edit} />))
+        joinedGroups = profile.joinedGroups.map(groupId => (<ProfileGroups key={groupId} id={groupId} edit={this.state.edit}
+          handleClick={this.leaveGroup}
+        />))
       } else {
         if (isOwner(this.state.profile._id)) {
           joinedGroups = <Link to="/groups"> <div className="no-group">Explore Hikr Groups</div></Link>
@@ -183,7 +200,7 @@ class ProfileShow extends React.Component {
             <div className="tile is-child box profile-top">
               <figure>
                 {this.state.image && <img src={this.state.image} alt="profileImage" />}
-                {!this.state.image && <img src={defaultImage} alt="default"/>}
+                {!this.state.image && <img src={defaultImage} alt="default" />}
                 {this.state.edit &&
                   <div className="control">
                     <ProfileImageUpload
@@ -234,6 +251,7 @@ class ProfileShow extends React.Component {
                   <div className="column columns is-multiline">
                     {favoritedHikes}
                   </div>
+                  {profile.favoritedHikes && profile.favoritedHikes.length > 0 && <Link to="/hikes" className="explore-hikes">Explore more Hikes</Link>}
                 </article>
               </div>
             </div>
