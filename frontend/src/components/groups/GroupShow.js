@@ -3,6 +3,7 @@ import Calendar from 'react-calendar'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId, getToken } from '../../lib/auth'
+import GroupImgNew from './GroupImgNew'
 
 
 class GroupShow extends React.Component {
@@ -15,6 +16,7 @@ class GroupShow extends React.Component {
       Events: false,
       Chat: false
     },
+  
     date: new Date(),
   
     member: false,
@@ -27,7 +29,6 @@ class GroupShow extends React.Component {
     try {
       const groupId = this.props.match.params.id
       const res = await axios.get(`/api/groups/${groupId}`)
-      console.log(res)
      
       const userId = getUserId()
       let member
@@ -101,70 +102,101 @@ class GroupShow extends React.Component {
     window.location.href = "mailto:?body="+body+"&subject="+subject          
   }
 
+  // userAddedImages
+  handleUploadPhoto = async event => {
+    try {
+      const groupId = this.props.match.params.id
+      const group = await axios.post(`/api/groups/${groupId}/user-images`, {
+          images: event.target.value,
+          user: getUserId()
+        },{
+        headers: { Authorization: `Bearer ${getToken()}`}
+      })
+      this.setState({ group })
+      this.props.history.push(`/groups/${groupId}`) //! push to the group page? ind. url?
+      console.log(group)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  handleDeletePhoto = async e => {
+    console.log(this.props)
+    try {
+      const groupId = this.props.match.params.id
+      const userAddedImageId = e.target.value
+      const group = await axios.delete(`/api/groups/${groupId}/user-images/${userAddedImageId}`, {
+        headers: { Authorization: `Bearer ${getToken()}`}
+      })
+      this.setState({ group })
+      this.props.history.push(`/groups/${groupId}`) //! push to the group page? ind. url?
+      console.log(group)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  
 
   render() {
     console.log(this.state)
     console.log(this.props)
-    // console.log(isAuthenticated())
-    // console.log(this.isGroupMember())
-    // console.log(this.isAdmin())
-    
     const group = this.state.group
 
+    const admin = group.createdMember ? { ...group.createdMember } : ''
+    
     let members
     if (group.members) {
       members = group.members.map( member => (
-        <article class="media" key={member._id}>
+        <article class="media" key={member.user._id}>
           <div class="media-left">
             <figure class="image is-64x64">
-              <img src={member.profileImage} alt={member.username} />
+              <img src={member.user.profileImage} alt={member.user.username} />
             </figure>
           </div>
           <div class="media-content">
             <div class="content">
               <p>
-              <strong>{member.username}</strong><small>{member.email}</small>
+              <strong>{member.user.username.replace(member.user.username.charAt(0), member.user.username.charAt(0).toUpperCase())}&nbsp;</strong><small>{member.user.email}</small>
                 <br />
-                {member.bio}
+                {member.user.bio}
               </p>
             </div>
 
             <nav class="level is-mobile">
-            <div class="level-left">
+              <div class="level-left">
 
-              <a class="level-item" aria-label="1.profile">
-                <span class="icon is-small">
-                  <Link to={`/profiles/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
-                </span>
-              </a>
-
-              <a class="level-item" aria-label="2.reply">
-                <span class="icon is-small">
-                  <i class="fas fa-reply" aria-hidden="true"></i>
-                </span>
-              </a>
-
-                <a class="level-item" aria-label="3.favHike">
+                <a class="level-item" aria-label="1.profile">
                   <span class="icon is-small">
-                  { member.favoriteHikes ? 
-                    <Link to={`/hikes/${member.favoriteHikes[0]._id}`}><i class="fas fa-heart" aria-hidden="true"></i></Link>
-                    : ''
-                  }
-                </span>
-              </a>
-            </div>
-          </nav>
+                    <Link to={`/profiles/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
+                  </span>
+                </a>
 
-        </div>
-      </article>
+                <a class="level-item" aria-label="2.reply">
+                  <span class="icon is-small">
+                    <i class="fas fa-reply" aria-hidden="true"></i>
+                  </span>
+                </a>
+
+                  <a class="level-item" aria-label="3.favHike">
+                    <span class="icon is-small">
+                    { member.user.favoriteHikes ? 
+                      <Link to={`/hikes/${member.user.favoriteHikes[0]._id}`}><i class="fas fa-heart" aria-hidden="true"></i></Link>
+                      : ''
+                    }
+                  </span>
+                </a>
+              </div>
+            </nav>
+          </div>
+        </article>
       ))
     }
 
     let pictures
     if (group.userAddedImages) {
-      pictures = group.userAddedImages.map( img => (
-        <div class="column" key={img._id}>
-          <figure className="image is-square"><img src={img.images} alt={group.name} style={{height: 100, width: 200}}/></figure>
+      pictures = group.userAddedImages.map( (img, index) => (
+        <div class="column is-4" key={index}>
+          <figure className="image"><img src={img.images} alt={group.name} style={{height: 250}}/></figure>
+          { (img.user._id === getUserId() ) && <button value={img._id} onClick={this.handleDeletePhoto}>x</button> }
         </div>
       ))
     }
@@ -332,12 +364,36 @@ class GroupShow extends React.Component {
             </div>
           </div>
 
+
           <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} style={{minHeight: 500}}>
             <section class="section">
               <div class="container">
                 <h1 class="title"><strong>Welcome to {group.name}! </strong></h1>
                 <p class="subtitle">Description</p>
                 <div class="content">{group.description}</div>
+                <br />
+                <p class="subtitle">Host</p>
+                <div className="column is-full">
+                  <div className="column is-full">
+                    <div className="box">
+                      <article className="media">
+                        <div className="media-left">
+                          <figure className="image is-64x64"><img src= {admin.profileImage} alt={admin.username} /></figure>
+                        </div>
+                        <div className="media-content">
+                          <div className="content">
+                            <p>
+                              <strong>{admin.username}&nbsp;</strong><small>{admin.email}</small>
+                              <br />
+                              {admin.bio}
+                            </p>
+                            <Link to={`/profiles/${admin._id}`}><i className="fas fa-address-card"></i></Link>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -355,7 +411,15 @@ class GroupShow extends React.Component {
             <section class="section">
               <div class="container">
                 <h1 class="subtitle">Group Pictures</h1>
-                { pictures }
+                <div class="columns is-multiline">
+                  { pictures }
+                </div>
+                { this.state.member && 
+                  <GroupImgNew
+                    onChange={this.handleUploadPhoto}
+                    name="images"
+                  />
+                }
               </div>
             </section>
           </div>

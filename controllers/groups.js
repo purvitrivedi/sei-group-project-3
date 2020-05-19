@@ -122,8 +122,26 @@ async function userAddedImageCreate(req, res, next) {
   }
 }
 
+// GET
+// URL = api/groups/:id/user-images/:userAddedImageId
+async function userAddedImageShow(req, res, next) {
+  try {
+    const groupId = req.params.id
+    const group = await Group.findById(groupId)
+    if (!group) throw new Error(notFound)
+
+    const userAddedImageId = req.params.userAddedImageId
+    const picToShow = group.userAddedImages.id(userAddedImageId)
+    if (!picToShow) throw new Error(notFound)
+      
+    res.status(200).json(picToShow)
+  } catch (err) {
+    next(err)
+  }
+}
+
 // DELETE
-// URL = api/groups/:id/user-images/:userImageId
+// URL = api/groups/:id/user-images/:userAddedImageId
 async function userAddedImageDelete(req, res, next) {
   try {
     // find group
@@ -148,6 +166,8 @@ async function userAddedImageDelete(req, res, next) {
     next(err)
   }
 }
+
+
 
 //* Messages
 // POST
@@ -200,6 +220,9 @@ async function groupsMessageDelete(req, res, next) {
   }
 }
 
+
+
+
 //* Event
 // POST
 // URL = api/groups/:id/events
@@ -228,6 +251,7 @@ async function groupsEventCreate(req, res, next) {
     next(err)
   }
 }
+
 // GET
 // URL = api/groups/:id/events/:eventId
 async function groupsEventShow(req, res, next) {
@@ -366,6 +390,7 @@ module.exports = {
 
   //userAddedImages
   createGroupImage: userAddedImageCreate,
+  showGroupImage: userAddedImageShow,
   deleteGroupImage: userAddedImageDelete,
 
   // messages

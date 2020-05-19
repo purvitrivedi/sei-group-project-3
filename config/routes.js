@@ -52,6 +52,7 @@ router.route('/groups/:id/user-images')
   .post(secureRoute, groups.createGroupImage)
 
 router.route('/groups/:id/user-images/:userAddedImageId')
+  .get(secureRoute, groups.showGroupImage)
   .delete(secureRoute, groups.deleteGroupImage)
 
 // messages
