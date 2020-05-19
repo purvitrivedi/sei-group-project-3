@@ -18,6 +18,7 @@ import ProfileEdit from './components/profiles/ProfileEdit'
 import HikesIndex from './components/hikes/HikesIndex'
 import HikeShow from './components/hikes/HikeShow'
 import HikeCreate from './components/hikes/HikeCreate'
+import HikeUpdate from './components/hikes/HikeUpdate'
 
 // groups
 import GroupIndex from './components/groups/GroupIndex'
@@ -40,6 +41,7 @@ const App = () => {
         <SecureRoute path="/profiles" component={ProfileIndex} />
 
         <Route path="/hikes/new" component={HikeCreate} />
+        <Route path="/hikes/:id/update" component={HikeUpdate} />
         <Route path="/hikes/:id" component={HikeShow} />
         <Route path="/hikes" component={HikesIndex} />
 

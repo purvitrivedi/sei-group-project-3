@@ -27,20 +27,22 @@ class Home extends React.Component {
             <div className="columns">
               <form
                 onSubmit={this.handleSubmit}
-                className="column is-one-third is-offset-one-third">
-                <div className="field ">
+                className="column is-half is-offset-one-quarter search-section">
+                <div className="field searchbar">
                   <div className="control">
                     <input
                       className="input is-rounded is-primary"
                       type="text"
                       name="searchTerm"
-                      placeholder="Hey HIKR, Where do you want to go?..."
+                      placeholder="Hey HIKR, where do you want to go...?"
                       onChange={this.handleChange}
                       value={this.state.searchTerm}
                     />
                   </div>
                 </div>
-                <input type="submit" className="button is-rounded is-success" label="hikr"/>
+                <div className="field search-button">
+                  <input type="submit" className="button is-rounded is-success" value="Go!"/>
+                </div>
               </form>
             </div>
           </div>

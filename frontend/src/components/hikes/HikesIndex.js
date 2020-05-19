@@ -52,9 +52,6 @@ class HikesIndex extends React.Component {
 
   render() {
     if (!this.state.hikes) return null
-    
-    console.log(this.props.location)
-    
 
     return (
       <div className="HikesIndex">
