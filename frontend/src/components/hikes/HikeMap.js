@@ -14,9 +14,6 @@ class HikeMap extends React.Component {
     }
   }
 
-  // handleShowPopup = event => {
-  //   console.log(event.target.className)
-  // }
 
   render() {
     const hikes = this.props.hikes
@@ -33,23 +30,20 @@ class HikeMap extends React.Component {
         >
           {hikes.map(hike => {
             return (
-              <>
-                <Popup
-                  latitude={hike.lat}
-                  longitude={hike.lon}
-                  key={`${hike._id}${hike.name}`}
-                  >
-                  <Link to={`/hikes/${hike._id}`}>
-                    <p>{hike.name}</p> 
-                    <p>{hike.country}</p>
-                    <img className="map-image" src={hike.images[0]} alt={hike.name} />
-                  </Link>
-
-                </Popup>
-              </>
+              <Popup
+                latitude={hike.lat}
+                longitude={hike.lon}
+                key={`${hike._id}${hike.name}`}
+              >
+                <Link to={`/hikes/${hike._id}`}>
+                  <p>{hike.name}</p>
+                  <p>{hike.country}</p>
+                  <img className="map-image" src={hike.images[0]} alt={hike.name} />
+                </Link>
+              </Popup>
             )
           })}
-          <NavigationControl showZoom position='top-left' className="map-controls"/>
+          <NavigationControl showZoom position='top-left' className="map-controls" />
         </MapGL>
       </div>
 
