@@ -23,7 +23,6 @@ class ProfileImageUpload extends React.Component {
   }
 
   render() {
-    const { image } = this.state
     return (
         <>
           <input
