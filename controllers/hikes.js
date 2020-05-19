@@ -98,7 +98,7 @@ async function hikesReviewCreate(req, res, next) {
     const hikeId = req.params.id
     const hike = await Hike.findById(hikeId).populate('user')
     if (!hike) throw new Error(notFound)
-    hike.reviews.push(req.body)
+    hike.reviews.unshift(req.body)
     await hike.save()
     res.status(201).json(hike)
   } catch (err) {
