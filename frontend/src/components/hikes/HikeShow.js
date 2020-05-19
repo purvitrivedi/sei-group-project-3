@@ -5,7 +5,8 @@ import { getSingleHike, deleteHikeReview, addHikeToFavorites, reviewHike, delete
 import { isAuthenticated, getUserId, isOwner } from '../../lib/auth'
 
 import HikeReviews from './HikeReviews'
-import HikeUpdate from './HikeUpdate'
+import HikeImageModal from './HikeImageModal'
+
 
 
 
@@ -16,7 +17,8 @@ class HikeShow extends React.Component {
       text: '',
       rating: ''
     },
-    averageRating: ''
+    averageRating: '',
+    imageModalActive: false
   }
 
   async componentDidMount() {
@@ -47,7 +49,7 @@ class HikeShow extends React.Component {
 
       const userId = getUserId()
       const hikeId = { hike: this.props.match.params.id }
-      const res = await addHikeToFavorites(userId, hikeId)
+      await addHikeToFavorites(userId, hikeId)
     } catch (err) {
       console.log(err)
     }
@@ -59,7 +61,7 @@ class HikeShow extends React.Component {
       const hikeId = this.props.match.params.id
       await reviewHike(hikeId, reviewData)
       const res = await getSingleHike(hikeId)
-      this.setState({ hike: res.data }, 
+      this.setState({ hike: res.data },
         () => {
           this.getAverageRating()
         })
@@ -75,7 +77,7 @@ class HikeShow extends React.Component {
     try {
       await deleteHikeReview(hikeId, reviewId)
       const res = await getSingleHike(hikeId)
-      this.setState({ hike: res.data }, 
+      this.setState({ hike: res.data },
         () => {
           this.getAverageRating()
         })
@@ -89,15 +91,19 @@ class HikeShow extends React.Component {
     const ratings = reviews.map(review => {
       return review.rating
     })
-    const averageRating = (ratings.reduce((a,b) => a + b, 0) / ratings.length).toFixed(0)
+    const averageRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(0)
     this.setState({ averageRating })
+  }
+
+  handleImageModal = () => {
+    this.setState({ imageModalActive: !this.state.imageModalActive })
   }
 
 
   render() {
     if (!this.state.hike) return null
 
-    const { hike, averageRating } = this.state
+    const { hike, averageRating, imageModalActive } = this.state
     return (
       <div className="HikeShow box">
         <div className="hero is-medium is-success">
@@ -107,8 +113,9 @@ class HikeShow extends React.Component {
         </div>
         <div className="box">
           <section className="hike-info">
+            <h1 className="hikr-title">About this Hike:</h1>
             <h1>{hike.description}</h1>
-            <hr/>
+            <hr />
             <h1>Difficulty: {hike.difficulty.map(difficulty => {
               return `${difficulty}, `
             })}</h1>
@@ -131,27 +138,34 @@ class HikeShow extends React.Component {
                 onClick={this.handleAddToFavorites}
               >Add Hike to Favorites</button>}
 
-              <button className="button">Image Gallery</button>
-            
-              <button className="button">HIKR Reviews</button>
+            <button className="button" onClick={this.handleImageModal}>Image Gallery</button>
 
-                {isOwner(hike.user._id) &&
-                  <Link 
-                    to={`/hikes/${hike._id}/update`}
-                    className="button is-info"
-                  // onClick={this.handleAddToFavorites}
-                  >Update this Hike</Link>}
-    
-                {isOwner(hike.user._id) &&
-                  <button
-                    className="button is-danger"
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this Hike?')) {
-                        this.handleDeleteHike()
-                      }
-                    }}>Delete this Hike</button>}
+            {/* <button className="button">HIKR Reviews</button> */}
+
+            {isOwner(hike.user._id) &&
+              <Link
+                to={`/hikes/${hike._id}/update`}
+                className="button is-info"
+              >Update this Hike</Link>}
+
+            {isOwner(hike.user._id) &&
+              <button
+                className="button is-danger"
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete this Hike?')) {
+                    this.handleDeleteHike()
+                  }
+                }}>Delete this Hike</button>}
             <hr />
           </section>
+          <section>
+            <HikeImageModal
+              handleImageModal={this.handleImageModal}
+              isModalActive={imageModalActive}
+              images={hike.images}
+            />
+          </section>
+
           <section className="reviews">
             <HikeReviews
               reviews={this.state.hike.reviews}

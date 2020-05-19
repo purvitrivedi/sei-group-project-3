@@ -36,7 +36,7 @@ class HikeReviews extends React.Component {
       <>
         {isAuthenticated() &&
           <form onSubmit={(event) => { handleSubmitReview(event, this.state.reviewData) }}>
-            <h1>Add a HIKR Review:</h1>
+            <h1 className="hikr-title">Add a HIKR Review:</h1>
             <br />
             <article className="media">
               <figure className="media-left">
@@ -121,14 +121,14 @@ class HikeReviews extends React.Component {
             </article>
           </form>}
         <article className="media">
-          <h1>HIKR Reviews:</h1>
+          <h1 className="hikr-title">HIKR Reviews:</h1>
         </article>
         {reviews.map(review => {
           return (
             <article key={review._id} className="media">
               <figure className="media-left">
                 <p className="image is-64x64">
-                  <img src={review.user.profileImage} />
+                  <img src={review.user.profileImage} alt="profile pic"/>
                 </p>
               </figure>
               <div className="media-content">
