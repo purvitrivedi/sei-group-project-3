@@ -2,7 +2,7 @@ import React from 'react'
 import Calendar from 'react-calendar'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { isAuthenticated, getUserId } from '../../lib/auth'
+import { isAuthenticated, getUserId, getToken } from '../../lib/auth'
 
 
 class GroupShow extends React.Component {
@@ -29,33 +29,58 @@ class GroupShow extends React.Component {
     }
   }
 
+  // join the group
+  handleJoinGroup = async () => {
+    try {
+      const groupId = this.props.match.params.id
+      const userId = getUserId()
+      const user = await axios.get(`/api/profiles/${userId}`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      console.log(user)
+      const group = await axios.post(`/api/groups/${groupId}/members`, userId, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      this.setState({ group })
+      window.alert(`Welcome ${user.data.username.toUpperCase()}!`)
+
+      this.isGroupMember()
+      this.props.history.push(`/groups/${groupId}`)
+    } catch (err) {
+      console.log(err.response)
+    }
+  }
   // unsubs from group
   handleUnsubscribe = async () => {
     try {
       const groupId = this.props.match.params.id
       const group = await axios.get(`/api/groups/${groupId}`)
       const userId = getUserId()
-     
+      const memberId = this.state.group.members.find( member => member.user === userId)._id
       const conf = window.confirm('Are you sure you want to unsubscribe?')
-      if (conf) group = await axios.delete(`/api/groups/${groupId}/members/${userId}`)
+      if (conf && memberId) group = await axios.delete(`/api/groups/${groupId}/members/${memberId}`,{
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
       this.setState({ group })
       this.props.history.push('/groups')
     } catch (err) {
-      console.log(err.response)
+      console.log(err)
     }
   }
 
   // auth
-  isGroupMember = () => {
-    const group = this.state.group
+  isGroupMember = async () => {
     const userId = getUserId()
-    let members
-    if (group.members) members = group.members.some( member => member.user._id === userId ) ? true : false
-    return members
+    const groupId = this.props.match.params.id
+    const group = await axios.get(`/api/groups/${groupId}`)
+    let member
+    if (group.members) member = group.members.some( member => member.user._id === userId ) ? true : false
+    return member
   }
-  isAdmin = () => {
-    const group = this.state.group
+  isAdmin = async () => {
     const userId = getUserId()
+    const groupId = this.props.match.params.id
+    const group = await axios.get(`/api/groups/${groupId}`)
     let admin
     if (group.createdMember) admin = group.createdMember._id === userId ? true : false
     return admin
@@ -70,8 +95,17 @@ class GroupShow extends React.Component {
     this.setState({ display })
   }
 
-  //calendar
+  //event - calendar
   controlCalendar = date => this.setState({ date })
+
+
+  // send email
+  triggerOutlook = () => {
+    const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href)     
+    const subject = "Take a look at this group from Hikr.com!"
+    window.location.href = "mailto:?body="+body+"&subject="+subject          
+  }
+
 
   render() {
     console.log(this.state)
@@ -86,46 +120,45 @@ class GroupShow extends React.Component {
     if (group.members) {
       members = group.members.map( member => (
         <article class="media" key={member._id}>
-        <div class="media-left">
-          <figure class="image is-64x64">
-            <img src={member.profileImage} alt={member.username} />
-          </figure>
-        </div>
-        <div class="media-content">
-          <div class="content">
-            <p>
-            <strong>{member.username}</strong><small>{member.email}</small>
-              <br />
-              {member.bio}
-            </p>
+          <div class="media-left">
+            <figure class="image is-64x64">
+              <img src={member.profileImage} alt={member.username} />
+            </figure>
           </div>
+          <div class="media-content">
+            <div class="content">
+              <p>
+              <strong>{member.username}</strong><small>{member.email}</small>
+                <br />
+                {member.bio}
+              </p>
+            </div>
 
-          <nav class="level is-mobile">
-          <div class="level-left">
+            <nav class="level is-mobile">
+            <div class="level-left">
 
-            <a class="level-item" aria-label="1.profile">
-              <span class="icon is-small">
-                <Link to={`/profiles/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
-              </span>
-            </a>
-
-            <a class="level-item" aria-label="2.reply">
-              <span class="icon is-small">
-                //! link to message sent w populated field
-                <i class="fas fa-reply" aria-hidden="true"></i>
-              </span>
-            </a>
-
-              <a class="level-item" aria-label="3.favHike">
+              <a class="level-item" aria-label="1.profile">
                 <span class="icon is-small">
-                { member.favoriteHikes ? 
-                  <Link to={`/hikes/${member.favoriteHikes[0]._id}`}><i class="fas fa-heart" aria-hidden="true"></i></Link>
-                  : ''
-                }
-              </span>
-            </a>
-          </div>
-        </nav>
+                  <Link to={`/profiles/${member.user._id}`}><i class="fas fa-address-card"></i></Link>
+                </span>
+              </a>
+
+              <a class="level-item" aria-label="2.reply">
+                <span class="icon is-small">
+                  <i class="fas fa-reply" aria-hidden="true"></i>
+                </span>
+              </a>
+
+                <a class="level-item" aria-label="3.favHike">
+                  <span class="icon is-small">
+                  { member.favoriteHikes ? 
+                    <Link to={`/hikes/${member.favoriteHikes[0]._id}`}><i class="fas fa-heart" aria-hidden="true"></i></Link>
+                    : ''
+                  }
+                </span>
+              </a>
+            </div>
+          </nav>
 
         </div>
       </article>
@@ -135,33 +168,41 @@ class GroupShow extends React.Component {
     let pictures
     if (group.userAddedImages) {
       pictures = group.userAddedImages.map( img => (
-        <div class="column is-1" key={img._id}>
-          <figure className="image is-square"><img src={img.images} alt={group.name} /></figure>
+        <div class="column" key={img._id}>
+          <figure className="image is-square"><img src={img.images} alt={group.name} style={{height: 100, width: 200}}/></figure>
         </div>
       ))
     }
 
     let events
     if (group.events) {
-      events = group.events.map( event => (
-        <section class="section box" key={event._id}>
-          <div class="container">
-            <h1 class="subtitle">{event.eventName}</h1>
-            <p>{event.description}</p>
-            <p>Event Host: {event.createdMember.username}</p>
-            { event.participants ? <p>{event.participants.length} members will participate!</p> : '' }
+      events = group.events.map( event => {
+        const hikeName = () => event.hike ? event.hike.name : ''
+        const hikePage = () => event.hike ? event.hike._id : ''
+        const counter = () => event.participants ? event.participants.length : ''
+        return (
+          <section class="section box" key={event._id}>
+            <div class="container">
+              <h1 class="subtitle"><strong>{event.eventName}</strong></h1>
+              
+              <p>Course:&nbsp;{hikeName()} <Link to={`/hikes/${hikePage()}`}><i class="fas fa-flag"></i></Link></p>
+              <p style={{fontSize: 12}}> ~&nbsp;{event.description} ~</p>
+                <hr />
+              <p>Host:&nbsp;{event.createdMember.username}</p>
+              <Link to={`/profiles/${event.createdMember._id}`}><figure class="image is-rounded is-64x64"><img class="is-rounded" src={event.createdMember.profileImage} alt={event.createdMember.username} /></figure></Link>
+                <br />
+                { event.participants.length ? <p style={{fontSize: 15}}>{`${counter()} will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
 
-            <Link to={`groups/${group._id}/events/${event._id}`} ><button>Check the event details!</button></Link>
-
-            <Calendar
-              onChange={this.controlCalendar}
-              value={this.state.date} />
-          </div>
-        </section>
-      ))
+              <div class="buttons is-right">
+                <Link to={`${group._id}/events/${event._id}`} {...event}><button class="button is-small">Edit event</button></Link>
+                <button class="button is-danger is-small">Join the Event</button>
+              </div>
+          
+            </div>
+          </section>
+        )
+      })
     }
-
-
 
     let chat
     if (group.messages) {
@@ -276,29 +317,27 @@ class GroupShow extends React.Component {
         </section>
 
         <div class="container">
-          
+  
           <div class="columns">
             <div class="column">
               <div class="buttons is-left">
-                <button class="button is-active is-2" name="Information" onClick={this.handleViewChange}><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;Information</button>
-                <button class="button is-active is-2" name="Members" onClick={this.handleViewChange}><i class="fas fa-users" aria-hidden="true"></i>&nbsp;Members</button>
-                <button class="button is-active is-2" name="Pictures" onClick={this.handleViewChange}><i class="fas fa-image" aria-hidden="true"></i>&nbsp;Pictures</button>
-                {this.isGroupMember() && <button class="button is-active is-2" name="Events" onClick={this.handleViewChange}><i class="far fa-calendar-check" aria-hidden="true"></i>&nbsp;Events</button> }
-                {this.isGroupMember() && <button class="button is-active is-2" name="Chat" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
+                <button class="button is-outlined" name="Information" onClick={this.handleViewChange}><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;Information</button>
+                <button class="button is-outlined" name="Members" onClick={this.handleViewChange}><i class="fas fa-users" aria-hidden="true"></i>&nbsp;Members</button>
+                <button class="button is-outlined" name="Pictures" onClick={this.handleViewChange}><i class="fas fa-image" aria-hidden="true"></i>&nbsp;Pictures</button>
+                {this.isGroupMember() && <button class="button is-outlined" name="Events" onClick={this.handleViewChange}><i class="far fa-calendar-check" aria-hidden="true"></i>&nbsp;Events</button> }
+                {this.isGroupMember() && <button class="button is-outlined" name="Chat" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
               </div>
             </div>
             <div class="column">
               <div class="buttons is-right">
+                { this.isGroupMember() && <a class="button is-danger" onClick={this.triggerOutlook}>Recommend to Your Friend</a>}
                 { this.isAdmin() && <Link to={`/groups/${group._id}/edit`}><a class="button is-light">Edit</a></Link>}
-                { !this.isGroupMember() && <Link to={`/groups/${group._id}/join`}><a class="button is-danger"><strong>Join the Group!</strong></a></Link>}
+                { !this.isGroupMember() && <a class="button is-danger" onClick={this.handleJoinGroup}><strong>Join the Group!</strong></a>}
               </div>
             </div>
           </div>
 
-          {/* <GroupShowBody  key={group._id} { ...group } isGroupMember={ this.isGroupMember } isAdmin={ this.isAdmin } /> */}
-
-
-          <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} style={{height: 500}}>
+          <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} style={{minHeight: 500}}>
             <section class="section">
               <div class="container">
                 <h1 class="title"><strong>Welcome to {group.name}! </strong></h1>
@@ -308,7 +347,7 @@ class GroupShow extends React.Component {
             </section>
           </div>
 
-          <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`} style={{height: 500}}>
+          <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`} style={{minHeight: 500}}>
             <section class="section" >
                 <div class="container">
                   <h1 class="subtitle">Group Members</h1>
@@ -317,29 +356,48 @@ class GroupShow extends React.Component {
             </section>
           </div>
 
-          <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{height: 500}}>
+          <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{minHeight: 500}}>
             <section class="section">
               <div class="container">
                 <h1 class="subtitle">Group Pictures</h1>
-                <div class="columns is-multi">
-                  { pictures }
-                </div>
+                { pictures }
               </div>
             </section>
           </div>
         
-          <div class={`${this.state.display.Events ? "Events" : "is-hidden" }`} style={{height: 500}}>
+          <div class={`${this.state.display.Events ? "Events" : "is-hidden" }`} style={{minHeight: 500}}>
             <section class="section" >
               <div class="container">
                 <h1 class="subtitle">Events</h1>
-                <div class="columns is-multi">
-                  { events }
-                </div>
+                <nav class="panel">
+                  <p class="panel-heading">Calendar Search</p>
+                  <div class="panel-block">
+                    <p class="control columns is-fullwidth is-multiline" style={{minHeight: 150}}>
+                      <div class="column">
+                        <label class="column is-2">From</label>
+                        <input class="input column is-5" type="date" placeholder="From" />
+                      </div>
+                      <div class="column">
+                      <label class="column is-2">To</label>
+                      <input class="input column is-5" type="date" placeholder="To" />
+                      </div>
+                    </p>
+                  </div>
+                  <Calendar
+                      onChange={this.controlCalendar}
+                      value={this.state.date} />
+                  <div class="panel-block">
+                    <button class="button is-link is-outlined is-fullwidth">Reset all filter</button>
+                  </div>
+                </nav>
+                
+                { events }
+                
               </div>
             </section>
           </div>
 
-          <div class={`${this.state.display.Chat ? "Chat" : "is-hidden" }`} style={{height: 500}}>
+          <div class={`${this.state.display.Chat ? "Chat" : "is-hidden" }`} style={{minHeight: 500}}>
             <section class="section" >
               <div class="container">
                 <h1 class="subtitle">Chat Board</h1>
