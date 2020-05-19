@@ -9,9 +9,9 @@ class HikesIndex extends React.Component {
   state = {
     hikes: null,
     search: '',
-    hideMap: false,
+    hideMap: true,
     hideGrid: true,
-    hideList: true
+    hideList: false
   }
 
   async componentDidMount() {
@@ -35,7 +35,7 @@ class HikesIndex extends React.Component {
     const { hikes, search } = this.state
     const regexp = new RegExp(search, 'i')
     return hikes.filter(hike => {
-      return regexp.test(hike.name) || regexp.test(hike.country) || regexp.test(hike.difficulty)
+      return regexp.test(hike.name) || regexp.test(hike.country) || regexp.test(hike.difficulty) || regexp.test(hike.seasons)
     })
   }
 
@@ -59,7 +59,9 @@ class HikesIndex extends React.Component {
     return (
       <div className="HikesIndex">
         <div className="hero is-medium">
-          <div className="hero-body"></div>
+          <div className="hero-body ">
+            <h1 className="title-logo has-text-centered">HIKR</h1>
+          </div>
         </div>
         <div className="field box">
           <div className="control">
@@ -67,7 +69,7 @@ class HikesIndex extends React.Component {
               className="input is-primary"
               name="search"
               type="text"
-              placeholder="Search for Hike, Country or Difficulty..."
+              placeholder="Search for a Hike, Country, Season or Difficulty..."
               onChange={this.handleChange}
               value={this.state.search}
             />

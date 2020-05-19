@@ -23,9 +23,30 @@ export const createHike = formData => {
   return axios.post(`${baseUrl}/hikes`, formData, withHeaders())
 }
 
+export const deleteHike = id => {
+  return axios.delete(`${baseUrl}/hikes/${id}`, withHeaders())
+}
+
+export const reviewHike = (id, reviewData) => {
+  return axios.post(`${baseUrl}/hikes/${id}/reviews`, reviewData, withHeaders())
+}
+
+export const deleteHikeReview = (id, reviewId) => {
+  return axios.delete(`${baseUrl}/hikes/${id}/reviews/${reviewId}`, withHeaders())
+}
+
+export const addHikeToFavorites = (userId, hikeId) => {
+  return axios.post(`/api/profiles/${userId}/favorites`, hikeId, withHeaders())
+}
+
 
 //User
 
 export const registerUser = (formData) => {
   return axios.post(`${baseUrl}/register`, formData)
 }
+
+export const getCurrentUser = (userId) => {
+  return axios.get(`/api/profiles/${userId}`, withHeaders())
+}
+
