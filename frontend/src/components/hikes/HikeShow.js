@@ -131,28 +131,25 @@ class HikeShow extends React.Component {
                 onClick={this.handleAddToFavorites}
               >Add Hike to Favorites</button>}
 
-            {isOwner(hike.user._id) &&
-              <Link 
-                to={`/hikes/${hike._id}/update`}
-                className="button is-info"
-              // onClick={this.handleAddToFavorites}
-              >Update this Hike</Link>}
+              <button className="button">Image Gallery</button>
+            
+              <button className="button">HIKR Reviews</button>
 
-            {isOwner(hike.user._id) &&
-              <button
-                className="button is-danger"
-                onClick={() => {
-                  if (window.confirm('Are you sure you want to delete this Hike?')) {
-                    this.handleDeleteHike()
-                  }
-                }}>Delete this Hike</button>}
-
-            {isAuthenticated() &&
-              <button
-                className="button is-warning"
-              onClick={this.getAverageRating}
-              >Log ave rating</button>}
-
+                {isOwner(hike.user._id) &&
+                  <Link 
+                    to={`/hikes/${hike._id}/update`}
+                    className="button is-info"
+                  // onClick={this.handleAddToFavorites}
+                  >Update this Hike</Link>}
+    
+                {isOwner(hike.user._id) &&
+                  <button
+                    className="button is-danger"
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this Hike?')) {
+                        this.handleDeleteHike()
+                      }
+                    }}>Delete this Hike</button>}
             <hr />
           </section>
           <section className="reviews">

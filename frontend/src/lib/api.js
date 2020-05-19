@@ -27,6 +27,10 @@ export const deleteHike = id => {
   return axios.delete(`${baseUrl}/hikes/${id}`, withHeaders())
 }
 
+export const updateHike = (id, formData) => {
+  return axios.put(`${baseUrl}/hikes/${id}`, formData, withHeaders())
+}
+
 export const reviewHike = (id, reviewData) => {
   return axios.post(`${baseUrl}/hikes/${id}/reviews`, reviewData, withHeaders())
 }
