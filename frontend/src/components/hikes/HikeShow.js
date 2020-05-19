@@ -89,7 +89,7 @@ class HikeShow extends React.Component {
     const ratings = reviews.map(review => {
       return review.rating
     })
-    const averageRating = (ratings.reduce((a,b) => a + b, 0) / ratings.length).toFixed(2)
+    const averageRating = (ratings.reduce((a,b) => a + b, 0) / ratings.length).toFixed(0)
     this.setState({ averageRating })
   }
 
@@ -120,7 +120,7 @@ class HikeShow extends React.Component {
 
             <h1>Country: {hike.country}</h1>
             <h1>Time the hike takes: {hike.timeToComplete}</h1>
-            <h1>Average Rating: {averageRating}/5</h1>
+            <h1>Average Rating: {'⭐️'.repeat(averageRating)}</h1>
             <hr />
           </section>
 
@@ -153,7 +153,6 @@ class HikeShow extends React.Component {
             <hr />
           </section>
           <section className="reviews">
-            
             <HikeReviews
               reviews={this.state.hike.reviews}
               handleReviewDelete={this.handleReviewDelete}
