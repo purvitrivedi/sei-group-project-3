@@ -25,6 +25,7 @@ class GroupEdit extends React.Component {
 
   handleChange = event => {
     const formData = { ...this.state.formData, [event.target.name]: event.target.value }
+    console.log(formData)
     this.setState({ formData })
   }
 
