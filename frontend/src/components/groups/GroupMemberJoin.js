@@ -1,10 +1,16 @@
 import React from 'react'
 
 class GroupMembersIndex extends React.Component {
+  state = {
+    formData : {
+
+    }
+  }
+
+  registerInfo 
   render() {
     return(
-      'hey GROUP MEMBER INDEX' 
-    )
+      'hey'    )
   }
 }
 

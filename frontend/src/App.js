@@ -23,7 +23,6 @@ import HikeUpdate from './components/hikes/HikeUpdate'
 // groups
 import GroupIndex from './components/groups/GroupIndex'
 import GroupShow from './components/groups/GroupShow'
-import GroupMembersIndex from './components/groups/GroupMembersIndex'
 import GroupImagesIndex from './components/groups/GroupImagesIndex'
 import GroupEventShow from './components/groups/GroupEventShow'
 import GroupNew from './components/groups/GroupNew'
@@ -45,11 +44,10 @@ const App = () => {
         <Route path="/hikes/:id" component={HikeShow} />
         <Route path="/hikes" component={HikesIndex} />
 
-        <SecureRoute path="/groups/:id/members" component={GroupMembersIndex} />
         <SecureRoute path="/groups/:id/images" component={GroupImagesIndex} />
-        <SecureRoute path="/groups/:id/events" component={GroupEventShow} />
-        <SecureRoute path="/groups/register" component={GroupNew} />
+        <SecureRoute path="/groups/:id/events/:eventId" component={GroupEventShow} />
         <SecureRoute path="/groups/:id/edit" component={GroupEdit} />
+        <SecureRoute path="/groups/register" component={GroupNew} />
         <Route path="/groups/:id" component={GroupShow} />
         <Route path="/groups" component={GroupIndex} />
       </Switch>

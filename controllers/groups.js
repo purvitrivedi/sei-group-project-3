@@ -1,5 +1,4 @@
 const Group = require('../models/group')
-const User = require('../models/user')
 const { notFound, unauthorized } = require('../lib/errorMessages')
 
 //* Group
@@ -22,12 +21,12 @@ async function groupsIndex(req, res, next) {
 async function groupsShow(req, res, next) { 
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId)
+    const group = await (await Group.findById(groupId))
       .populate('members.user')
       .populate('createdMember')
       .populate('messages.user')
       .populate('userAddedImages.user')
-      // .populate('events.hike')
+      .populate('events.hike')
       .populate('events.participants')
       .populate('events.createdMember')
     if (!group) throw new Error(notFound)
@@ -59,12 +58,12 @@ async function groupsCreate(req, res, next) {
 async function groupsUpdate(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId)
+    const group = await (await Group.findById(groupId))
       .populate('members.user')
       .populate('createdMember')
       .populate('messages.user')
       .populate('userAddedImages.user')
-      // .populate('events.hike')
+      .populate('events.hike')
       .populate('events.participants')
       .populate('events.createdMember')
     if (!group) throw new Error(notFound)
@@ -100,7 +99,7 @@ async function groupsDelete(req, res, next) {
 async function userAddedImageCreate(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId).populate('userAddedImages.user')
+    const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
 
     req.body.user = req.currentUser
@@ -205,18 +204,38 @@ async function groupsEventCreate(req, res, next) {
     const group = await Group.findById(groupId)
     if (!group) throw new Error(notFound)
 
-    // if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name 
+    if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name 
 
     req.body.createdMember = req.currentUser
     const adminId = group.createdMember._id
     if (!group.members.some(member => member.user._id.equals(req.body.createdMember._id))
       && !adminId.equals(req.body.createdMember._id) ) {
       throw new Error(unauthorized)
-    } // only group members or admin can send msg
+    } // only group members or admin can create events
 
+    const newParticipant = { user: req.body.createdMember._id }
+    req.body.participants = newParticipant
     group.events.push(req.body)
+
     await group.save()
     res.status(201).json(group)
+  } catch (err) {
+    next(err)
+  }
+}
+// GET
+// URL = api/groups/:id/events/:eventId
+async function groupsEventShow(req, res, next) {
+  try {
+    const groupId = req.params.id
+    const group = await Group.findById(groupId)
+    if (!group) throw new Error(notFound)
+
+    const eventId = req.params.eventId
+    const eventToShow = group.events.id(eventId)
+    if (!eventToShow) throw new Error(notFound)
+      
+    res.status(200).json(eventToShow)
   } catch (err) {
     next(err)
   }
@@ -288,11 +307,12 @@ async function groupsEventDelete(req, res, next) {
 async function groupsMemberCreate(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId).populate('members.user')
+    const group = await (await Group.findById(groupId))
+      .populate('members.user')
     if (!group) throw new Error(notFound)
    
-    // if (group.members.some( member =>  member.user._id.equals(req.body.user._id))) throw new Error('Already exist') //avoid double reg.
     req.body.user = req.currentUser
+    if (group.members.some( member =>  member.user._id.equals(req.body.user._id))) throw new Error('Already exist') //avoid double reg.
     group.members.push(req.body)
     await group.save()
 
@@ -306,6 +326,7 @@ async function groupsMemberCreate(req, res, next) {
 // URL = api/groups/:id/members/memberId
 async function groupsMemberDelete(req, res, next) {
   try {
+    console.log(req)
     // find group
     const groupId = req.params.id
     const group = await Group.findById(groupId)
@@ -347,6 +368,7 @@ module.exports = {
   deleteMessage: groupsMessageDelete,
 
   // events
+  showEvent: groupsEventShow,
   createEvent: groupsEventCreate,
   updateEvent: groupsEventUpdate,
   deleteEvent: groupsEventDelete,
