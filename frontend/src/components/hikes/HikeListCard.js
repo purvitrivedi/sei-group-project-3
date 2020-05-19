@@ -20,7 +20,7 @@ const HikeListCard = ({ name, description, difficulty, country, timeToComplete, 
               </h1>
               <h1>Time it takes: {timeToComplete}</h1>
             </div>
-            <div className="column is-full">{description}</div>
+            <div className="column is-full">{description.length > 350 ? description.substr(0, 350) + '... CLICK TO FIND OUT MORE'  : description }</div>
           </div>
         </div>
 

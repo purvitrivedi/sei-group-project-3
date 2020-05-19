@@ -20,7 +20,7 @@ class Home extends React.Component {
     console.log(this.state.searchTerm)
 
     return (
-      <section className="Home hero is-fullheight-with-navbar is-success is-bold">
+      <section className="Home hero is-fullheight-with-navbar is-primary is-bold">
         <div className="hero-body">
           <div className="container">
             <h1 className="title-logo has-text-centered">HIKR</h1>
@@ -41,7 +41,7 @@ class Home extends React.Component {
                   </div>
                 </div>
                 <div className="field search-button">
-                  <input type="submit" className="button is-rounded is-success" value="Go!"/>
+                  <input type="submit" className="button is-rounded is-primary" value="Go!"/>
                 </div>
               </form>
             </div>

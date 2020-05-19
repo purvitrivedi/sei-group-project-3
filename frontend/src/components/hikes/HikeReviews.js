@@ -133,7 +133,7 @@ class HikeReviews extends React.Component {
               </figure>
               <div className="media-content">
                 <div className="content">
-                  <p><strong>{review.user.fullName}</strong> <small>{'⭐️'.repeat(review.rating)} </small> <time datetime="2016-1-1">{review.createdAt}</time>
+                  <p><strong>{review.user.fullName}</strong> <small>{'⭐️'.repeat(review.rating)} </small> <small>{review.createdAt}</small>
                     <br />
                     {review.text}
                   </p>
