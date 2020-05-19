@@ -10,6 +10,15 @@
     font-size: 150px;
     text-shadow: 0 0 10px #000000;
   }
+  .search-section{
+    display: flex;
+    flex-direction: row;
+    .searchbar {
+      flex-grow: 3;
+      margin-right: 10px;
+    }
+  }
+
 }
 
 

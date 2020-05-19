@@ -66,6 +66,7 @@ router.route('/groups/:id/events')
   .post(secureRoute, groups.createEvent)
 
 router.route('/groups/:id/events/:eventId')
+  .get(secureRoute, groups.showEvent)
   .put(secureRoute, groups.updateEvent)
   .delete(secureRoute, groups.deleteEvent)
 
