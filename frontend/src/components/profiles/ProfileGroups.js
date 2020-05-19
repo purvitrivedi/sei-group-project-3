@@ -15,7 +15,7 @@ class ProfileGroups extends React.Component {
     const groupId = this.props.id
     const res = await axios.get(`/api/groups/${groupId}`)
     this.setState({ group: res.data })
-  
+
     this.matchMember()
   }
 
@@ -25,11 +25,11 @@ class ProfileGroups extends React.Component {
     let memberId
     if (members) {
       members.filter(member => {
-        if(member.user === userId) 
-        memberId = member._id
+        if (member.user.id === userId || member.user === userId)
+          memberId = member._id
         return member._id
       })
-      this.setState({memberId})
+      this.setState({ memberId })
     }
   }
 
@@ -41,21 +41,21 @@ class ProfileGroups extends React.Component {
     const edit = this.props.edit
     return (
 
-      <div className="column is-full fav-comp">
-        <Link to={`/groups/${group._id}`}>
-          <div className="columns">
-            <img className="column is-three-fifths" src={group.headerImage} alt="hikeImage" />
-            <p className="column">{group.name}</p>
+        <div className="columns">
+          <Link to={`/groups/${group._id}`}> <img className="column is-three-fifths group-image" src={group.headerImage} alt="hikeImage" /></Link>
+          <div className="column">
+            <div>
+            <Link to={`/groups/${group._id}`}><p >{group.name}</p></Link>
+              {edit &&
+                <button
+                  className="button remove column"
+                  onClick={this.props.handleClick}
+                  value={group._id}
+                  name={this.state.memberId}
+                >Leave Group</button>}
+            </div>
           </div>
-        </Link>
-        {edit &&
-          <button
-            className="button remove column"
-            onClick={this.props.handleClick}
-            value={group._id}
-            name={this.state.memberId}
-          >Leave Group</button>}
-      </div>
+        </div>
 
     )
   }

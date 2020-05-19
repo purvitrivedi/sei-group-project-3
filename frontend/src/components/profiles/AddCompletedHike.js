@@ -1,9 +1,11 @@
 import React from 'react'
 import axios from 'axios'
 import Select from 'react-select'
+import { getToken } from '../../lib/auth'
 
 class AddCompletedHike extends React.Component {
   state = {
+    completedHikes: [],
     hikes: [],
     hikeOptions: [],
     selectedHike: ''
@@ -11,9 +13,17 @@ class AddCompletedHike extends React.Component {
 
   async componentDidMount() {
     try {
+      const withHeaders = () => {
+        return {
+          headers: { Authorization: `Bearer ${getToken()}` }
+        }
+      }
       const res = await axios.get('/api/hikes')
-      this.setState({ hikes: res.data })
-      this.createHikeOptions()
+      const resUser = await axios.get(`/api/profiles/${this.props.id}`, withHeaders())
+      this.setState({ hikes: res.data, completedHikes: resUser.data.completedHikes },
+        () => {
+          this.createHikeOptions()
+        })
     } catch (err) {
       console.log(err)
     }
@@ -22,7 +32,13 @@ class AddCompletedHike extends React.Component {
 
   createHikeOptions = () => {
     const { hikes } = this.state
-    const hikeOptions = hikes.map(hike => ({ value: hike._id, label: hike.name }))
+    let hikeOptions = hikes.map(hike => ({ value: hike._id, label: hike.name }))
+    const comp = this.state.completedHikes.flatMap(item => item.hike._id)
+
+    for (let i = 0; i < comp.length; i++) {
+      hikeOptions = hikeOptions.filter(hike => hike.value !== comp[i])
+    }
+
     this.setState({ hikeOptions })
   }
 
@@ -34,7 +50,7 @@ class AddCompletedHike extends React.Component {
 
   }
 
-  
+
   render() {
     return (
       <div>
@@ -47,7 +63,7 @@ class AddCompletedHike extends React.Component {
           />
           <div className="column"> <button type="submit" className="button">+</button></div>
         </form>
-      </div>
+      </div >
     )
   }
 }
