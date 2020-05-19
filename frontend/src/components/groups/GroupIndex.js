@@ -31,11 +31,9 @@ class GroupIndex extends React.Component {
 
         <section className="GroupIndex section">
           <div className="container">
-            <div className="columns is-multiline">
               {this.state.groups.map(group => (
                 <GroupCard key={group._id} { ...group }/>
               ))}
-            </div>
           </div>
         </section>
       </div>

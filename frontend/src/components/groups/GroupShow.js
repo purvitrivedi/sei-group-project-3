@@ -15,15 +15,27 @@ class GroupShow extends React.Component {
       Events: false,
       Chat: false
     },
-    date: new Date()
+    date: new Date(),
+  
+    member: false,
+    admin: false
+    
   }
 
-  // fetch
+  // fetch and status auth
   async componentDidMount() {
     try {
       const groupId = this.props.match.params.id
       const res = await axios.get(`/api/groups/${groupId}`)
-      this.setState({ group : res.data })
+      console.log(res)
+     
+      const userId = getUserId()
+      let member
+      if (res.data.members) member = res.data.members.some( member => member.user._id === userId ) ? true : false
+      let admin
+      if (res.data.createdMember) admin = res.data.createdMember._id === userId ? true : false
+      
+      this.setState({ group : res.data, member, admin })
     } catch (err) {
       console.log(err)
     }
@@ -54,11 +66,13 @@ class GroupShow extends React.Component {
   handleUnsubscribe = async () => {
     try {
       const groupId = this.props.match.params.id
-      const group = await axios.get(`/api/groups/${groupId}`)
+      let group = await axios.get(`/api/groups/${groupId}`)
+  
       const userId = getUserId()
-      const memberId = this.state.group.members.find( member => member.user === userId)._id
+      const memberToRemove = group.data.members.find( member => member.user._id === userId)
+    
       const conf = window.confirm('Are you sure you want to unsubscribe?')
-      if (conf && memberId) group = await axios.delete(`/api/groups/${groupId}/members/${memberId}`,{
+      if (conf && memberToRemove) group = await axios.delete(`/api/groups/${groupId}/members/${memberToRemove._id}`,{
         headers: { Authorization: `Bearer ${getToken()}` }
       })
       this.setState({ group })
@@ -66,24 +80,6 @@ class GroupShow extends React.Component {
     } catch (err) {
       console.log(err)
     }
-  }
-
-  // auth
-  isGroupMember = async () => {
-    const userId = getUserId()
-    const groupId = this.props.match.params.id
-    const group = await axios.get(`/api/groups/${groupId}`)
-    let member
-    if (group.members) member = group.members.some( member => member.user._id === userId ) ? true : false
-    return member
-  }
-  isAdmin = async () => {
-    const userId = getUserId()
-    const groupId = this.props.match.params.id
-    const group = await axios.get(`/api/groups/${groupId}`)
-    let admin
-    if (group.createdMember) admin = group.createdMember._id === userId ? true : false
-    return admin
   }
 
   // control views
@@ -98,7 +94,6 @@ class GroupShow extends React.Component {
   //event - calendar
   controlCalendar = date => this.setState({ date })
 
-
   // send email
   triggerOutlook = () => {
     const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href)     
@@ -110,9 +105,9 @@ class GroupShow extends React.Component {
   render() {
     console.log(this.state)
     console.log(this.props)
-    console.log(isAuthenticated())
-    console.log(this.isGroupMember())
-    console.log(this.isAdmin())
+    // console.log(isAuthenticated())
+    // console.log(this.isGroupMember())
+    // console.log(this.isAdmin())
     
     const group = this.state.group
 
@@ -324,15 +319,15 @@ class GroupShow extends React.Component {
                 <button class="button is-outlined" name="Information" onClick={this.handleViewChange}><i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;Information</button>
                 <button class="button is-outlined" name="Members" onClick={this.handleViewChange}><i class="fas fa-users" aria-hidden="true"></i>&nbsp;Members</button>
                 <button class="button is-outlined" name="Pictures" onClick={this.handleViewChange}><i class="fas fa-image" aria-hidden="true"></i>&nbsp;Pictures</button>
-                {this.isGroupMember() && <button class="button is-outlined" name="Events" onClick={this.handleViewChange}><i class="far fa-calendar-check" aria-hidden="true"></i>&nbsp;Events</button> }
-                {this.isGroupMember() && <button class="button is-outlined" name="Chat" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
+                {this.state.member && <button class="button is-outlined" name="Events" onClick={this.handleViewChange}><i class="far fa-calendar-check" aria-hidden="true"></i>&nbsp;Events</button> }
+                {this.state.member && <button class="button is-outlined" name="Chat" onClick={this.handleViewChange}><i class="fas fa-comments"></i>&nbsp;Chat</button> }
               </div>
             </div>
             <div class="column">
               <div class="buttons is-right">
-                { this.isGroupMember() && <a class="button is-danger" onClick={this.triggerOutlook}>Recommend to Your Friend</a>}
-                { this.isAdmin() && <Link to={`/groups/${group._id}/edit`}><a class="button is-light">Edit</a></Link>}
-                { !this.isGroupMember() && <a class="button is-danger" onClick={this.handleJoinGroup}><strong>Join the Group!</strong></a>}
+                { this.state.member && <a class="button is-danger" onClick={this.triggerOutlook}>Recommend to Your Friend</a>}
+                { this.state.admin && <Link to={`/groups/${group._id}/edit`}><a class="button is-light">Edit</a></Link>}
+                { !this.state.member && <a class="button is-danger" onClick={this.handleJoinGroup}><strong>Join the Group!</strong></a>}
               </div>
             </div>
           </div>
@@ -407,7 +402,7 @@ class GroupShow extends React.Component {
           </div>
     
 
-          { this.isGroupMember && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
+          { this.state.member && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
         </div>
       </div>
       )

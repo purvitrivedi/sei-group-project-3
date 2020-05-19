@@ -1,12 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import { getToken } from '../../lib/auth'
+import  GroupHeaderImgNew  from './GroupHeaderImgNew'
 
 class GroupEdit extends React.Component {
   state = { 
     formData: {
       name: '',
-      members: [''],
       headerImage: '', 
       description: ''
     },
@@ -31,7 +31,6 @@ class GroupEdit extends React.Component {
   handleClear = () => {
     const formData = {
       name: '',
-      members: [''],
       headerImage: '', 
       description: ''
     }
@@ -43,7 +42,7 @@ class GroupEdit extends React.Component {
     event.preventDefault()
     const groupId = this.props.match.params.id
     try {
-      const group = await axios.put(`/api/group/${groupId}`, this.state.formData, {
+      const group = await axios.put(`/api/groups/${groupId}`, this.state.formData, {
         headers: { Authorization: `Bearer ${getToken()}`}
       })
       this.props.history.push(`/groups/${groupId}`)
@@ -71,7 +70,7 @@ class GroupEdit extends React.Component {
                   <p style={{fontSize: 30}}>Update Your Group!</p>
                   <p>* Required</p>
                   <br />
-                  <p style={{fontSize: 20}}>If you are not our member, please register your information <a href="/login">here</a>!</p>
+                  <p style={{fontSize: 20}}>If you are not our member, please register your information&nbsp;<a href="/login">here</a>!</p>
                   <br />
                   <p>For more infomation, visit <a href='#' style={{fontColor: 'red'}}>our site</a></p>
                 </div>
@@ -104,35 +103,22 @@ class GroupEdit extends React.Component {
               <div className="field">
                 <div className="control">
                   <div className='columns'>
-                      <div className='column is-3'><label><strong>Members:</strong></label></div>
-                        <div className='column is-8'>
-                          <input
-                            className={`input ${!this.state.errors.members ?  '' : 'is-danger'}`}
-                            type="text"
-                            placeholder="Members"
-                            value={this.state.formData.members}
-                            name="members"
-                            onChange={this.handleChange}  
-                          />
-                        </div>
-                    </div>
-                </div>
-              </div>
-
-
-              <div className="field">
-                <div className="control">
-                  <div className='columns'>
                       <div className='column is-3'><label><strong>Image*:</strong></label></div>
                       <div className='column is-8'>
-                          <input
+                        <div className={`control ${!this.state.errors.headerImage ?  '' : 'is-danger'}`}>
+                          <GroupHeaderImgNew
+                            onChange={this.handleChange}
+                            name="headerImage"
+                          />
+                        </div>
+                          {/* <input
                             className={`input ${!this.state.errors.headerImage ?  '' : 'is-danger'}`}
                             type="text"
                             placeholder="Header image"
                             value={this.state.formData.headerImage}
                             name="headerImage"
                             onChange={this.handleChange}  
-                          />
+                          /> */}
                       </div>
                   </div>
                 </div>
@@ -141,7 +127,7 @@ class GroupEdit extends React.Component {
               <div className="field">
                 <div className="control">
                   <div className='columns'>
-                      <div className='column is-3'><label><strong>Description:</strong></label></div>
+                      <div className='column is-3'><label><strong>Description*:</strong></label></div>
                       <div className='column is-8'>
                         <textarea 
                           className="textarea" 
