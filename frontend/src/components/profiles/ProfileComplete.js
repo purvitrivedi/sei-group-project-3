@@ -14,8 +14,8 @@ const ProfileComplete = (props) => {
         className="button remove"
         onClick={props.handleClick}
         value={props._id}
+        name="completed"
       >Remove</button>}
-
     </div>
   )
 }

@@ -27,7 +27,7 @@ class ProfileImageUpload extends React.Component {
     return (
         <>
           <input
-            className="input"
+            className="input image-upload"
             type="file"
             onChange={this.handleUpload}
           />

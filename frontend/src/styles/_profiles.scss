@@ -1,142 +1,88 @@
-.profile-show {
-  margin-left: 20%;
-  margin-top: 2%;
+.background-profile {
   height: 100vh;
-
-  .left-tile {
-    min-height: 30vh;
-    width: 30vh;
-  }
-
-  .groups {
-    background-color: rgba(136, 167, 255, 0.644);
-    min-height: 46.5vh;
-    width: 30vh;
-    img {
-      width: 150px;
-    }
-  }
-  .bio-box {
-    color: white;
-    margin-top: 20px;
-    background-color: rgb(49, 101, 126);
-    min-height: 22.3vh;
-    width: 40vh;
-  }
-  .fav {
-    color: white;
-    min-height: 45vh;
-    width: 40vh;
-  }
-
-  .comp {
-    background-color: rgba(255, 232, 102, 0.685);
-    margin-left: 0px;
-    min-height: 82vh;
-    width: 40vh;
-  }
-
-  .tile-pad {
-    margin: 15px;
-  }
-
-  .name {
-    margin-top: 10px;
-  }
-  .bio {
-    width: 100%;
-    text-align: center;
-  }
-
-  figure {
-    margin-bottom: 35px;
-    text-align: center;
-    img {
-      width: 150px;
-    }
-    .fullname {
-      margin: 10px;
-      margin-left: 12px;
-      width: 300px;
-    }
-
-    .name-btn {
-      font-size: 20px;
-    }
-
-    .edit {
-      font-size: 13px;
-      padding: 2px 20px;
-      margin: 0 auto;
-      background-color: rgb(192, 173, 255);
-      border-radius: 10px;
-    }
-  }
-
-  .no-hikes {
-    margin: 55% auto;
-    text-align: center;
-  }
-
-  .no-group {
-    margin: 65% auto;
-    color: rgb(244, 255, 146);
-    text-align: center;
-    // font-weight: bold;
-  }
+  // background-image: url("https://images.unsplash.com/photo-1536334916155-dd9f850d6d73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80");
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
+    url("https://images.unsplash.com/photo-1464821541677-ceb53bcf1541?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 5% 10% 2%;
 }
 
-.fav-comp {
-  img {
-    width: 100px;
-  }
-  column {
-    width: 50%;
+.is-ancestor {
+  background: unset;
+  h1 {
+    font-family: "Amatic SC", cursive;
+    font-size: 40px;
+    text-shadow: 0 0 10px #000000;
+    color: #ffffff;
   }
 
   p {
-    font-size: 14px;
-    text-align: left;
+    color: white;
   }
-}
-
-.comp-form {
-  font-size: 14px;
-
-  button {
-    font-size: 14px;
+  .is-child {
+    background-color: rgba(62, 65, 62, 0.548);
   }
-}
 
-.remove {
-  background-color: rgba(251, 152, 149, 0.966);
-  border-radius: 10px;
-  border: none;
-  font-size: 12px;
-  text-align: center;
-  padding: 3px 5px;
-}
+  .profile-top {
+    text-align: center;
+    img {
+      width: 150px;
+    }
+  }
 
-.edit-bio {
-  position: absolute;
-  width: 80px;
-  font-size: 13px;
-  background-color: rgb(212, 206, 235);
-  border-radius: 10px;
-  text-align: center;
-  margin-left: 250px;
-  margin-top: 5px;
-}
+  .no-group,
+  .edit,
+  .edit-bio-btn,
+  .no-hikes {
+    color: rgb(255, 241, 52);
+    font-weight: 400;
+  }
+  .add-name {
+    margin-top: 30px;
+    margin-left: 10px;
+    width: 100x;
 
-.edit-bio-btn {
-  width: 80px;
-  font-size: 13px;
-  background-color: rgb(212, 206, 235);
-  border-radius: 10px;
-  text-align: center;
-  margin: 10px auto;
-}
+    .fullname {
+      background-color: rgb(225, 241, 199);
+      border: none;
+    }
 
-.list-image {
-  max-width: 200px;
+    .name-btn {
+      font-size: 18px;
+      border: none;
+      background-color: unset;
+    }
+  }
+
+  .edit-bio {
+    position: absolute;
+    margin-left: 10%;
+    margin-top: 30px;
+    color: rgb(255, 241, 52);
+    font-weight: 400;
+    width: 80px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .textarea {
+    margin-left: 30px;
+  }
+
+  .image-upload {
+    margin: 20px 0px;
+    background-color: unset;
+  }
+
+  .remove {
+    background-color: rgba(251, 152, 149, 0.609);
+    color: white;
+    border-radius: 10px;
+    border: none;
+    font-size: 12px;
+    text-align: center;
+    padding: 3px 5px;
+  }
 }
