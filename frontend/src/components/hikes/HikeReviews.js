@@ -41,7 +41,7 @@ class HikeReviews extends React.Component {
             <article className="media">
               <figure className="media-left">
                 <p className="image is-64x64">
-                  <img src={this.state.profileImage} />
+                  <img src={this.state.profileImage} alt="user profile pic"/>
                 </p>
               </figure>
               <div className="media-content">
