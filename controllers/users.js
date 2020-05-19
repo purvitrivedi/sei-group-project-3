@@ -29,7 +29,8 @@ async function userShow(req, res, next) {
           arr.push(curr)
         }
         return arr
-      }, []) 
+      }, [])
+
     }
     // if (user.eventsGoing) {
     //   user.eventsGoing = user.eventsGoing.flatMap(item => item._id).reduce((arr, curr) => {
@@ -97,7 +98,7 @@ async function userFavoriteHikeDelete(req, res, next) {
     const userId = req.params.id
     const favId = req.params.favId
     console.log(favId)
-    
+
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)
 

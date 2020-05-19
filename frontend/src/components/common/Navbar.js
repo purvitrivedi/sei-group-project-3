@@ -91,6 +91,7 @@ class Navbar extends React.Component {
                 <div className="navbar-dropdown">
                   <Link to="/profiles" className="navbar-item">Hikrs</Link>
                   <Link to="/groups" className="navbar-item">Groups</Link>
+                  <Link to="/groups/register" className="navbar-item">Add a New Group</Link>
                 </div>
               </div>}
               {!isAuthenticated() && <Link to="/login" className="navbar-item">Log In</Link>}

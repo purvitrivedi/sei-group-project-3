@@ -9,6 +9,11 @@ async function groupsIndex(req, res, next) {
     const groups = await Group.find()
       .populate('members.user')
       .populate('createdMember')
+      .populate('messages.user')
+      .populate('userAddedImages.user')
+      .populate('events.hike')
+      .populate('events.participants')
+      .populate('events.createdMember')
     if (!groups) throw new Error(notFound)
     res.status(200).json(groups)
   } catch (err) {
@@ -21,7 +26,7 @@ async function groupsIndex(req, res, next) {
 async function groupsShow(req, res, next) { 
   try {
     const groupId = req.params.id
-    const group = await (await Group.findById(groupId))
+    const group = await Group.findById(groupId)
       .populate('members.user')
       .populate('createdMember')
       .populate('messages.user')
@@ -58,7 +63,7 @@ async function groupsCreate(req, res, next) {
 async function groupsUpdate(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await (await Group.findById(groupId))
+    const group = await Group.findById(groupId)
       .populate('members.user')
       .populate('createdMember')
       .populate('messages.user')
