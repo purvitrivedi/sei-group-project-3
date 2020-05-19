@@ -1,0 +1,23 @@
+.navbar {
+  font-family: "Amatic SC", cursive;
+  font-size: 28px;
+
+.navbar-brand {
+  .navbar-item{
+  color: rgb(70, 68, 68);
+  }
+}
+
+  .navbar-end {
+    .has-dropdown {
+      padding: 6px 20px 0px;
+    }
+  
+  
+    .navbar-dropdown {
+      font-size: 25px;
+    }
+  }
+}
+
+

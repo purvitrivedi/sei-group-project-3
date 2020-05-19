@@ -1,8 +1,6 @@
 import React from 'react'
-import { isOwner, getUserId } from '../../lib/auth'
 
 const ProfileComplete = (props) => {
-  const userId = getUserId()
   const { edit } = props
   return (
     <div className="column is-full fav-comp">

@@ -24,7 +24,6 @@ class HikeReviews extends React.Component {
   }
 
   handleChange = event => {
-    // const text = event.target.value
     const reviewData = { ...this.state.reviewData, [event.target.name]: event.target.value }
     this.setState({ reviewData })
   }
@@ -134,7 +133,7 @@ class HikeReviews extends React.Component {
               </figure>
               <div className="media-content">
                 <div className="content">
-                  <p><strong>{review.user.fullName}</strong> <small>Rating: {review.rating} Stars</small> <small>{review.createdAt}</small>
+                  <p><strong>{review.user.fullName}</strong> <small>{'⭐️'.repeat(review.rating)} </small> <small>{review.createdAt}</small>
                     <br />
                     {review.text}
                   </p>

@@ -183,7 +183,7 @@ class ProfileShow extends React.Component {
             <div className="tile is-child box profile-top">
               <figure>
                 {this.state.image && <img src={this.state.image} alt="profileImage" />}
-                {!this.state.image && <img src={defaultImage} />}
+                {!this.state.image && <img src={defaultImage} alt="default"/>}
                 {this.state.edit &&
                   <div className="control">
                     <ProfileImageUpload

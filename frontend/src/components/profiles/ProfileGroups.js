@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-import { getUserId } from '../../lib/auth'
 
 
 class ProfileGroups extends React.Component {
