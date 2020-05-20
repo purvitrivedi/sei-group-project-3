@@ -7,6 +7,7 @@ import { isAuthenticated, getUserId, isOwner } from '../../lib/auth'
 import HikeReviews from './HikeReviews'
 import HikeImageModal from './HikeImageModal'
 import ImageUpload from '../common/ImageUpload'
+import HikeShowMap from './HikeShowMap'
 
 
 
@@ -104,9 +105,9 @@ class HikeShow extends React.Component {
   handleAddImage = async event => {
     const hikeId = this.props.match.params.id
     try {
-      await addImageToHike(hikeId, {images: event.target.value})
+      await addImageToHike(hikeId, { images: event.target.value })
       const res = await getSingleHike(hikeId)
-      this.setState({ hike: res.data }, 
+      this.setState({ hike: res.data },
         () => {
           this.setState({ imageModalActive: true })
         })
@@ -178,13 +179,6 @@ class HikeShow extends React.Component {
                 }}>Delete this Hike</button>}
             <hr />
           </section>
-
-          <section className={this.state.imageUploadActive ? "image-upload" : "image-upload is-hidden"} >
-            <ImageUpload
-              onChange={this.handleAddImage}
-            />
-          </section>
-
           <section>
             <HikeImageModal
               handleImageModal={this.handleImageModal}
@@ -192,14 +186,31 @@ class HikeShow extends React.Component {
               images={hike.images}
             />
           </section>
+          <hr />
+          <div className="columns is-multiline">
+            <div className="column is-half-desktop">
+            <h1 className="hikr-title">Location:</h1>
+            <br/>
+              <HikeShowMap
+                hike={this.state.hike}
+              />
+            </div>
+            <div className="column is-half-desktop">
+              <section className={this.state.imageUploadActive ? "image-upload" : "image-upload is-hidden"} >
+                <ImageUpload
+                  onChange={this.handleAddImage}
+                />
+              </section>
 
-          <section className="reviews">
-            <HikeReviews
-              reviews={this.state.hike.reviews}
-              handleReviewDelete={this.handleReviewDelete}
-              handleSubmitReview={this.handleSubmitReview}
-            />
-          </section>
+              <section className="reviews">
+                <HikeReviews
+                  reviews={this.state.hike.reviews}
+                  handleReviewDelete={this.handleReviewDelete}
+                  handleSubmitReview={this.handleSubmitReview}
+                />
+              </section>
+            </div>
+          </div>
         </div>
       </div>
     )

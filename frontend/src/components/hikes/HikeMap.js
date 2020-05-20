@@ -11,8 +11,7 @@ class HikeMap extends React.Component {
       zoom: 4,
       bearing: 0,
       pitch: 0
-    },
-    // isPopupLarge: false
+    }
   }
 
   handlePopupShow = event => {
@@ -21,7 +20,6 @@ class HikeMap extends React.Component {
     } else {
       event.currentTarget.className = "small-popup"
     }
-    // this.setState({ isPopupLarge: !this.state.isPopupLarge })
   }
 
   render() {
