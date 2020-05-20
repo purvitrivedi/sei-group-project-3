@@ -422,7 +422,7 @@ class GroupShow extends React.Component {
                     <br />
                     {msg.text}
                     <br />
-                    { likedArray.length >= 1 && <small><p style={{fontSize: 10}}>{likedArray.length}&nbsp;members liked this comment ❤︎</p></small> }
+                    { likedArray.length >= 1 && <small><p>{likedArray.length}&nbsp;members liked this comment ❤︎</p></small> }
 
                     { msg.user._id !== getUserId() && 
                       <small>
