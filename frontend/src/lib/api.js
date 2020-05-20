@@ -43,6 +43,10 @@ export const addHikeToFavorites = (userId, hikeId) => {
   return axios.post(`/api/profiles/${userId}/favorites`, hikeId, withHeaders())
 }
 
+export const addImageToHike = (id, imageData) => {
+  return axios.post(`${baseUrl}/hikes/${id}/images`, imageData, withHeaders())
+}
+
 
 // * Auth
 
@@ -64,8 +68,42 @@ export const getAllUsers = () => {
 }
 
 export const getUser = userId => {
-  return axios.get(`/api/profiles/${userId}`, withHeaders())
+  return axios.get(`${baseUrl}/profiles/${userId}`, withHeaders())
+}
+
+export const editUser = (userId, data) => {
+  return axios.put(`${baseUrl}/profiles/${userId}`, data, withHeaders())
 }
 
 
 
+//* add & remove hikes from profile
+
+export const addCompleted = (userId, hikeId) => {
+  return axios.post(`${baseUrl}/profiles/${userId}/completed`, hikeId, withHeaders())
+}
+
+
+export const removeHikeRequest = (userId, linkName, hikeId) => {
+  return axios.delete(`${baseUrl}/profiles/${userId}/${linkName}/${hikeId}`, withHeaders())
+}
+
+
+//* member leave group
+
+export const leaveGroupRequest = (groupId, memberId) => {
+  return axios.delete(`${baseUrl}/groups/${groupId}/members/${memberId}`, withHeaders())
+}
+
+
+//* profileImageUpload
+
+export const profileImageUpload = (uploadUrl, data) => {
+  return axios.post(uploadUrl, data)
+}
+
+
+//* Groups
+export const getSingleGroup = groupId => {
+  return axios.get(`${baseUrl}/groups/${groupId}`)
+}

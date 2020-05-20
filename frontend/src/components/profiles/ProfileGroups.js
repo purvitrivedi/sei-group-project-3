@@ -1,7 +1,7 @@
 import React from 'react'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { getUserId } from '../../lib/auth'
+import { getSingleGroup } from '../../lib/api'
 
 
 class ProfileGroups extends React.Component {
@@ -13,7 +13,7 @@ class ProfileGroups extends React.Component {
 
   async componentDidMount() {
     const groupId = this.props.id
-    const res = await axios.get(`/api/groups/${groupId}`)
+    const res = await getSingleGroup(groupId)
     this.setState({ group: res.data })
 
     this.matchMember()

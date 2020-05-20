@@ -9,7 +9,7 @@ class HikeImageModal extends React.Component {
     return (
       <div className={this.props.isModalActive ? "modal is-active" : "modal"}>
         <div className="modal-background"></div>
-        <div className="modal-content hike-modal">
+        <div className="modal-content">
         
           <Carousel>
             {this.props.images.map(image => {

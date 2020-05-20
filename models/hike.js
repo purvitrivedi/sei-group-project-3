@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 // user can add images to the hike page
-const userImagesSchema = new mongoose.Schema({
-  image: { type: String, required: true },
-  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
-})
+// const userImagesSchema = new mongoose.Schema({
+//   image: { type: String, required: true },
+//   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+// })
 // user can review the hike and rate from 1-5
 const reviewSchema = new mongoose.Schema({
   text: { type: String, required: true, maxlength: 1000 },
@@ -32,7 +32,7 @@ const hikeSchema = new mongoose.Schema({
   distance: { type: String, required: true },
   timeToComplete: { type: String, required: true },
   images: { type: Array, required: true },
-  imagesUser: [userImagesSchema],
+  // imagesUser: [userImagesSchema],
   reviews: [reviewSchema],
   // ratings: [ratingSchema],
   seasons: { type: Array, required: true },

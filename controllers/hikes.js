@@ -136,11 +136,10 @@ async function hikesReviewDelete(req, res, next) {
 
 async function hikesUserImageCreate(req, res, next) {
   try {
-    req.body.user = req.currentUser
     const hikeId = req.params.id
-    const hike = await Hike.findById(hikeId).populate('user')
+    const hike = await Hike.findById(hikeId)
     if (!hike) throw new Error(notFound)
-    hike.images.push(req.body)
+    hike.images.push(req.body.images)
     await hike.save()
     res.status(201).json(hike)
   } catch (err) {

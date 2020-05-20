@@ -32,12 +32,12 @@ class AddCompletedHike extends React.Component {
 
   createHikeOptions = () => {
     const { hikes } = this.state
-    let hikeOptions = hikes.map(hike => ({ value: hike._id, label: hike.name }))
-    const comp = this.state.completedHikes.flatMap(item => item.hike._id)
+    const hikeOptions = hikes.map(hike => ({ value: hike._id, label: hike.name }))
+    // const comp = this.state.completedHikes.flatMap(item => item.hike._id)
 
-    for (let i = 0; i < comp.length; i++) {
-      hikeOptions = hikeOptions.filter(hike => hike.value !== comp[i])
-    }
+    // for (let i = 0; i < comp.length; i++) {
+    //   hikeOptions = hikeOptions.filter(hike => hike.value !== comp[i])
+    // }
 
     this.setState({ hikeOptions })
   }
