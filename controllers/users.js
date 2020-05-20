@@ -82,6 +82,8 @@ async function userFavoriteHikeCreate(req, res, next) {
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)
 
+    if (user.favoritedHikes.some( hike =>  hike.hike.equals(req.body.hike))) throw new Error('Already added') 
+
     user.favoritedHikes.push(req.body)
     await user.save()
 
@@ -127,6 +129,8 @@ async function userCompletedHikeCreate(req, res, next) {
 
     const user = await User.findById(userId)
     if (!user) throw new Error(notFound)
+
+    if (user.completedHikes.some( hike =>  hike.hike.equals(req.body.hike))) throw new Error('Already added') 
 
     user.completedHikes.push(req.body)
     await user.save()

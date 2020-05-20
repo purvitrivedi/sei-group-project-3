@@ -1,6 +1,7 @@
 import React from 'react'
-import { getToken, isOwner } from '../../lib/auth'
 import axios from 'axios'
+import { isOwner, getToken } from '../../lib/auth'
+import { getUser } from '../../lib/api'
 import { Link } from 'react-router-dom'
 
 
@@ -27,12 +28,7 @@ class ProfileShow extends React.Component {
   async componentDidMount() {
     try {
       const id = this.props.match.params.id
-      const withHeaders = () => {
-        return {
-          headers: { Authorization: `Bearer ${getToken()}` }
-        }
-      }
-      const res = await axios.get(`/api/profiles/${id}`, withHeaders())
+      const res = await getUser(id)
       this.setState({ profile: res.data, bio: res.data.bio, image: res.data.profileImage, fullName: res.data.fullName })
     } catch (err) {
       console.log(err.response)
@@ -292,7 +288,7 @@ class ProfileShow extends React.Component {
                       <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.addCompHike} /></div>
                     }
                     <div className="completed">{completedHikes}</div>
-                    
+
                   </div>
                 </article>
               </div>

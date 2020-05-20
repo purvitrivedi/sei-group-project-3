@@ -1,6 +1,5 @@
 import React from 'react'
-import axios from 'axios'
-import { getToken } from '../../lib/auth'
+import { getAllUsers } from '../../lib/api'
 import ProfilesList from './ProfilesList'
 
 class ProfilesIndex extends React.Component {
@@ -13,12 +12,7 @@ class ProfilesIndex extends React.Component {
 
   async componentDidMount() {
     try {
-      const withHeaders = () => {
-        return {
-          headers: { Authorization: `Bearer ${getToken()}` }
-        }
-      }
-      const res = await axios.get('/api/profiles', withHeaders())
+      const res = await getAllUsers()
       this.setState({ profiles: res.data })
     } catch (err) {
       console.log(err.response)

@@ -1,5 +1,6 @@
 import React from 'react'
 import { setToken } from '../../lib/auth'
+import { loginUser } from '../../lib/api'
 import axios from 'axios'
 
 class Login extends React.Component {
@@ -21,7 +22,7 @@ class Login extends React.Component {
   handleSubmit = async (event, path) => {
     event.preventDefault()
     try {
-      const res = await axios.post('/api/login',this.state.formData)
+      const res = await loginUser(this.state.formData)
       setToken(res.data.token)
       path.push('/hikes')
 

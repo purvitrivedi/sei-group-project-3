@@ -44,13 +44,28 @@ export const addHikeToFavorites = (userId, hikeId) => {
 }
 
 
-//User
+// * Auth
 
-export const registerUser = (formData) => {
+export const registerUser = formData => {
   return axios.post(`${baseUrl}/register`, formData)
 }
 
-export const getCurrentUser = (userId) => {
+export const loginUser = formData => {
+  return axios.post(`${baseUrl}/login`, formData)
+}
+
+
+
+
+// * Profiles
+
+export const getAllUsers = () => {
+  return axios.get(`${baseUrl}/profiles`, withHeaders())
+}
+
+export const getUser = userId => {
   return axios.get(`/api/profiles/${userId}`, withHeaders())
 }
+
+
 
