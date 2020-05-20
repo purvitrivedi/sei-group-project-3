@@ -1,8 +1,9 @@
 import React from 'react'
+import axios from 'axios'
 import Calendar from 'react-calendar'
 import Moment from 'react-moment'
 import 'moment-timezone'
-import axios from 'axios'
+import Popup from "reactjs-popup"
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId, getToken } from '../../lib/auth'
 import GroupImgNew from './GroupImgNew'
@@ -18,11 +19,20 @@ class GroupShow extends React.Component {
       Events: false,
       Chat: false
     },
+    displayReplyForm: false,
+    replyStatus: false,
   
     date: new Date(),
   
     member: false,
-    admin: false
+    admin: false,
+    eventToParticipate: [],
+
+    formData: {
+      text: '',
+      user:'',
+      to: ''
+    }
   }
 
   // fetch and status auth
@@ -91,6 +101,7 @@ class GroupShow extends React.Component {
     display[event.target.name] = true
     this.setState({ display })
   }
+
   // send email
   triggerOutlook = () => {
     const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href)     
@@ -100,9 +111,8 @@ class GroupShow extends React.Component {
 
   //event - calendar, delete event
   controlCalendar = date => this.setState({ date })
-
-
   handleEventDelete = async e => {
+    e.preventDefault()
     try {
     const groupId = this.props.match.params.id
     const eventId = e.target.value
@@ -145,16 +155,36 @@ class GroupShow extends React.Component {
       })
       const group = await axios.get(`/api/groups/${groupId}`)
       this.setState({ group: group.data })
-      console.log(group)
     } catch (err) {
       console.log(err)
     }
   }
   
+  handleMessageChange = event => {
+    const formData = { ...this.state.formData, [event.target.name]: event.target.value }
+    this.setState({ formData })
+  }
+  handleMessageSubmit = async event => {
+    try {
+      const groupId = this.props.match.params.id
+      await axios.post(`/api/groups/${groupId}/messages`, {
+        text: this.state.formData.text,
+        user: getUserId()
+      }, {
+        headers: { Authorization: `Bearer ${getToken()}`}
+      })
+      
+      const group = await axios.get(`/api/groups/${groupId}`)
+      this.setState({ group: group.data })
+    } catch (err) {
+      this.setState({ errors: err })
+    }
+  }
 
   render() {
     console.log(this.state)
     console.log(this.props)
+
     const group = this.state.group
     const admin = group.createdMember ? { ...group.createdMember } : ''
     
@@ -221,7 +251,7 @@ class GroupShow extends React.Component {
       events = group.events.map( item => {
         const hikeName = () => item.hike ? item.hike.name : ''
         const hikePage = () => item.hike ? item.hike._id : ''
-        const numPar = (item) => item.participants.length //! add par?
+        const numPar = (item) => item.participants.length
         const userId = getUserId()
         const eventId = item._id
         const handleJoinEvent = async () => {
@@ -237,15 +267,51 @@ class GroupShow extends React.Component {
             })
             window.alert(`Thanks ${userToAdd.data.username} for joining!`)
             numPar(item)
+            const eventToParticipate = [ ...this.state.eventToParticipate, eventId]
 
             const group = await axios.get(`/api/groups/${groupId}`)
-            this.setState({ group: group.data })
+            this.setState({ group: group.data, eventToParticipate })
           } catch (err) {
             console.log(err)
           }
         }
+        const handleCancelEvent = async () => {
+          try {
+            const groupId = this.props.match.params.id
+            // let parId
+            // if (item.participants) parId = item.participants.find( par => par.user._id === userId)
+            // console.log({parId})
+            let group = await axios.get(`/api/groups/${groupId}`)
+            const parId = item.participants.find( par => par.user._id === userId)
+            const parToRemove = await axios.get(`/api/profiles/${userId}`, {
+              headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            await axios.delete(`/api/groups/${groupId}/events/${eventId}/participants/${parId}`, {
+              headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            window.confirm(`${parToRemove.data.username}, are you sure you want to cancel the event?`)
+            numPar(item)
+            const eventToParticipate = [ ...this.state.eventToParticipate ]
+            eventToParticipate.splice( eventToParticipate.indexOf(eventId), 1)
 
-        console.log(eventId)
+            group = await axios.get(`/api/groups/${groupId}`)
+            this.setState({ group: group.data, eventToParticipate })
+          } catch (err) {
+            console.log(err.response)
+          }
+        }
+
+        let participants
+        if (group.participants) {
+          participants = item.participants.map( par => {
+            return (
+              <div class="column" key={par._id}>
+                <figure class="image is-128x128">
+                  <img class="is-rounded" src={par.user.profileImage} />
+                </figure>
+              </div>
+          )})
+        }
         return (
           <section class="section box" key={item._id}>
             <div class="container">
@@ -267,13 +333,17 @@ class GroupShow extends React.Component {
               <p>Event Host:&nbsp;<strong>{item.createdMember.username.replace(item.createdMember.username[0], item.createdMember.username[0].toUpperCase())}</strong></p>
               <Link to={`/profiles/${item.createdMember._id}`}><figure class="image is-rounded is-64x64"><img class="is-rounded" src={item.createdMember.profileImage} alt={item.createdMember.username} /></figure></Link>
                 <br />
-              { numPar(item) >=1 ? <p style={{fontSize: 15}}>{`${numPar(item)} will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
+              { numPar(item) > 1 ? <p style={{fontSize: 15}}>{`${numPar(item)} members will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
 
+              { numPar(item) > 1 ? <div class="columns"> { participants } </div> : '' }
               
               <div class="buttons is-right">
-               { !item.participants.some(par => par.user === getUserId()) &&
-                <button class="button is-danger" value={eventId} onClick={handleJoinEvent}><strong>Join</strong></button> 
-               }
+                { this.state.eventToParticipate.includes(item._id) &&
+                  <button class="button is-danger" value={eventId} onClick={handleJoinEvent}><strong>Join</strong></button>
+                }
+                { !this.state.eventToParticipate.includes(item._id) &&
+                  <button class="button is-small" value={eventId} onClick={handleCancelEvent}>Cancel</button>
+                }
               </div>
             </div>
           </section>
@@ -284,93 +354,146 @@ class GroupShow extends React.Component {
     let chat
     if (group.messages) {
       chat = group.messages.map( msg => {
-        // const sendLike = () => ()
+        const groupId = this.props.match.params.id
+        const messageId = msg._id
+        let likedArray = msg.likes
+        const handleMessageDelete = async () => {
+          await axios.delete(`/api/groups/${groupId}/messages/${messageId}`, {
+            headers: { Authorization: `Bearer ${getToken()}`}
+          })
+          const group = await axios.get(`/api/groups/${groupId}`)
+          this.setState({ group: group.data })
+        }
+        const handleLikes = async () => {
+          try {
+            const userId = getUserId()
+            if ( likedArray.length > 0 && likedArray.find( like => like.user._id === userId)) window.alert('You have already liked the comment')
+
+            const resUser = await axios.get(`/api/profiles/${userId}`, {
+              headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            await axios.put(`/api/groups/${groupId}/messages/${messageId}/likes`, resUser.data, {
+              headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            const group = await axios.get(`/api/groups/${groupId}`)
+            this.setState({ group: group.data })
+          } catch (err) {
+            console.log(err.response)
+          }  
+        }
+       
+        const handleReplyForm = () => {
+          const displayReplyForm = true
+          this.setState({ displayReplyForm })
+        }
+        const handleReplyMessage = event => {
+          const formData = { ...this.state.formData, [event.target.name]: event.target.value, to: msg._id }
+          console.log(formData)
+          this.setState({ formData })
+        }
+  
+        const handleReplySubmit = async event => {
+          event.preventDefault()
+          try {
+            await axios.post(`/api/groups/${groupId}/messages`, this.state.formData, {
+            headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            const group = axios.get(`/api/groups/${groupId}`)
+            this.setState({ group: group.data, replayStaus: true, displayReplyForm: false })
+          } catch (err) {
+            console.log(err)
+          }
+        }
+
         return (
           <div class="Chat" key={msg._id}>
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-64x64">
-              <img src={msg.user.profileImage} alt={msg.user.username} />
-            </p>
-          </figure>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>{msg.user.username.replace(msg.user.username[0], msg.user.username[0].toUpperCase())}</strong>
-                <br />
-                {msg.text}
-                <br />
-                <small><a>Like</a> · <a>Reply</a> · <Moment fromNow ago>{msg.updatedAt}</Moment></small>
-              </p>
-            </div>
-        
+            { getUserId() === msg.user._id && <div class="buttons is-right"><button class="button is-small" onClick={handleMessageDelete}>x</button></div> }
             <article class="media">
+            
               <figure class="media-left">
-                <p class="image is-48x48">
-                  <img src="https://bulma.io/images/placeholders/96x96.png" />
+                <p class="image is-64x64">
+                  <img src={msg.user.profileImage} alt={msg.user.username} />
                 </p>
               </figure>
               <div class="media-content">
                 <div class="content">
                   <p>
-                    <strong>Sean Brown</strong>
+                    <strong>{msg.user.username.replace(msg.user.username[0], msg.user.username[0].toUpperCase())}</strong>
                     <br />
-                    Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
+                    {msg.text}
                     <br />
-                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                    { likedArray.length >= 1 && <small><p style={{fontSize: 10}}>{likedArray.length}&nbsp;members liked this comment ❤︎</p></small> }
+
+                    { msg.user._id !== getUserId() && 
+                      <small>
+                        <a onClick={handleLikes}>Like</a> · 
+                        {/* <PopupReply /> */}
+                        <a onClick={handleReplyForm}> Reply</a> · Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago
+                      </small> 
+                    }
+                     { msg.user._id === getUserId() &&<small>Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago</small> }
                   </p>
                 </div>
-        
-                <article class="media">
-                  Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa.
+
+
+                <article class={this.state.displayReplyForm === true ? "Reply media" : "Reply media is-hidden"}>
+                  <div class="media-content">
+                    <div class="field">
+                      <p class="control">
+                        <textarea 
+                            class="textarea" 
+                            placeholder="Reply..." 
+                            onChange={handleReplyMessage} 
+                            name='text'
+                            value={this.state.formData.text}
+                        />
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control">
+                        <button 
+                          class="button is-small" 
+                          onClick={handleReplySubmit}
+                        >Reply</button>
+                      </p>
+                    </div>
+                  </div>
                 </article>
-        
-                <article class="media">
-                  Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor.
+
+                <article class={this.state.replyStatus === true ? "media" : "media is-hidden"}>
+                  <figure class="media-left">
+                    <p class="image is-48x48">
+                      <img src={msg.user.profileImage} alt={msg.user.username} />
+                    </p>
+                  </figure>
+                  <div class="media-content">
+                    <div class="content">
+                      <p>
+                        <strong>{msg.user.username.replace(msg.user.username[0], msg.user.username[0].toUpperCase())}</strong>
+                        <br />
+                        {msg.text}
+                        <br />
+                        { likedArray.length >= 1 && <small><p>{likedArray.length}&nbsp;members liked this comment ❤︎</p></small> }
+
+                        { msg.user._id !== getUserId() && 
+                          <small>
+                            <a onClick={handleLikes}>Like</a> · 
+                            {/* <PopupReply /> */}
+                            <a onClick={handleReplyForm}> Reply</a> · Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago
+                          </small> 
+                        }
+                        { msg.user._id === getUserId() &&<small>Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago</small> }
+                      </p>
+                    </div>
+                    {/* <article class="media">
+                      Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa.
+                    </article> */}
+                  </div>
                 </article>
               </div>
             </article>
-        
-            <article class="media">
-              <figure class="media-left">
-                <p class="image is-48x48">
-                  <img src="https://bulma.io/images/placeholders/96x96.png" />
-                </p>
-              </figure>
-              <div class="media-content">
-                <div class="content">
-                  <p>
-                    <strong>Kayli Eunice </strong>
-                    <br />
-                    Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat.
-                    <br />
-                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                  </p>
-                </div>
-              </div>
-            </article>
+            <hr />
           </div>
-        </article>
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-64x64">
-              <img src="https://bulma.io/images/placeholders/128x128.png" />
-            </p>
-          </figure>
-          <div class="media-content">
-            <div class="field">
-              <p class="control">
-                <textarea class="textarea" placeholder="Add a comment..."></textarea>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control">
-                <button class="button">Post comment</button>
-              </p>
-            </div>
-          </div>
-        </article>
-        </div>
         )
       })
     }
@@ -510,6 +633,26 @@ class GroupShow extends React.Component {
               <div class="container">
                 <h1 class="subtitle">Chat Board</h1>
                 { chat }
+                <article class="media">
+                  <div class="media-content">
+                    <div class="field">
+                      <p class="control">
+                        <textarea 
+                          class="textarea" 
+                          placeholder="Add a comment..." 
+                          onChange={this.handleMessageChange} 
+                          name='text'
+                          value={this.state.formData.text}
+                        />
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control">
+                        <button class="button" onClick={this.handleMessageSubmit}>Post comment</button>
+                      </p>
+                    </div>
+                  </div>
+                </article>
               </div>
             </section>
           </div>
@@ -518,10 +661,8 @@ class GroupShow extends React.Component {
           { this.state.member && <div class="buttons is-right"><button class="button is-small" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
         </div>
       </div>
-      )
+    )
   }
-    
 }
-
 
 export default GroupShow

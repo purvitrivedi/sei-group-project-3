@@ -7,18 +7,42 @@ const hikeData = require('./data/hikes')
 const userData = require('./data/users')
 // const groupData = require('./data/groups')
 
+// const faker = require('faker')
+
 mongoose.connect(
   dbURI,
   { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
   async (err, db) => {
+
+
     if (err) return console.log(err)
+
     try {
       await db.dropDatabase()
-      const users = await User.create(userData)
-      console.log(`${'🧗‍♀️'.repeat(users.length)} Users created`)
+
+      const createdUsers = await User.create(userData)
+
+      // for (let i = 0; i < 300; i++) {
+      //   const name = faker.name.findName()
+      //   const image = faker.image.imageUrl()
+      //   users.push({
+      //     username: name.split(' ')[0].toLowerCase(),
+      //     email: `${name.split(' ').join('').toLowerCase()}@email.com`,
+      //     password: 'pass',
+      //     passwordConfirmation: 'pass',
+      //     fullName: name,
+      //     profileImage: image
+
+      //   })
+      // }
+
+
+      // const createdUsers = await User.create(users)
+
+      console.log(`${createdUsers.length} Users created`)
 
       const hikesWithUsers = hikeData.map(hike => {
-        return { ...hike, user: users[Math.floor(Math.random() * users.length)]._id }
+        return { ...hike, user: createdUsers[Math.floor(Math.random() * createdUsers.length)]._id }
       })
 
       // const groupsWithMembers = groupData.map(group => {
