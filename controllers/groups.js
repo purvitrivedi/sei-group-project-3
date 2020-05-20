@@ -227,6 +227,7 @@ async function groupsMessageDelete(req, res, next) {
 // POST
 // URL = api/groups/:id/events
 async function groupsEventCreate(req, res, next) {
+  console.log(req.body)
   try {
     const groupId = req.params.id
     const group = await Group.findById(groupId)
@@ -235,14 +236,15 @@ async function groupsEventCreate(req, res, next) {
     if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name 
 
     req.body.createdMember = req.currentUser
+    console.log(req.body)
     const adminId = group.createdMember._id
     if (!group.members.some(member => member.user._id.equals(req.body.createdMember._id))
       && !adminId.equals(req.body.createdMember._id) ) {
       throw new Error(unauthorized)
     } // only group members or admin can create events
 
-    const newParticipant = { user: req.body.createdMember._id }
-    req.body.participants = newParticipant
+    // const newParticipant = { user: req.body.createdMember._id }
+    // req.body.participants = newParticipant
     group.events.push(req.body)
 
     await group.save()
@@ -287,13 +289,40 @@ async function groupsEventUpdate(req, res, next) {
       && !adminId.equals(req.currentUser._id)) { // admin has right to update
       throw new Error(unauthorized) 
     }
-
-    if (req.body.participants
-      && !group.members.some( member => member.user._id.equals(req.body.participants)) ) {
-      throw new Error('Participant need to join the group')
-    } // only group members can participate events
     
     Object.assign(eventToUpdate, req.body)
+    await group.save()
+    res.status(202).json(group)
+  } catch (err) {
+    next(err)
+  }
+}
+
+// PUT (PARTICIPANTS)
+// URL = api/groups/:id/events/:eventId/participants
+async function groupsEventParticipants(req, res, next) {
+  console.log(req)
+  try {
+    const groupId = req.params.id
+    const group = await Group.findById(groupId)
+    if (!group) throw new Error(notFound)
+
+    const eventId = req.params.eventId
+    const eventToUpdate = group.events.id(eventId)
+    if (!eventToUpdate) throw new Error(notFound)
+
+    const adminId = group.createdMember._id
+    if (!eventToUpdate.createdMember._id.equals(req.currentUser._id)
+      && !adminId.equals(req.currentUser._id)) { // admin has right to update
+      throw new Error(unauthorized) 
+    }
+
+    if (!group.members.some( member => member.user._id.equals(req.currentUser._id)) ) {
+      throw new Error('You are already group member')
+    } // only group members can participate events
+    
+    eventToUpdate.participants.push(req.currentUser._id)
+    await eventToUpdate.save()
     await group.save()
     res.status(202).json(group)
   } catch (err) {
@@ -401,6 +430,7 @@ module.exports = {
   showEvent: groupsEventShow,
   createEvent: groupsEventCreate,
   updateEvent: groupsEventUpdate,
+  addParticipant: groupsEventParticipants,
   deleteEvent: groupsEventDelete,
 
   // members

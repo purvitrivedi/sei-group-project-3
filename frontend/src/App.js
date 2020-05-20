@@ -23,10 +23,10 @@ import HikeUpdate from './components/hikes/HikeUpdate'
 // groups
 import GroupIndex from './components/groups/GroupIndex'
 import GroupShow from './components/groups/GroupShow'
-import GroupImagesIndex from './components/groups/GroupImagesIndex'
-import GroupEventShow from './components/groups/GroupEventShow'
 import GroupNew from './components/groups/GroupNew'
 import GroupEdit from './components/groups/GroupEdit'
+import GroupEventEdit from './components/groups/GroupEventEdit'
+import GroupEventNew from './components/groups/GroupEventNew'
 
 const App = () => {
   return (
@@ -44,8 +44,8 @@ const App = () => {
         <Route path="/hikes/:id" component={HikeShow} />
         <Route path="/hikes" component={HikesIndex} />
 
-        <SecureRoute path="/groups/:id/images" component={GroupImagesIndex} />
-        <SecureRoute path="/groups/:id/events/:eventId" component={GroupEventShow} />
+        <SecureRoute path="/groups/:id/events/:eventId/edit" component={GroupEventEdit} />
+        <SecureRoute path="/groups/:id/events" component={GroupEventNew} />
         <SecureRoute path="/groups/:id/edit" component={GroupEdit} />
         <SecureRoute path="/groups/register" component={GroupNew} />
         <Route path="/groups/:id" component={GroupShow} />

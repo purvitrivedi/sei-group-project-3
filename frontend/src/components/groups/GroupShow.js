@@ -21,7 +21,6 @@ class GroupShow extends React.Component {
   
     member: false,
     admin: false
-    
   }
 
   // fetch and status auth
@@ -91,16 +90,48 @@ class GroupShow extends React.Component {
     display[event.target.name] = true
     this.setState({ display })
   }
-
-  //event - calendar
-  controlCalendar = date => this.setState({ date })
-
   // send email
   triggerOutlook = () => {
     const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href)     
     const subject = "Take a look at this group from Hikr.com!"
     window.location.href = "mailto:?body="+body+"&subject="+subject          
   }
+
+  //event - calendar, delete event
+  controlCalendar = date => this.setState({ date })
+  handleJoinEvent = async event => {
+    try {
+      const groupId = this.props.match.params.id
+      const userId = getUserId()
+      const eventId = await event.target.value
+      const group = await axios.put(`/api/groups/${groupId}/events/${eventId}/participants`, userId, {
+        headers: { Authorization: `Bearer ${getToken()}`}
+      })
+      console.log(group)
+      window.alert('Thanks for joining!')
+      this.setState({ group: group.data })
+      this.props.history.push(`/groups/${groupId}`)//! push to the group page? ind. url
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  handleEventDelete = async e => {
+    try {
+    const groupId = this.props.match.params.id
+    const eventId = e.target.value
+    const group = axios.delete(`/api/groups/${groupId}/events/${eventId}`, {
+      headers: { Authorization: `Bearer ${getToken()}`}
+    })
+    const conf = window.confirm('Are you sure you want to delete the event?')
+    if (conf) this.setState({ group })
+    this.props.history.push(`/groups/${groupId}`) //! push to the group page? ind. url?
+    console.log(group)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
 
   // userAddedImages
   handleUploadPhoto = async event => {
@@ -119,11 +150,10 @@ class GroupShow extends React.Component {
       console.log(err)
     }
   }
-  handleDeletePhoto = async e => {
-    console.log(this.props)
+  handleDeletePhoto = async event => {
     try {
       const groupId = this.props.match.params.id
-      const userAddedImageId = e.target.value
+      const userAddedImageId = event.target.value
       const group = await axios.delete(`/api/groups/${groupId}/user-images/${userAddedImageId}`, {
         headers: { Authorization: `Bearer ${getToken()}`}
       })
@@ -203,26 +233,35 @@ class GroupShow extends React.Component {
 
     let events
     if (group.events) {
-      events = group.events.map( event => {
-        const hikeName = () => event.hike ? event.hike.name : ''
-        const hikePage = () => event.hike ? event.hike._id : ''
-        const counter = () => event.participants ? event.participants.length : ''
+      events = group.events.map( item => {
+        const hikeName = () => item.hike ? item.hike.name : ''
+        const hikePage = () => item.hike ? item.hike._id : ''
+        const counter = () => item.participants.length >= 1 ? true : false //! prob - push createdMember to the participants
         return (
-          <section class="section box" key={event._id}>
+          <section class="section box" key={item._id}>
             <div class="container">
-              <h1 class="subtitle"><strong>{event.eventName}</strong></h1>
+              { item.createdMember._id === getUserId() && 
+              <div class="buttons is-right">
+                <Link to={`/groups/${group._id}/events/${item._id}/edit`} {...item}><button class="button is-small">Edit event</button></Link>
+                <button class="button is-small" value={item._id} onClick={this.handleEventDelete}>Delete</button>
+              </div>
+              }
+              <h1 class="subtitle"><strong>{item.eventName}</strong></h1>
               
-              <p>Course:&nbsp;{hikeName()} <Link to={`/hikes/${hikePage()}`}><i class="fas fa-flag"></i></Link></p>
-              <p style={{fontSize: 12}}> ~&nbsp;{event.description} ~</p>
-                <hr />
-              <p>Host:&nbsp;{event.createdMember.username}</p>
-              <Link to={`/profiles/${event.createdMember._id}`}><figure class="image is-rounded is-64x64"><img class="is-rounded" src={event.createdMember.profileImage} alt={event.createdMember.username} /></figure></Link>
+              <p>Course:&nbsp;{hikeName()} &nbsp;<Link to={`/hikes/${hikePage()}`}><i class="fas fa-flag"></i></Link></p>
+              <p style={{fontSize: 12}}>&nbsp;&nbsp;&nbsp;<i class="fas fa-hiking"></i>&nbsp;{item.hike.difficulty}</p>
+              <p style={{fontSize: 12}}>&nbsp;&nbsp;&nbsp;<i class="fas fa-globe"></i>&nbsp;{item.hike.country}</p>
+
                 <br />
-                { event.participants.length ? <p style={{fontSize: 15}}>{`${counter()} will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
+              <p style={{fontSize: 12}}> ~&nbsp;{item.description} ~</p>
+                <hr />
+              <p>Event Host:&nbsp;<strong>{item.createdMember.username.replace(item.createdMember.username[0], item.createdMember.username[0].toUpperCase())}</strong></p>
+              <Link to={`/profiles/${item.createdMember._id}`}><figure class="image is-rounded is-64x64"><img class="is-rounded" src={item.createdMember.profileImage} alt={item.createdMember.username} /></figure></Link>
+                <br />
+              { counter() ? <p style={{fontSize: 15}}>{`${counter()} will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
 
               <div class="buttons is-right">
-                <Link to={`${group._id}/events/${event._id}`} {...event}><button class="button is-small">Edit event</button></Link>
-                <button class="button is-danger is-small">Join the Event</button>
+                { !item.participants.some(par => par.user === getUserId()) && <button class="button is-danger" value={item._id} onClick={this.handleJoinEvent}><strong>Join</strong></button> }
               </div>
           
             </div>
@@ -357,7 +396,8 @@ class GroupShow extends React.Component {
             </div>
             <div class="column">
               <div class="buttons is-right">
-                { this.state.member && <a class="button is-danger" onClick={this.triggerOutlook}>Recommend to Your Friend</a>}
+                { this.state.member && <Link to={`/groups/${group._id}/events`}><button class="button is-info" onClick={this.handleCreateEvent}><strong>Create Event</strong></button></Link>}
+                { this.state.member && <a class="button is-danger" onClick={this.triggerOutlook}><strong>Recommend to Your Friend</strong></a>}
                 { this.state.admin && <Link to={`/groups/${group._id}/edit`}><a class="button is-light">Edit</a></Link>}
                 { !this.state.member && <a class="button is-danger" onClick={this.handleJoinGroup}><strong>Join the Group!</strong></a>}
               </div>
@@ -372,7 +412,7 @@ class GroupShow extends React.Component {
                 <p class="subtitle">Description</p>
                 <div class="content">{group.description}</div>
                 <br />
-                <p class="subtitle">Host</p>
+                <p class="subtitle">Group Admin</p>
                 <div className="column is-full">
                   <div className="column is-full">
                     <div className="box">
@@ -428,7 +468,8 @@ class GroupShow extends React.Component {
             <section class="section" >
               <div class="container">
                 <h1 class="subtitle">Events</h1>
-                <nav class="panel">
+
+                <nav class="panel is-4">
                   <p class="panel-heading">Calendar Search</p>
                   <div class="panel-block">
                     <p class="control columns is-fullwidth is-multiline" style={{minHeight: 150}}>
@@ -442,6 +483,7 @@ class GroupShow extends React.Component {
                       </div>
                     </p>
                   </div>
+                  
                   <Calendar
                       onChange={this.controlCalendar}
                       value={this.state.date} />
@@ -449,9 +491,7 @@ class GroupShow extends React.Component {
                     <button class="button is-link is-outlined is-fullwidth">Reset all filter</button>
                   </div>
                 </nav>
-                
                 { events }
-                
               </div>
             </section>
           </div>
@@ -466,7 +506,7 @@ class GroupShow extends React.Component {
           </div>
     
 
-          { this.state.member && <div class="column is-full"><button class="button is-small is-right" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
+          { this.state.member && <div class="buttons is-right"><button class="button is-small" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
         </div>
       </div>
       )

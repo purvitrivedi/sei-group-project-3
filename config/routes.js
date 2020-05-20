@@ -71,6 +71,9 @@ router.route('/groups/:id/events/:eventId')
   .put(secureRoute, groups.updateEvent)
   .delete(secureRoute, groups.deleteEvent)
 
+router.route('/groups/:id/events/:eventId/participants')
+  .put(secureRoute, groups.addParticipant)
+
 // members
 router.route('/groups/:id/members')
   .post(secureRoute, groups.createMember)
