@@ -284,7 +284,7 @@ class GroupShow extends React.Component {
     let chat
     if (group.messages) {
       chat = group.messages.map( msg => {
-        const sendLike = () => ()
+        // const sendLike = () => ()
         return (
           <div class="Chat" key={msg._id}>
         <article class="media">
@@ -300,7 +300,7 @@ class GroupShow extends React.Component {
                 <br />
                 {msg.text}
                 <br />
-                <small><a onClick={}>Like</a> · <a>Reply</a> · <Moment fromNow ago>{msg.updatedAt}</Moment></small>
+                <small><a>Like</a> · <a>Reply</a> · <Moment fromNow ago>{msg.updatedAt}</Moment></small>
               </p>
             </div>
         

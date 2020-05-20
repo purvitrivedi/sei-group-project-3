@@ -25,7 +25,8 @@ const groupMessageSchema = new mongoose.Schema({
 
 const userAddedImageSchema = new mongoose.Schema({
   images: { type: String, required: true },
-  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+  to: { type: String }
 }, {
   timestamps: true
 })
