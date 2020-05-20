@@ -122,7 +122,6 @@ class HikeShow extends React.Component {
 
   render() {
     if (!this.state.hike) return null
-    console.log(this.state.hike.images)
 
     const { hike, averageRating, imageModalActive } = this.state
     return (
