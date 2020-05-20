@@ -1,5 +1,7 @@
 import React from 'react'
 import Calendar from 'react-calendar'
+import Moment from 'react-moment'
+import 'moment-timezone'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId, getToken } from '../../lib/auth'
@@ -46,18 +48,17 @@ class GroupShow extends React.Component {
     try {
       const groupId = this.props.match.params.id
       const userId = getUserId()
+      await axios.post(`/api/groups/${groupId}/members`, userId, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+
       const user = await axios.get(`/api/profiles/${userId}`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
-      console.log(user)
-      const group = await axios.post(`/api/groups/${groupId}/members`, userId, {
-        headers: { Authorization: `Bearer ${getToken()}` }
-      })
-      this.setState({ group })
-      window.alert(`Welcome ${user.data.username.toUpperCase()}!`)
+      const group = await axios.get(`/api/groups/${groupId}`)
+      this.setState({ group: group.data, member: true })
 
-      this.isGroupMember()
-      this.props.history.push(`/groups/${groupId}`)
+      window.alert(`Welcome ${user.data.username.toUpperCase()}!`)
     } catch (err) {
       console.log(err.response)
     }
@@ -67,16 +68,16 @@ class GroupShow extends React.Component {
     try {
       const groupId = this.props.match.params.id
       let group = await axios.get(`/api/groups/${groupId}`)
-  
+
       const userId = getUserId()
       const memberToRemove = group.data.members.find( member => member.user._id === userId)
     
       const conf = window.confirm('Are you sure you want to unsubscribe?')
-      if (conf && memberToRemove) group = await axios.delete(`/api/groups/${groupId}/members/${memberToRemove._id}`,{
+      if (conf && memberToRemove) await axios.delete(`/api/groups/${groupId}/members/${memberToRemove._id}`,{
         headers: { Authorization: `Bearer ${getToken()}` }
       })
-      this.setState({ group })
-      this.props.history.push('/groups')
+      group = await axios.get(`/api/groups/${groupId}`)
+      this.setState({ group: group.data, admin: false, member: false })
     } catch (err) {
       console.log(err)
     }
@@ -99,32 +100,18 @@ class GroupShow extends React.Component {
 
   //event - calendar, delete event
   controlCalendar = date => this.setState({ date })
-  handleJoinEvent = async event => {
-    try {
-      const groupId = this.props.match.params.id
-      const userId = getUserId()
-      const eventId = await event.target.value
-      const group = await axios.put(`/api/groups/${groupId}/events/${eventId}/participants`, userId, {
-        headers: { Authorization: `Bearer ${getToken()}`}
-      })
-      console.log(group)
-      window.alert('Thanks for joining!')
-      this.setState({ group: group.data })
-      this.props.history.push(`/groups/${groupId}`)//! push to the group page? ind. url
-    } catch (err) {
-      console.log(err)
-    }
-  }
+
+
   handleEventDelete = async e => {
     try {
     const groupId = this.props.match.params.id
     const eventId = e.target.value
-    const group = axios.delete(`/api/groups/${groupId}/events/${eventId}`, {
+    await axios.delete(`/api/groups/${groupId}/events/${eventId}`, {
       headers: { Authorization: `Bearer ${getToken()}`}
     })
     const conf = window.confirm('Are you sure you want to delete the event?')
-    if (conf) this.setState({ group })
-    this.props.history.push(`/groups/${groupId}`) //! push to the group page? ind. url?
+    const group = await axios.get(`/api/groups/${groupId}`)
+    if (conf) this.setState({ group: group.data })
     console.log(group)
     } catch (err) {
       console.log(err)
@@ -132,19 +119,18 @@ class GroupShow extends React.Component {
   }
 
 
-
   // userAddedImages
   handleUploadPhoto = async event => {
     try {
       const groupId = this.props.match.params.id
-      const group = await axios.post(`/api/groups/${groupId}/user-images`, {
+      await axios.post(`/api/groups/${groupId}/user-images`, {
           images: event.target.value,
           user: getUserId()
         },{
         headers: { Authorization: `Bearer ${getToken()}`}
       })
-      this.setState({ group })
-      this.props.history.push(`/groups/${groupId}`) //! push to the group page? ind. url?
+      const group = await axios.get(`/api/groups/${groupId}`)
+      this.setState({ group: group.data })
       console.log(group)
     } catch (err) {
       console.log(err)
@@ -154,11 +140,11 @@ class GroupShow extends React.Component {
     try {
       const groupId = this.props.match.params.id
       const userAddedImageId = event.target.value
-      const group = await axios.delete(`/api/groups/${groupId}/user-images/${userAddedImageId}`, {
+      await axios.delete(`/api/groups/${groupId}/user-images/${userAddedImageId}`, {
         headers: { Authorization: `Bearer ${getToken()}`}
       })
-      this.setState({ group })
-      this.props.history.push(`/groups/${groupId}`) //! push to the group page? ind. url?
+      const group = await axios.get(`/api/groups/${groupId}`)
+      this.setState({ group: group.data })
       console.log(group)
     } catch (err) {
       console.log(err)
@@ -170,7 +156,6 @@ class GroupShow extends React.Component {
     console.log(this.state)
     console.log(this.props)
     const group = this.state.group
-
     const admin = group.createdMember ? { ...group.createdMember } : ''
     
     let members
@@ -236,7 +221,31 @@ class GroupShow extends React.Component {
       events = group.events.map( item => {
         const hikeName = () => item.hike ? item.hike.name : ''
         const hikePage = () => item.hike ? item.hike._id : ''
-        const counter = () => item.participants.length >= 1 ? true : false //! prob - push createdMember to the participants
+        const numPar = (item) => item.participants.length //! add par?
+        const userId = getUserId()
+        const eventId = item._id
+        const handleJoinEvent = async () => {
+          try {
+            const groupId = this.props.match.params.id
+            const userToAdd = await axios.get(`/api/profiles/${userId}`, {
+              headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            await axios.put(`/api/groups/${groupId}/events/${eventId}/participants`, {
+              user: userToAdd.data
+            }, {
+              headers: { Authorization: `Bearer ${getToken()}`}
+            })
+            window.alert(`Thanks ${userToAdd.data.username} for joining!`)
+            numPar(item)
+
+            const group = await axios.get(`/api/groups/${groupId}`)
+            this.setState({ group: group.data })
+          } catch (err) {
+            console.log(err)
+          }
+        }
+
+        console.log(eventId)
         return (
           <section class="section box" key={item._id}>
             <div class="container">
@@ -258,12 +267,14 @@ class GroupShow extends React.Component {
               <p>Event Host:&nbsp;<strong>{item.createdMember.username.replace(item.createdMember.username[0], item.createdMember.username[0].toUpperCase())}</strong></p>
               <Link to={`/profiles/${item.createdMember._id}`}><figure class="image is-rounded is-64x64"><img class="is-rounded" src={item.createdMember.profileImage} alt={item.createdMember.username} /></figure></Link>
                 <br />
-              { counter() ? <p style={{fontSize: 15}}>{`${counter()} will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
+              { numPar(item) >=1 ? <p style={{fontSize: 15}}>{`${numPar(item)} will participate`}</p> : <p style={{fontSize: 15}}>Be the first participant!</p>}
 
+              
               <div class="buttons is-right">
-                { !item.participants.some(par => par.user === getUserId()) && <button class="button is-danger" value={item._id} onClick={this.handleJoinEvent}><strong>Join</strong></button> }
+               { !item.participants.some(par => par.user === getUserId()) &&
+                <button class="button is-danger" value={eventId} onClick={handleJoinEvent}><strong>Join</strong></button> 
+               }
               </div>
-          
             </div>
           </section>
         )
@@ -272,98 +283,96 @@ class GroupShow extends React.Component {
 
     let chat
     if (group.messages) {
-      chat = group.messages.map( msg => (
-        // <div class="columns box">
-        //   <div class="column is-2"><figure><img src={msg.user.profileImage} alt={msg.user._id} class="is-rounded" /></figure></div>
-        //   <div class="column is-10" key={msg._id}>{msg.text}</div>
-        //   <p>Updated at {msg.updatedAt}</p>
-        // </div>
-        <>
+      chat = group.messages.map( msg => {
+        const sendLike = () => ()
+        return (
+          <div class="Chat" key={msg._id}>
         <article class="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/128x128.png" />
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>Barbara Middleton</strong>
-              <br />
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
-              <br />
-              <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
+          <figure class="media-left">
+            <p class="image is-64x64">
+              <img src={msg.user.profileImage} alt={msg.user.username} />
             </p>
-          </div>
-      
-          <article class="media">
-            <figure class="media-left">
-              <p class="image is-48x48">
-                <img src="https://bulma.io/images/placeholders/96x96.png" />
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{msg.user.username.replace(msg.user.username[0], msg.user.username[0].toUpperCase())}</strong>
+                <br />
+                {msg.text}
+                <br />
+                <small><a onClick={}>Like</a> · <a>Reply</a> · <Moment fromNow ago>{msg.updatedAt}</Moment></small>
               </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>Sean Brown</strong>
-                  <br />
-                  Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
-                  <br />
-                  <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                </p>
-              </div>
-      
-              <article class="media">
-                Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa.
-              </article>
-      
-              <article class="media">
-                Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor.
-              </article>
             </div>
-          </article>
-      
-          <article class="media">
-            <figure class="media-left">
-              <p class="image is-48x48">
-                <img src="https://bulma.io/images/placeholders/96x96.png" />
+        
+            <article class="media">
+              <figure class="media-left">
+                <p class="image is-48x48">
+                  <img src="https://bulma.io/images/placeholders/96x96.png" />
+                </p>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>Sean Brown</strong>
+                    <br />
+                    Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
+                    <br />
+                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                  </p>
+                </div>
+        
+                <article class="media">
+                  Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa.
+                </article>
+        
+                <article class="media">
+                  Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor.
+                </article>
+              </div>
+            </article>
+        
+            <article class="media">
+              <figure class="media-left">
+                <p class="image is-48x48">
+                  <img src="https://bulma.io/images/placeholders/96x96.png" />
+                </p>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>Kayli Eunice </strong>
+                    <br />
+                    Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat.
+                    <br />
+                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </article>
+        <article class="media">
+          <figure class="media-left">
+            <p class="image is-64x64">
+              <img src="https://bulma.io/images/placeholders/128x128.png" />
+            </p>
+          </figure>
+          <div class="media-content">
+            <div class="field">
+              <p class="control">
+                <textarea class="textarea" placeholder="Add a comment..."></textarea>
               </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>Kayli Eunice </strong>
-                  <br />
-                  Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat.
-                  <br />
-                  <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                </p>
-              </div>
             </div>
-          </article>
-        </div>
-      </article>
-      <article class="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/128x128.png" />
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="field">
-            <p class="control">
-              <textarea class="textarea" placeholder="Add a comment..."></textarea>
-            </p>
+            <div class="field">
+              <p class="control">
+                <button class="button">Post comment</button>
+              </p>
+            </div>
           </div>
-          <div class="field">
-            <p class="control">
-              <button class="button">Post comment</button>
-            </p>
-          </div>
+        </article>
         </div>
-      </article>
-        </>
-      ))
+        )
+      })
     }
 
 
