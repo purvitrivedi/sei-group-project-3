@@ -40,10 +40,10 @@ class Register extends React.Component {
 
     const { formData, errors } = this.state
     return (
-      <div className="column">
+      <div className="register">
         <section className="section">
-          <div className="container">
-            <h1 className="title">Register</h1>
+          <div className="container box ">
+            <h1 className="title"><i className="fas fa-mountain mountain"></i> Register <i className="fas fa-mountain mountain"></i></h1>
             <hr />
             <div className="columns">
               <form onSubmit={(event) => this.handleSubmit(event, this.props.history)} className="column">

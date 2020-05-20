@@ -9,6 +9,15 @@
   padding: 5% 10% 2%;
 }
 
+.background-login {
+  height: 94.25vh;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
+    url("https://images.unsplash.com/photo-1548501505-a6a79bf0b774?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3578&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .is-ancestor {
   max-height: 80vh;
 
@@ -135,4 +144,55 @@
   border-radius: 3px;
   margin: 10px 0px;
   padding: 15px;
+}
+
+.form-submit {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  .container {background-color:none;}
+
+
+
+  @media (max-width: 830px) {
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    margin: 0 auto;
+  }
+
+  .login,
+  .register {
+    width: 450px;
+    @media (max-width: 375px) {
+      width: 100%;
+    }
+  }
+
+  h1 {
+    font-family: "Amatic SC", cursive;
+    text-align: center;
+    font-size: 40px;
+  }
+
+  button {
+    font-family: "Amatic SC", cursive;
+    background-color: rgba(49, 43, 43, 0.109);
+    font-size: 25px;
+    border: none;
+
+
+    @media (max-width: 375px) {
+      padding: 5px;
+    }
+  }
+
+  .mountain {
+    width: 15px;
+  }
+
+
 }

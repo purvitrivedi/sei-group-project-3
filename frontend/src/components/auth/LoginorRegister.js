@@ -7,9 +7,9 @@ import Register from './Register'
 const LoginOrRegister = (props) => {
   const { history } = props
   return (
-    <div>
+    <div className="background-login">
       <hr />
-      <div className="columns">
+      <div className="form-submit">
         <Login history={history} />
         <Register history={history} />
       </div>
