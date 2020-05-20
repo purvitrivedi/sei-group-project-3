@@ -65,11 +65,12 @@ class HikeCreate extends React.Component {
   }
 
   render() {
- 
+
     return (
-      <section className="section">
+      <section className="section background-hike-form">
         <div className="container">
           <HikeForm
+            title="Add Hike"
             formData={this.state.formData}
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}

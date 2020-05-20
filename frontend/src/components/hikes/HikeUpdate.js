@@ -62,9 +62,10 @@ class HikeUpdate extends React.Component {
 
   render() {
     return (
-      <section className="section">
+      <section className="section background-hike-form-edit">
         <div className="container">
           <HikeForm
+            title="Edit your Hike"
             formData={this.state.formData}
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}

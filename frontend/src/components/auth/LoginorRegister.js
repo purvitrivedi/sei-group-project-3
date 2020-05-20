@@ -8,7 +8,6 @@ const LoginOrRegister = (props) => {
   const { history } = props
   return (
     <div className="background-login">
-      <hr />
       <div className="form-submit">
         <Login history={history} />
         <Register history={history} />

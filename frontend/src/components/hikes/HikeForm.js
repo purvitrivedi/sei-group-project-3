@@ -3,15 +3,16 @@ import Select from 'react-select'
 
 import ImageUpload from '../common/ImageUpload'
 
-const HikeForm = ({  
-  formData, 
-  handleChange, 
-  handleSubmit, 
-  handleAddImage, 
-  handleImageChange, 
-  handleMultiChangeSeasons, 
-  handleMultiChangeDifficulty, 
-  btnTxt 
+const HikeForm = ({
+  title,
+  formData,
+  handleChange,
+  handleSubmit,
+  handleAddImage,
+  handleImageChange,
+  handleMultiChangeSeasons,
+  handleMultiChangeDifficulty,
+  btnTxt
 }) => {
 
   const seasonOptions = [
@@ -31,9 +32,10 @@ const HikeForm = ({
 
   return (
     <div className="columns">
-      <form onSubmit={handleSubmit} className="column is-half is-offset-one-quarter box">
-        <p>Add a new hike</p>
+      <form onSubmit={handleSubmit} className="column is-half is-offset-one-quarter box hike-form">
+        <h1 className="title"><i className="fas fa-mountain mountain"></i> {title} <i className="fas fa-mountain mountain"></i></h1>
         <hr />
+        <div className='hike-form-fields'>
         <div className="field">
           <label className="label">Name</label>
           <div className="control">
@@ -55,32 +57,33 @@ const HikeForm = ({
               name="difficulty"
               isMulti
               onChange={handleMultiChangeDifficulty}
-              
             />
           </div>
         </div>
-        <div className="field">
-          <label className="label">Distance</label>
-          <div className="control">
-            <input
-              className="input"
-              placeholder="5km..."
-              name="distance"
-              onChange={handleChange}
-              value={formData.distance}
-            />
+        <div className="columns split-row">
+          <div className="field column">
+            <label className="label">Distance</label>
+            <div className="control">
+              <input
+                className="input"
+                placeholder="5km..."
+                name="distance"
+                onChange={handleChange}
+                value={formData.distance}
+              />
+            </div>
           </div>
-        </div>
-        <div className="field">
-          <label className="label">Time to complete</label>
-          <div className="control">
-            <input
-              className="input"
-              placeholder="How long does it take to complete..."
-              name="timeToComplete"
-              onChange={handleChange}
-              value={formData.timeToComplete}
-            />
+          <div className="field column">
+            <label className="label">Time to complete</label>
+            <div className="control">
+              <input
+                className="input"
+                placeholder="How long does it take to complete..."
+                name="timeToComplete"
+                onChange={handleChange}
+                value={formData.timeToComplete}
+              />
+            </div>
           </div>
         </div>
         <div className="field">
@@ -92,7 +95,7 @@ const HikeForm = ({
               placeholder="Seasons..."
               name="seasons"
               onChange={handleMultiChangeSeasons}
-            
+
             />
           </div>
         </div>
@@ -108,7 +111,8 @@ const HikeForm = ({
             />
           </div>
         </div>
-        <div className="field">
+        <div className="columns split-row">
+        <div className="field column">
           <label className="label">Latitude</label>
           <div className="control">
             <input
@@ -120,7 +124,7 @@ const HikeForm = ({
             />
           </div>
         </div>
-        <div className="field">
+        <div className="field column">
           <label className="label">Longitude</label>
           <div className="control">
             <input
@@ -132,6 +136,8 @@ const HikeForm = ({
             />
           </div>
         </div>
+        </div>
+        
         <div className="field">
           <label className="label">Description</label>
           <div className="control">
@@ -159,7 +165,8 @@ const HikeForm = ({
           </div>
         </div>
         <div className="field">
-          <button type="submit" className="button is-fullwidth is-success">{btnTxt}</button>
+          <button type="submit" className="button is-fullwidth hike-submit">{btnTxt}</button>
+        </div>
         </div>
       </form>
     </div>
