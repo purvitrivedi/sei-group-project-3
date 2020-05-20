@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { isOwner, getUserId, isAuthenticated } from '../../lib/auth'
-import { getCurrentUser } from '../../lib/api'
+import { getUser } from '../../lib/api'
 
 
 class HikeReviews extends React.Component {
@@ -16,7 +16,7 @@ class HikeReviews extends React.Component {
   async componentDidMount() {
     try {
       const userId = getUserId()
-      const res = await getCurrentUser(userId)
+      const res = await getUser(userId)
       this.setState({ profileImage: res.data.profileImage })
     } catch (err) {
       console.log(err);

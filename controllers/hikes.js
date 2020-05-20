@@ -140,7 +140,7 @@ async function hikesUserImageCreate(req, res, next) {
     const hikeId = req.params.id
     const hike = await Hike.findById(hikeId).populate('user')
     if (!hike) throw new Error(notFound)
-    hike.imagesUser.push(req.body)
+    hike.images.push(req.body)
     await hike.save()
     res.status(201).json(hike)
   } catch (err) {

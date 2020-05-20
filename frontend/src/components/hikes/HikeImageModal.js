@@ -15,7 +15,7 @@ class HikeImageModal extends React.Component {
             {this.props.images.map(image => {
               return (
                 <div key={image}>
-                  <img src={image} alt="hiking image" />
+                  <img src={image} alt="hiking location" />
                 </div>
               )
             })}
