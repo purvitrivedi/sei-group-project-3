@@ -6,6 +6,7 @@ import { isAuthenticated, getUserId, isOwner } from '../../lib/auth'
 
 import HikeReviews from './HikeReviews'
 import HikeImageModal from './HikeImageModal'
+import ImageUpload from '../common/ImageUpload'
 
 
 
@@ -18,7 +19,8 @@ class HikeShow extends React.Component {
       rating: ''
     },
     averageRating: '',
-    imageModalActive: false
+    imageModalActive: false,
+    imageUploadActive: false
   }
 
   async componentDidMount() {
@@ -99,6 +101,25 @@ class HikeShow extends React.Component {
     this.setState({ imageModalActive: !this.state.imageModalActive })
   }
 
+  handleAddImage = () => {
+    const hike = { ...this.state.hike, images: [...this.state.hike.images, ''] }
+    this.setState({ hike })
+  }
+
+  handleImageChange = (event, i) => {
+    const images = [...this.state.hike.images]
+    const newImages = images.map((image, index) => {
+      if (i === index) return event.target.value
+      return image
+    })
+    const hike = { ...this.state.hike, images: newImages }
+    this.setState({ hike })
+  }
+
+  handleImageUploadActive = () => {
+    this.setState({ imageUploadActive: !this.state.imageUploadActive })
+  }
+
 
   render() {
     if (!this.state.hike) return null
@@ -140,7 +161,7 @@ class HikeShow extends React.Component {
 
             <button className="button" onClick={this.handleImageModal}>Image Gallery</button>
 
-            {/* <button className="button">HIKR Reviews</button> */}
+            {isAuthenticated() && <button className="button" onClick={this.handleImageUploadActive}>Add an image to the gallery</button>}
 
             {isOwner(hike.user._id) &&
               <Link
@@ -157,6 +178,13 @@ class HikeShow extends React.Component {
                   }
                 }}>Delete this Hike</button>}
             <hr />
+          </section>
+          <section className={this.state.imageUploadActive ? "image-upload" : "image-upload is-hidden"} >
+            <ImageUpload 
+            // key={index}
+            // onChange={args => handleImageChange(args, index)}
+            // name="images"/>
+            />
           </section>
           <section>
             <HikeImageModal

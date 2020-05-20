@@ -31,7 +31,7 @@ class ImageUpload extends React.Component {
           </div>
           :
           <>
-            <label className="label">Upload Image (wait for upload to finish before adding Hike)</label>
+            <label className="label">Upload Image (wait for upload to finish before adding)</label>
             <input
               className="input"
               type="file"
