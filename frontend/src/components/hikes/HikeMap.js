@@ -11,9 +11,18 @@ class HikeMap extends React.Component {
       zoom: 4,
       bearing: 0,
       pitch: 0
-    }
+    },
+    // isPopupLarge: false
   }
 
+  handlePopupShow = event => {
+    if (event.currentTarget.className === "small-popup") {
+      event.currentTarget.className = "large-popup"
+    } else {
+      event.currentTarget.className = "small-popup"
+    }
+    // this.setState({ isPopupLarge: !this.state.isPopupLarge })
+  }
 
   render() {
     const hikes = this.props.hikes
@@ -30,17 +39,25 @@ class HikeMap extends React.Component {
         >
           {hikes.map(hike => {
             return (
-              <Popup
-                latitude={hike.lat}
-                longitude={hike.lon}
-                key={`${hike._id}${hike.name}`}
-              >
-                <Link to={`/hikes/${hike._id}`}>
-                  <p>{hike.name}</p>
-                  <p>{hike.country}</p>
-                  <img className="map-image" src={hike.images[0]} alt={hike.name} />
-                </Link>
-              </Popup>
+              <div key={`popup${hike._id}`}>
+                <Popup
+                  latitude={hike.lat}
+                  longitude={hike.lon}
+                  closeButton={false}
+                >
+                  <div className="small-popup" onClick={this.handlePopupShow} >
+                    <h1>{hike.name}, 📍</h1>
+                    <h2>{hike.country} - {hike.distance}, {hike.timeToComplete}</h2>
+                    <h3>{hike.description.length > 150 ? hike.description.substr(0, 150) + '...' : hike.description}</h3>
+                    <div className="popup-image">
+                      <img src={hike.images[0]} alt={hike.name} />
+                    </div>
+                    <Link to={`/hikes/${hike._id}`}>
+                      <p>See more...</p>
+                    </Link>
+                  </div>
+                </Popup>
+              </div>
             )
           })}
           <NavigationControl showZoom position='top-left' className="map-controls" />

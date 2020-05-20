@@ -3,15 +3,17 @@ import Select from 'react-select'
 
 import ImageUpload from '../common/ImageUpload'
 
-const HikeForm = ({  
-  formData, 
-  handleChange, 
-  handleSubmit, 
-  handleAddImage, 
-  handleImageChange, 
-  handleMultiChangeSeasons, 
-  handleMultiChangeDifficulty, 
-  btnTxt 
+const HikeForm = ({
+  title,
+  formData,
+  handleChange,
+  handleSubmit,
+  handleAddImage,
+  handleImageChange,
+  handleMultiChangeSeasons,
+  handleMultiChangeDifficulty,
+  btnTxt, 
+  errors
 }) => {
 
   const seasonOptions = [
@@ -29,11 +31,13 @@ const HikeForm = ({
     { value: 'Expert', label: 'Expert' }
   ]
 
+
   return (
     <div className="columns">
-      <form onSubmit={handleSubmit} className="column is-half is-offset-one-quarter box">
-        <p>Add a new hike</p>
+      <form onSubmit={handleSubmit} className="column is-half is-offset-one-quarter box hike-form">
+        <h1 className="title"><i className="fas fa-mountain mountain"></i> {title} <i className="fas fa-mountain mountain"></i></h1>
         <hr />
+        <div className='hike-form-fields'>
         <div className="field">
           <label className="label">Name</label>
           <div className="control">
@@ -45,6 +49,7 @@ const HikeForm = ({
               value={formData.name}
             />
           </div>
+          {errors && errors.name && <small className="help is-danger">Name is required</small>}
         </div>
         <div className="field">
           <label className="label">Difficulty</label>
@@ -55,32 +60,36 @@ const HikeForm = ({
               name="difficulty"
               isMulti
               onChange={handleMultiChangeDifficulty}
-              
             />
           </div>
+          {errors && errors.difficulty && <small className="help is-danger">Difficulty is required</small>}
         </div>
-        <div className="field">
-          <label className="label">Distance</label>
-          <div className="control">
-            <input
-              className="input"
-              placeholder="5km..."
-              name="distance"
-              onChange={handleChange}
-              value={formData.distance}
-            />
+        <div className="columns split-row">
+          <div className="field column">
+            <label className="label">Distance</label>
+            <div className="control">
+              <input
+                className="input"
+                placeholder="5km..."
+                name="distance"
+                onChange={handleChange}
+                value={formData.distance}
+              />
+            </div>
+            {errors && errors.distance && <small className="help is-danger">Distance is required</small>}
           </div>
-        </div>
-        <div className="field">
-          <label className="label">Time to complete</label>
-          <div className="control">
-            <input
-              className="input"
-              placeholder="How long does it take to complete..."
-              name="timeToComplete"
-              onChange={handleChange}
-              value={formData.timeToComplete}
-            />
+          <div className="field column">
+            <label className="label">Time to complete</label>
+            <div className="control">
+              <input
+                className="input"
+                placeholder="How long does it take to complete..."
+                name="timeToComplete"
+                onChange={handleChange}
+                value={formData.timeToComplete}
+              />
+            </div>
+            {errors && errors.timeToComplete && <small className="help is-danger">Time to Complete is required</small>}
           </div>
         </div>
         <div className="field">
@@ -92,9 +101,10 @@ const HikeForm = ({
               placeholder="Seasons..."
               name="seasons"
               onChange={handleMultiChangeSeasons}
-            
+
             />
           </div>
+          {errors && errors.seasons && <small className="help is-danger">Seasons is required</small>}
         </div>
         <div className="field">
           <label className="label">Country</label>
@@ -107,8 +117,10 @@ const HikeForm = ({
               value={formData.country}
             />
           </div>
+          {errors && errors.country && <small className="help is-danger">Country is required</small>}
         </div>
-        <div className="field">
+        <div className="columns split-row">
+        <div className="field column">
           <label className="label">Latitude</label>
           <div className="control">
             <input
@@ -119,8 +131,9 @@ const HikeForm = ({
               value={formData.lat}
             />
           </div>
+          {errors && errors.lat && <small className="help is-danger">Latitude is required</small>}
         </div>
-        <div className="field">
+        <div className="field column">
           <label className="label">Longitude</label>
           <div className="control">
             <input
@@ -131,7 +144,10 @@ const HikeForm = ({
               value={formData.lon}
             />
           </div>
+          {errors && errors.lon && <small className="help is-danger">Longitude is required</small>}
         </div>
+        </div>
+        
         <div className="field">
           <label className="label">Description</label>
           <div className="control">
@@ -143,6 +159,7 @@ const HikeForm = ({
               value={formData.description}
             />
           </div>
+          {errors && errors.description && <small className="help is-danger">Description is required</small>}
         </div>
         <div className="field">
           <div className="control">
@@ -157,9 +174,11 @@ const HikeForm = ({
             })}
             <button onClick={handleAddImage}>Add Another Image</button>
           </div>
+          {errors && errors.images && <small className="help is-danger">At least one image required</small>}
         </div>
         <div className="field">
-          <button type="submit" className="button is-fullwidth is-success">{btnTxt}</button>
+          <button type="submit" className="button is-fullwidth hike-submit">{btnTxt}</button>
+        </div>
         </div>
       </form>
     </div>

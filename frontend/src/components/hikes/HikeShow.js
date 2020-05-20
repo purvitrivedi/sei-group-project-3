@@ -115,16 +115,6 @@ class HikeShow extends React.Component {
     }
   }
 
-  // handleImageChange = (event, i) => {
-  //   const images = [...this.state.hike.images]
-  //   const newImages = images.map((image, index) => {
-  //     if (i === index) return event.target.value
-  //     return image
-  //   })
-  //   const hike = { ...this.state.hike, images: newImages }
-  // this.setState({ hike })
-  // }
-
   handleImageUploadActive = () => {
     this.setState({ imageUploadActive: !this.state.imageUploadActive })
   }
@@ -132,7 +122,6 @@ class HikeShow extends React.Component {
 
   render() {
     if (!this.state.hike) return null
-    console.log(this.state.hike.images)
 
     const { hike, averageRating, imageModalActive } = this.state
     return (

@@ -35,10 +35,10 @@ class Login extends React.Component {
   render() {
     const { formData, error } = this.state
     return (
-      <div className="column">
+      <div className="login">
         <section className="section">
-          <div className="container">
-            <h1 className="title">Login</h1>
+          <div className="container box">
+            <h1 className="title"><i className="fas fa-mountain mountain"></i> Login <i className="fas fa-mountain mountain"></i></h1>
             <hr />
             <div className="columns">
               <form onSubmit={(event) => this.handleSubmit(event, this.props.history)} className="column">

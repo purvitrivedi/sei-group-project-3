@@ -45,7 +45,6 @@
       flex-grow: 5;
       margin: auto 10px;
     }
-    
   }
   .is-hidden {
     display: none;
@@ -61,10 +60,55 @@
   .is-popup-hidden {
     display: none;
   }
-  .map-image {
-    height: 50px;
-    width: 80px;
-  } 
+  .small-popup {
+    h1 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 16px;
+    }
+    h2 {
+      display: none;
+    }
+    h3 {
+      display: none;
+    }
+    p {
+      display: none;
+    }
+    img {
+      display: none;
+    } 
+  }
+  .large-popup {
+    width: 300px;
+    padding: 15px;
+    h1 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 28px;
+    }
+    h2 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 28px;
+    }
+    h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    p {
+      font-family: 'Amatic SC', cursive;
+      color: #04d18d;
+      font-size: 20px;
+    }
+    .popup-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      img {
+      height: 120px;
+        width: 240px;
+      } 
+    }
+  }
 
   .map-controls {
   position: absolute;
@@ -84,8 +128,6 @@
     }
   }
 }
-
-
 
 
 

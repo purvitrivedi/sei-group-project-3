@@ -18,12 +18,14 @@ class HikeCreate extends React.Component {
       timeToComplete: '',
       images: [''],
       seasons: ['']
-    }
+    }, 
+    errors: {}
   }
 
   handleChange = event => {
     const formData = { ...this.state.formData, [event.target.name]: event.target.value }
-    this.setState({ formData })
+    const errors = { ...this.state.errors, [event.target.name]: '' }
+    this.setState({ formData, errors })
   }
 
   handleSubmit = async event => {
@@ -32,14 +34,15 @@ class HikeCreate extends React.Component {
       const res = await createHike(this.state.formData)
       this.props.history.push(`/hikes/${res.data._id}`)
     } catch (err) {
-      console.log(err.response)
+      this.setState({ errors: err.response.data})
     }
   }
 
   handleAddImage = event => {
     event.preventDefault()
     const formData = { ...this.state.formData, images: [...this.state.formData.images, ''] }
-    this.setState({ formData })
+    const errors = { ...this.state.errors, [event.target.name]: '' }
+    this.setState({ formData, errors })
   }
 
   handleImageChange = (event, i) => {
@@ -65,11 +68,13 @@ class HikeCreate extends React.Component {
   }
 
   render() {
- 
+    console.log(this.state.errors)
+
     return (
-      <section className="section">
+      <section className="section background-hike-form">
         <div className="container">
           <HikeForm
+            title="Add Hike"
             formData={this.state.formData}
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
@@ -78,6 +83,7 @@ class HikeCreate extends React.Component {
             handleMultiChangeSeasons={this.handleMultiChangeSeasons}
             handleMultiChangeDifficulty={this.handleMultiChangeDifficulty}
             btnTxt="Add your Hike!"
+            errors={this.state.errors}
           />
         </div>
       </section>
