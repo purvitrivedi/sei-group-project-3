@@ -24,22 +24,22 @@ class ImageUpload extends React.Component {
   render() {
     const { image } = this.state
     return (
-      <>
-        {/* {image ?
+      <div>
+        {image ?
           <div>
-            <img src={image} alt="selected"/>
+            <img className="image is-64x64" src={image} alt="selected"/>
           </div>
           :
           <>
-            <label className="label">Upload Image (wait for upload to finish before adding)</label> */}
+            <label className="label">Upload Image (wait for upload to finish before adding)</label>
             <input
               className="input"
               type="file"
               onChange={this.handleUpload}
             />
           </>
-        // }
-      // </>
+        }
+      </div>
     )
   }
 }
