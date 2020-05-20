@@ -73,7 +73,7 @@ class GroupEventEdit extends React.Component {
       await axios.put(`/api/groups/${groupId}/events/${eventId}`, this.state.formData, {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
-      this.props.history.push(`/groups/${groupId}/events`)
+      this.props.history.push(`/groups/${groupId}`)
     } catch (err) {
       this.setState({ errors: err })
     }

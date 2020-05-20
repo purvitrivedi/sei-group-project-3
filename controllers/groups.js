@@ -227,15 +227,16 @@ async function groupsMessageDelete(req, res, next) {
 // POST
 // URL = api/groups/:id/events
 async function groupsEventCreate(req, res, next) {
-  console.log(req.body)
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId)
+    const group = await (await Group.findById(groupId))
+      .populate('events.participants')
     if (!group) throw new Error(notFound)
 
     if (group.events.some( event =>  event.eventName === req.body.eventName )) throw new Error('Already exist. Try another event name!') //unique event name 
 
     req.body.createdMember = req.currentUser
+    req.body.participants = { user: req.currentUser }
     console.log(req.body)
     const adminId = group.createdMember._id
     if (!group.members.some(member => member.user._id.equals(req.body.createdMember._id))
@@ -301,7 +302,6 @@ async function groupsEventUpdate(req, res, next) {
 // PUT (PARTICIPANTS)
 // URL = api/groups/:id/events/:eventId/participants
 async function groupsEventParticipants(req, res, next) {
-  console.log(req)
   try {
     const groupId = req.params.id
     const group = await Group.findById(groupId)
@@ -311,18 +311,18 @@ async function groupsEventParticipants(req, res, next) {
     const eventToUpdate = group.events.id(eventId)
     if (!eventToUpdate) throw new Error(notFound)
 
-    const adminId = group.createdMember._id
-    if (!eventToUpdate.createdMember._id.equals(req.currentUser._id)
-      && !adminId.equals(req.currentUser._id)) { // admin has right to update
-      throw new Error(unauthorized) 
-    }
-
     if (!group.members.some( member => member.user._id.equals(req.currentUser._id)) ) {
       throw new Error('You are already group member')
     } // only group members can participate events
     
-    eventToUpdate.participants.push(req.currentUser._id)
-    await eventToUpdate.save()
+    console.log(req.body.user.data)
+    console.log(eventToUpdate)
+   
+    const newMember = { user: req.body.user.data }
+    group.events.map( item => {
+      if (item._id === eventToUpdate._id) item.participants.push(newMember)
+    })
+    console.log(group)
     await group.save()
     res.status(202).json(group)
   } catch (err) {

@@ -63,12 +63,20 @@ class GroupEventNew extends React.Component {
     event.preventDefault()
 
     const groupId = this.props.match.params.id
-    const newEvent = { ...this.state.formData, participant: getUserId()}
+    const userId = getUserId()
+    const user = await axios.get(`/api/profiles/${userId}`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+
+    const formData = { ...this.state.formData }
+    this.setState({ formData })
+
     try {
-      await axios.post(`/api/groups/${groupId}/events`, newEvent, {
+      await axios.post(`/api/groups/${groupId}/events`, formData, {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
-      this.props.history.push(`/groups/${groupId}`) //! to event page
+      await axios.get(`/api/groups/${groupId}`)
+      this.props.history.push(`/groups/${groupId}`)
     } catch (err) {
       this.setState({ errors: err })
     }
