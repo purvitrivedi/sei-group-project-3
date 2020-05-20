@@ -56,24 +56,5 @@ module.exports = [
     fullName: 'Abigail Foreman',
     profileImage: 'https://ca.slack-edge.com/T0351JZQ0-UPF4VBW6A-aa58c07cbaf1-512'
 
-  },
-  {
-    username: 'aino',
-    email: 'aino@email',
-    password: 'pass',
-    passwordConfirmation: 'pass',
-    fullName: 'Aino Kytola',
-    profileImage: 'https://ca.slack-edge.com/T0351JZQ0-USU4PB61J-1fb17fe49e72-512'
-
-  },
-
-  {
-    username: 'alex',
-    email: 'alex@email',
-    password: 'pass',
-    passwordConfirmation: 'pass',
-    fullName: 'Alex Wheldon',
-    profileImage: 'https://ca.slack-edge.com/T0351JZQ0-UUTFHMQ4X-bbfc157d5ecc-512'
-
   }
 ]

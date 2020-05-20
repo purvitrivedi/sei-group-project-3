@@ -12,7 +12,8 @@ const HikeForm = ({
   handleImageChange,
   handleMultiChangeSeasons,
   handleMultiChangeDifficulty,
-  btnTxt
+  btnTxt, 
+  errors
 }) => {
 
   const seasonOptions = [
@@ -29,6 +30,7 @@ const HikeForm = ({
     { value: 'Advanced', label: 'Advanced' },
     { value: 'Expert', label: 'Expert' }
   ]
+
 
   return (
     <div className="columns">
@@ -47,6 +49,7 @@ const HikeForm = ({
               value={formData.name}
             />
           </div>
+          {errors && errors.name && <small className="help is-danger">Name is required</small>}
         </div>
         <div className="field">
           <label className="label">Difficulty</label>
@@ -59,6 +62,7 @@ const HikeForm = ({
               onChange={handleMultiChangeDifficulty}
             />
           </div>
+          {errors && errors.difficulty && <small className="help is-danger">Difficulty is required</small>}
         </div>
         <div className="columns split-row">
           <div className="field column">
@@ -72,6 +76,7 @@ const HikeForm = ({
                 value={formData.distance}
               />
             </div>
+            {errors && errors.distance && <small className="help is-danger">Distance is required</small>}
           </div>
           <div className="field column">
             <label className="label">Time to complete</label>
@@ -84,6 +89,7 @@ const HikeForm = ({
                 value={formData.timeToComplete}
               />
             </div>
+            {errors && errors.timeToComplete && <small className="help is-danger">Time to Complete is required</small>}
           </div>
         </div>
         <div className="field">
@@ -98,6 +104,7 @@ const HikeForm = ({
 
             />
           </div>
+          {errors && errors.seasons && <small className="help is-danger">Seasons is required</small>}
         </div>
         <div className="field">
           <label className="label">Country</label>
@@ -110,6 +117,7 @@ const HikeForm = ({
               value={formData.country}
             />
           </div>
+          {errors && errors.country && <small className="help is-danger">Country is required</small>}
         </div>
         <div className="columns split-row">
         <div className="field column">
@@ -123,6 +131,7 @@ const HikeForm = ({
               value={formData.lat}
             />
           </div>
+          {errors && errors.lat && <small className="help is-danger">Latitude is required</small>}
         </div>
         <div className="field column">
           <label className="label">Longitude</label>
@@ -135,6 +144,7 @@ const HikeForm = ({
               value={formData.lon}
             />
           </div>
+          {errors && errors.lon && <small className="help is-danger">Longitude is required</small>}
         </div>
         </div>
         
@@ -149,6 +159,7 @@ const HikeForm = ({
               value={formData.description}
             />
           </div>
+          {errors && errors.description && <small className="help is-danger">Description is required</small>}
         </div>
         <div className="field">
           <div className="control">
@@ -163,6 +174,7 @@ const HikeForm = ({
             })}
             <button onClick={handleAddImage}>Add Another Image</button>
           </div>
+          {errors && errors.images && <small className="help is-danger">At least one image required</small>}
         </div>
         <div className="field">
           <button type="submit" className="button is-fullwidth hike-submit">{btnTxt}</button>

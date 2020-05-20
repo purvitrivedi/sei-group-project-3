@@ -16,7 +16,8 @@ class HikeUpdate extends React.Component {
       timeToComplete: '',
       images: [''],
       seasons: ['']
-    }
+    },
+    errors: {}
   }
 
   async componentDidMount() {
@@ -25,13 +26,14 @@ class HikeUpdate extends React.Component {
       const res = await getSingleHike(hikeId)
       this.setState({ formData: res.data })
     } catch (err) {
-      console.log(err)
+      console.log(err.response.data)
     }
   }
 
   handleChange = event => {
     const formData = { ...this.state.formData, [event.target.name]: event.target.value }
-    this.setState({ formData })
+    const errors = { ...this.state.errors, [event.target.name]: '' }
+    this.setState({ formData, errors })
   }
 
   handleSubmit = async event => {
@@ -41,7 +43,7 @@ class HikeUpdate extends React.Component {
       await updateHike(hikeId, this.state.formData)
       this.props.history.push(`/hikes/${hikeId}`)
     } catch (err) {
-      console.log(err.response)
+      this.setState({ errors: err.response.data })
     }
   }
 
@@ -72,6 +74,7 @@ class HikeUpdate extends React.Component {
             handleAddImage={this.handleAddImage}
             handleImageChange={this.handleImageChange}
             btnTxt='Save changes to Hike'
+            errors={this.state.errors}
           />
         </div>
       </section>

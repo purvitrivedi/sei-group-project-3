@@ -28,14 +28,14 @@ const hikeSchema = new mongoose.Schema({
   country: { type: String, required: true },
   lat: { type: Number, required: true },
   lon: { type: Number, required: true },
-  difficulty: { type: Array, required: true },
+  difficulty: { type: Array, required: true, default: undefined },
   distance: { type: String, required: true },
   timeToComplete: { type: String, required: true },
-  images: { type: Array, required: true },
+  images: { type: Array, required: true, default: undefined },
   // imagesUser: [userImagesSchema],
   reviews: [reviewSchema],
   // ratings: [ratingSchema],
-  seasons: { type: Array, required: true },
+  seasons: { type: Array, required: true, default: undefined },
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
   timestamps: true
