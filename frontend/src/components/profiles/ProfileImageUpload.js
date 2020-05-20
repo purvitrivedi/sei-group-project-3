@@ -1,5 +1,6 @@
 import React from 'react'
-import axios from 'axios'
+
+import {profileImageUpload} from '../../lib/api'
 
 const uploadUrl = 'https://api.cloudinary.com/v1_1/dx8pt11io/image/upload'
 
@@ -14,7 +15,7 @@ class ProfileImageUpload extends React.Component {
     const data = new FormData()
     data.append('file', event.target.files[0])
     data.append('upload_preset', uploadPreset)
-    const res = await axios.post(uploadUrl, data)
+    const res = await profileImageUpload(uploadUrl, data)
     this.setState({
       image: res.data.url
     }, () => {
