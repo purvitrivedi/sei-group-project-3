@@ -25,6 +25,7 @@ class ProfileShow extends React.Component {
   }
 
   async componentDidMount() {
+
     try {
       const id = this.props.match.params.id
       const res = await getUser(id)
@@ -117,7 +118,7 @@ class ProfileShow extends React.Component {
 
     try {
       await leaveGroupRequest(groupId, memberId)
-      
+
       const res = await getUser(id)
 
       this.setState({ profile: res.data })
@@ -126,8 +127,25 @@ class ProfileShow extends React.Component {
     }
   }
 
+
+  sendToOwnProfile = () => {
+    console.log(this.props)
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.location.pathname.includes('/profiles/') && this.props.location.pathname.includes('/profiles/')) {
+      if (this.props.location.pathname !== prevProps.location.pathname) {
+        const id = this.props.match.params.id
+        const res = await getUser(id)
+        this.setState({ profile: res.data, bio: res.data.bio, image: res.data.profileImage, fullName: res.data.fullName })
+      }
+    }
+  }
+
+
   render() {
     const { profile } = this.state
+
     let completedHikes
     if (profile.completedHikes) {
       if (profile.completedHikes.length > 0) {

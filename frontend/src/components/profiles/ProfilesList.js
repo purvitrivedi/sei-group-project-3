@@ -12,7 +12,7 @@ const ProfilesList = (props) => {
         <div className="column columns is-multiline">
           <div className="column is-full">
             <div className="subtitle">{props.fullName}</div>
-            {!props.fullName && <Link to={`/profiles/${props._id}`}><div className="subtitle">@{props.username}</div></Link>}
+            {!props.fullName && <div className="subtitle">@{props.username}</div>}
           </div>
           <div className="column is-full">{props.bio}</div>
           {props.completedHikes.length !== 0 &&

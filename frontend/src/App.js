@@ -36,7 +36,7 @@ const App = () => {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <SecureRoute path="/profiles/:id/edit" component={ProfileEdit} />
-        <SecureRoute path="/profiles/:id" component={ProfileShow} />
+        <SecureRoute exact path="/profiles/:id" component={ProfileShow} />
         <SecureRoute path="/profiles" component={ProfileIndex} />
 
         <Route path="/hikes/new" component={HikeCreate} />
