@@ -1,7 +1,6 @@
 import React from 'react'
-import axios from 'axios'
-import { isOwner, getToken } from '../../lib/auth'
-import { getUser } from '../../lib/api'
+import { isOwner } from '../../lib/auth'
+import { getUser, addCompleted, removeHikeRequest, editUser, leaveGroupRequest } from '../../lib/api'
 import { Link } from 'react-router-dom'
 
 
@@ -39,18 +38,13 @@ class ProfileShow extends React.Component {
     event.preventDefault()
     try {
       const userId = this.state.profile._id
-      const withHeaders = () => {
-        return {
-          headers: { Authorization: `Bearer ${getToken()}` }
-        }
-      }
-      await axios.post(`/api/profiles/${userId}/completed`, selectedHike, withHeaders())
-      const res = await axios.get(`/api/profiles/${userId}`, withHeaders())
+      await addCompleted(userId, selectedHike)
+      const res = await getUser(userId)
       this.setState({ profile: res.data })
 
 
     } catch (err) {
-      console.log(err)
+      console.log(err.response)
     }
 
   }
@@ -62,13 +56,9 @@ class ProfileShow extends React.Component {
 
     try {
       const userId = this.state.profile._id
-      const withHeaders = () => {
-        return {
-          headers: { Authorization: `Bearer ${getToken()}` }
-        }
-      }
-      await axios.delete(`/api/profiles/${userId}/${linkName}/${id}`, withHeaders())
-      const res = await axios.get(`/api/profiles/${userId}`, withHeaders())
+
+      await removeHikeRequest(userId, linkName, id)
+      const res = await getUser(userId)
       this.setState({ profile: res.data })
 
 
@@ -91,22 +81,17 @@ class ProfileShow extends React.Component {
   }
 
   sendPutRequest = async (e) => {
+    console.log('clicked')
     if (e) { e.preventDefault() }
     const bio = this.state.bio
     const image = this.state.image
     const fullName = this.state.fullName
     try {
       const id = this.props.match.params.id
-      const withHeaders = () => {
-        return {
-          headers: { Authorization: `Bearer ${getToken()}` }
-        }
-      }
-      await axios.put(`/api/profiles/${id}`, { bio: bio }, withHeaders())
-      await axios.put(`/api/profiles/${id}`, { profileImage: image }, withHeaders())
-      await axios.put(`/api/profiles/${id}`, { fullName }, withHeaders())
 
-      const resGet = await axios.get(`/api/profiles/${id}`, withHeaders())
+      await editUser(id, { bio, profileImage: image, fullName })
+
+      const resGet = await getUser(id)
       this.setState({ profile: resGet.data, bio: resGet.data.bio, showBio: true, image: resGet.data.profileImage, fullName: resGet.data.fullName })
 
 
@@ -131,14 +116,10 @@ class ProfileShow extends React.Component {
     const id = this.state.profile._id
 
     try {
-      const withHeaders = () => {
-        return {
-          headers: { Authorization: `Bearer ${getToken()}` }
-        }
-      }
-      await axios.delete(`/api/groups/${groupId}/members/${memberId}`, withHeaders())
+      await leaveGroupRequest(groupId, memberId)
+      
+      const res = await getUser(id)
 
-      const res = await axios.get(`/api/profiles/${id}`, withHeaders())
       this.setState({ profile: res.data })
     } catch (err) {
       console.log(err.response)
@@ -262,7 +243,7 @@ class ProfileShow extends React.Component {
                     {profile.bio}
                   </p></div>}
                 {!this.state.showBio &&
-                  <div className="columns">
+                  <div className="columns is-multiline">
                     <textarea
                       className="textarea column"
                       value={this.state.bio}

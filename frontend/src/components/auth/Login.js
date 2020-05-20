@@ -1,7 +1,6 @@
 import React from 'react'
 import { setToken } from '../../lib/auth'
 import { loginUser } from '../../lib/api'
-import axios from 'axios'
 
 class Login extends React.Component {
 
