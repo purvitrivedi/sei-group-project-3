@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { getSingleHike, deleteHikeReview, addHikeToFavorites, reviewHike, deleteHike } from '../../lib/api'
+import { getSingleHike, deleteHikeReview, addHikeToFavorites, reviewHike, deleteHike, addImageToHike } from '../../lib/api'
 import { isAuthenticated, getUserId, isOwner } from '../../lib/auth'
 
 import HikeReviews from './HikeReviews'
@@ -101,20 +101,29 @@ class HikeShow extends React.Component {
     this.setState({ imageModalActive: !this.state.imageModalActive })
   }
 
-  handleAddImage = () => {
-    const hike = { ...this.state.hike, images: [...this.state.hike.images, ''] }
-    this.setState({ hike })
+  handleAddImage = async event => {
+    const hikeId = this.props.match.params.id
+    try {
+      await addImageToHike(hikeId, {images: event.target.value})
+      const res = await getSingleHike(hikeId)
+      this.setState({ hike: res.data }, 
+        () => {
+          this.setState({ imageModalActive: true })
+        })
+    } catch (err) {
+      console.log(err.response)
+    }
   }
 
-  handleImageChange = (event, i) => {
-    const images = [...this.state.hike.images]
-    const newImages = images.map((image, index) => {
-      if (i === index) return event.target.value
-      return image
-    })
-    const hike = { ...this.state.hike, images: newImages }
-    this.setState({ hike })
-  }
+  // handleImageChange = (event, i) => {
+  //   const images = [...this.state.hike.images]
+  //   const newImages = images.map((image, index) => {
+  //     if (i === index) return event.target.value
+  //     return image
+  //   })
+  //   const hike = { ...this.state.hike, images: newImages }
+  // this.setState({ hike })
+  // }
 
   handleImageUploadActive = () => {
     this.setState({ imageUploadActive: !this.state.imageUploadActive })
@@ -123,6 +132,7 @@ class HikeShow extends React.Component {
 
   render() {
     if (!this.state.hike) return null
+    console.log(this.state.hike.images)
 
     const { hike, averageRating, imageModalActive } = this.state
     return (
@@ -179,13 +189,13 @@ class HikeShow extends React.Component {
                 }}>Delete this Hike</button>}
             <hr />
           </section>
+
           <section className={this.state.imageUploadActive ? "image-upload" : "image-upload is-hidden"} >
-            <ImageUpload 
-            // key={index}
-            // onChange={args => handleImageChange(args, index)}
-            // name="images"/>
+            <ImageUpload
+              onChange={this.handleAddImage}
             />
           </section>
+
           <section>
             <HikeImageModal
               handleImageModal={this.handleImageModal}

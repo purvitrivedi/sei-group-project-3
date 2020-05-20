@@ -43,6 +43,10 @@ export const addHikeToFavorites = (userId, hikeId) => {
   return axios.post(`/api/profiles/${userId}/favorites`, hikeId, withHeaders())
 }
 
+export const addImageToHike = (id, imageData) => {
+  return axios.post(`${baseUrl}/hikes/${id}/images`, imageData, withHeaders())
+}
+
 
 // * Auth
 
