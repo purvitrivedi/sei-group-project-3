@@ -2,12 +2,14 @@
   height: 94.25vh;
   // background-image: url("https://images.unsplash.com/photo-1536334916155-dd9f850d6d73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80");
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
-    url("https://images.unsplash.com/photo-1464821541677-ceb53bcf1541?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80");
+    url("./assets//profile-page.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   padding: 5% 10% 2%;
 }
+
+
 
 .is-ancestor {
   max-height: 80vh;
@@ -136,3 +138,7 @@
   margin: 10px 0px;
   padding: 15px;
 }
+
+
+
+  
