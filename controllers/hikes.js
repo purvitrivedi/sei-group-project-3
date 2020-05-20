@@ -160,7 +160,7 @@ async function hikesUserImageDelete(req, res, next) {
     const hike = await Hike.findById(hikeId)
     if (!hike) throw new Error(notFound)
 
-    const imageToRemove = hike.imagesUser.id(imageId)
+    const imageToRemove = hike.images.id(imageId)
     if (!imageToRemove) throw new Error(notFound)
     if (!imageToRemove.user.equals(req.currentUser._id)) throw new Error(unauthorized)
     await imageToRemove.remove()
@@ -170,48 +170,6 @@ async function hikesUserImageDelete(req, res, next) {
     next(err)
   }
 }
-
-
-
-// add a rating from 1 to 5 to the hike if you are a registered and logged in user
-//* /hikes/:id/ratings/
-
-async function hikesUserRatingCreate(req, res, next) {
-  try {
-    req.body.user = req.currentUser
-    const hikeId = req.params.id
-    const hike = await Hike.findById(hikeId).populate('user')
-    if (!hike) throw new Error(notFound)
-    hike.ratings.push(req.body)
-    await hike.save()
-    res.status(201).json(hike)
-  } catch (err) {
-    next(err)
-  }
-}
-
-
-
-//updating the rating
-//* /hikes/:id/ratings/:ratingId
-
-async function hikesUserRatingUpdate(req, res, next) {
-  const hikeId = req.params.id
-  const ratingId = req.params.ratingId
-  try {
-    const hike = await Hike.findById(hikeId)
-    if (!hike) throw new Error(notFound)
-    const ratingToUpdate = hike.ratings.id(ratingId)
-    if (!ratingToUpdate) throw new Error(notFound)
-    if (!ratingToUpdate.user.equals(req.currentUser._id)) throw new Error(unauthorized)
-    Object.assign(ratingToUpdate, req.body)
-    await hike.save()
-    res.status(202).json(ratingToUpdate)
-  } catch (err) {
-    next(err)
-  }
-}
-
 
 
 //exporting controllers for use in the router
@@ -224,8 +182,6 @@ module.exports = {
   delete: hikesDelete,
   createReview: hikesReviewCreate,
   deleteReview: hikesReviewDelete,
-  createUserImage: hikesUserImageCreate,
-  deleteUserImage: hikesUserImageDelete,
-  createRating: hikesUserRatingCreate,
-  updateRating: hikesUserRatingUpdate
+  createImage: hikesUserImageCreate,
+  deleteImage: hikesUserImageDelete
 }
