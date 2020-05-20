@@ -66,7 +66,6 @@ class GroupNew extends React.Component {
               </div>
             </header>
 
-
             <form onSubmit={this.handleSubmit} className="columns box">
             <div className="column">
 

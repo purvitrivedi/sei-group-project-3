@@ -56,6 +56,10 @@ router.route('/groups/:id/messages')
 router.route('/groups/:id/messages/:messageId')
   .delete(secureRoute, groups.deleteMessage)
 
+router.route('/groups/:id/messages/:messageId/likes')
+  .put(secureRoute, groups.likeMessage)
+
+  
 // events
 router.route('/groups/:id/events')
   .post(secureRoute, groups.createEvent)
@@ -65,8 +69,15 @@ router.route('/groups/:id/events/:eventId')
   .put(secureRoute, groups.updateEvent)
   .delete(secureRoute, groups.deleteEvent)
 
+
+// event participants
 router.route('/groups/:id/events/:eventId/participants')
   .put(secureRoute, groups.addParticipant)
+
+router.route('/groups/:id/events/:eventId/participants/:parId')
+  .get(secureRoute, groups.getParticipants)
+  .delete(secureRoute, groups.deleteParticipant)
+
 
 // members
 router.route('/groups/:id/members')
@@ -74,7 +85,6 @@ router.route('/groups/:id/members')
 
 router.route('/groups/:id/members/:memberId')
   .delete(secureRoute, groups.deleteMember)
-
 
 
 

@@ -16,9 +16,15 @@ const eventSchema = new mongoose.Schema({
   timestamps: true
 })
 
+const messageLikesSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.ObjectId, ref: 'User' }
+})
+
 const groupMessageSchema = new mongoose.Schema({
   text: { type: String, required: true },
-  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+  user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+  to: { type: String },
+  likes: [ messageLikesSchema ]
 }, {
   timestamps: true
 })
