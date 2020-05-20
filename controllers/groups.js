@@ -315,15 +315,19 @@ async function groupsEventParticipants(req, res, next) {
       throw new Error('You are already group member')
     } // only group members can participate events
     
-    console.log(req.body.user.data)
+
     console.log(eventToUpdate)
+    console.log(req.body)
    
     const newMember = { user: req.body.user.data }
     group.events.map( item => {
-      if (item._id === eventToUpdate._id) item.participants.push(newMember)
-    })
-    console.log(group)
+      if (item._id === eventToUpdate._id) {
+        console.log(item.participants)
+        return ( item.participants.push(newMember) )
+    }})
+    
     await group.save()
+    console.log(group)
     res.status(202).json(group)
   } catch (err) {
     next(err)
