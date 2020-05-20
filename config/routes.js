@@ -23,17 +23,11 @@ router.route('/hikes/:id/reviews')
 router.route('/hikes/:id/reviews/:reviewId')
   .delete(secureRoute, hikes.deleteReview)
 
-router.route('/hikes/:id/user-images')
-  .post(secureRoute, hikes.createUserImage)
+router.route('/hikes/:id/images')
+  .post(secureRoute, hikes.createImage)
 
-router.route('/hikes/:id/user-images/:imageId')
-  .delete(secureRoute, hikes.deleteUserImage)
-
-router.route('/hikes/:id/ratings')
-  .post(secureRoute, hikes.createRating)
-
-router.route('/hikes/:id/ratings/:ratingId')
-  .put(secureRoute, hikes.updateRating)
+router.route('/hikes/:id/images/:imageId')
+  .delete(secureRoute, hikes.deleteImage)
 
 
 // * Groups
