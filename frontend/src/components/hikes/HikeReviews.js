@@ -1,4 +1,6 @@
 import React from 'react'
+import Moment from 'react-moment'
+import 'moment-timezone'
 
 import { isOwner, getUserId, isAuthenticated } from '../../lib/auth'
 import { getUser } from '../../lib/api'
@@ -10,7 +12,8 @@ class HikeReviews extends React.Component {
     reviewData: {
       rating: '',
       text: ''
-    }
+    },
+    newDate: ''
   }
 
   async componentDidMount() {
@@ -23,15 +26,14 @@ class HikeReviews extends React.Component {
     }
   }
 
-  handleChange = event => {
+  handleChange = event => {    
     const reviewData = { ...this.state.reviewData, [event.target.name]: event.target.value }
     this.setState({ reviewData })
   }
 
-
   render() {
-
     const { handleReviewDelete, handleSubmitReview, reviews } = this.props
+    
     return (
       <>
         {isAuthenticated() &&
@@ -59,7 +61,6 @@ class HikeReviews extends React.Component {
                 </div>
                 <div className="level">
                   <div className="level-left">
-                    <label className="label">Rating</label>
                     <div className="control">
                       <label className="radio">
                         <input
@@ -112,7 +113,7 @@ class HikeReviews extends React.Component {
                 <nav className="level">
                   <div className="level-left">
                     <div className="level-item">
-                      <button type="submit" className="button is-success">Submit Review!</button>
+                      <button type="submit" className="button hike-show-button is-success">Submit Review!</button>
                     </div>
                   </div>
                 </nav>
@@ -133,7 +134,7 @@ class HikeReviews extends React.Component {
               </figure>
               <div className="media-content">
                 <div className="content">
-                  <p><strong>{review.user.fullName}</strong> <small>{'⭐️'.repeat(review.rating)} </small> <small>{review.createdAt}</small>
+                  <p><strong>{review.user.fullName}</strong> <small>{'⭐️'.repeat(review.rating)} </small> <small><Moment fromNow >{review.createdAt}</Moment></small>
                     <br />
                     {review.text}
                   </p>
@@ -147,9 +148,6 @@ class HikeReviews extends React.Component {
             </article>
           )
         })}
-
-
-
       </>
     )
   }

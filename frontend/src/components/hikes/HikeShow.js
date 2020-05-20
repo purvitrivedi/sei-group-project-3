@@ -7,6 +7,7 @@ import { isAuthenticated, getUserId, isOwner } from '../../lib/auth'
 import HikeReviews from './HikeReviews'
 import HikeImageModal from './HikeImageModal'
 import ImageUpload from '../common/ImageUpload'
+import HikeShowMap from './HikeShowMap'
 
 
 
@@ -104,9 +105,9 @@ class HikeShow extends React.Component {
   handleAddImage = async event => {
     const hikeId = this.props.match.params.id
     try {
-      await addImageToHike(hikeId, {images: event.target.value})
+      await addImageToHike(hikeId, { images: event.target.value })
       const res = await getSingleHike(hikeId)
-      this.setState({ hike: res.data }, 
+      this.setState({ hike: res.data },
         () => {
           this.setState({ imageModalActive: true })
         })
@@ -139,50 +140,41 @@ class HikeShow extends React.Component {
             <h1>Difficulty: {hike.difficulty.map(difficulty => {
               return `${difficulty}, `
             })}</h1>
-
             <h1>Seasons: {hike.seasons.map(season => {
               return `${season}, `
             })}
             </h1>
-
             <h1>Country: {hike.country}</h1>
             <h1>Time the hike takes: {hike.timeToComplete}</h1>
             <h1>Average Rating: {'⭐️'.repeat(averageRating)}</h1>
             <hr />
           </section>
 
-          <section className="buttons">
-            {isAuthenticated() &&
-              <button
-                className="button is-success"
-                onClick={this.handleAddToFavorites}
-              >Add Hike to Favorites</button>}
-
-            <button className="button" onClick={this.handleImageModal}>Image Gallery</button>
-
-            {isAuthenticated() && <button className="button" onClick={this.handleImageUploadActive}>Add an image to the gallery</button>}
-
-            {isOwner(hike.user._id) &&
-              <Link
-                to={`/hikes/${hike._id}/update`}
-                className="button is-info"
-              >Update this Hike</Link>}
-
-            {isOwner(hike.user._id) &&
-              <button
-                className="button is-danger"
-                onClick={() => {
-                  if (window.confirm('Are you sure you want to delete this Hike?')) {
-                    this.handleDeleteHike()
-                  }
-                }}>Delete this Hike</button>}
-            <hr />
-          </section>
-
-          <section className={this.state.imageUploadActive ? "image-upload" : "image-upload is-hidden"} >
-            <ImageUpload
-              onChange={this.handleAddImage}
-            />
+          <section className="hike-show-buttons">
+            <div className="buttons has-addons">
+              <button className="button hike-show-button is-success is-light" onClick={this.handleImageModal}>Image Gallery</button>
+              {isAuthenticated() && <button className="button hike-show-button is-primary is-light" onClick={this.handleImageUploadActive}>Add an image to the gallery</button>}
+              {isAuthenticated() &&
+                <button
+                  className="button hike-show-button is-success is-light"
+                  onClick={this.handleAddToFavorites}
+                >Add Hike to Favorites</button>}
+            </div>
+            <div className="buttons has-addons">
+              {isOwner(hike.user._id) &&
+                <Link
+                  to={`/hikes/${hike._id}/update`}
+                  className="button hike-show-button is-info is-light"
+                >Update Hike</Link>}
+              {isOwner(hike.user._id) &&
+                <button
+                  className="button hike-show-button is-danger is-light"
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to delete this Hike?')) {
+                      this.handleDeleteHike()
+                    }
+                  }}>Delete Hike</button>}
+            </div>
           </section>
 
           <section>
@@ -191,17 +183,33 @@ class HikeShow extends React.Component {
               isModalActive={imageModalActive}
               images={hike.images}
             />
+            <section className={this.state.imageUploadActive ? "image-upload" : "image-upload is-hidden"} >
+              <ImageUpload
+                onChange={this.handleAddImage}
+              />
+            </section>
           </section>
-
-          <section className="reviews">
-            <HikeReviews
-              reviews={this.state.hike.reviews}
-              handleReviewDelete={this.handleReviewDelete}
-              handleSubmitReview={this.handleSubmitReview}
-            />
-          </section>
+          <hr />
+          <div className="columns is-multiline">
+            <div className="column is-half-desktop">
+              <h1 className="hikr-title">Location:</h1>
+              <br />
+              <HikeShowMap
+                hike={this.state.hike}
+              />
+            </div>
+            <div className="column is-half-desktop">
+              <section className="reviews">
+                <HikeReviews
+                  reviews={this.state.hike.reviews}
+                  handleReviewDelete={this.handleReviewDelete}
+                  handleSubmitReview={this.handleSubmitReview}
+                />
+              </section>
+            </div>
+          </div>
         </div>
-      </div>
+      </div >
     )
   }
 }

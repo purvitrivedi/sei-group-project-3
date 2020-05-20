@@ -38,6 +38,10 @@
       color: #ffffff;
     }
   }
+  .hike-index-title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 30px;
+  }
   .index-search {
     display: flex;
     flex-direction: row;
@@ -109,7 +113,6 @@
       } 
     }
   }
-
   .map-controls {
   position: absolute;
   }
@@ -125,6 +128,39 @@
       font-size: 100px;
       text-shadow: 0 0 10px #000000;
       color: #ffffff;
+    }
+  }
+  .hikr-title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 30px;
+  }
+  .hike-show-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .hike-show-button {
+    font-family: 'Amatic SC', cursive;
+    font-size: 20px;
+  }
+  .popup-text {
+      font-family: 'Amatic SC', cursive;
+      font-size: 26px;
+  }
+
+}
+
+@media only screen and (max-width: 600px) {
+  .HikeShow {
+    .hero-body {
+      .title-logo {
+      font-size: 50px;
+      }
+    }
+    .hike-show-buttons {
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
 }

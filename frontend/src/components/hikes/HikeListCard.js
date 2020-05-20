@@ -10,7 +10,7 @@ const HikeListCard = ({ name, description, difficulty, country, timeToComplete, 
           <img src={images[0]} alt={name} className="column is-one-quarter is-mobile" />
           <div className="column columns is-multiline">
             <div className="column is-full">
-              <h1 className="subtitle">{name}, {country}</h1>
+              <h1 className="subtitle hike-index-title">{name}, {country}</h1>
               <h1>Difficulty: {difficulty.map(difficulty => {
                 return `${difficulty}, `
               })}</h1>
@@ -20,8 +20,11 @@ const HikeListCard = ({ name, description, difficulty, country, timeToComplete, 
               </h1>
               <h1>Time it takes: {timeToComplete}</h1>
             </div>
-            <div className="column is-full">{description.length > 350 ? description.substr(0, 350) + '... CLICK TO FIND OUT MORE'  : description }</div>
+            <div className="column is-full">{description.length > 350 ? description.substr(0, 350) + '... CLICK TO FIND OUT MORE' : description}</div>
           </div>
+          {/* <div class="media-right">
+            <button class="button">❤️</button>
+          </div> */}
         </div>
 
       </div>
