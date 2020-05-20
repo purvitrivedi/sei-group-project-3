@@ -129,7 +129,7 @@ class ProfileShow extends React.Component {
 
   }
 
-  leaveGroup = async(event) => {
+  leaveGroup = async (event) => {
     const groupId = event.target.value
     const memberId = event.target.name
     const id = this.state.profile._id
@@ -143,7 +143,7 @@ class ProfileShow extends React.Component {
       await axios.delete(`/api/groups/${groupId}/members/${memberId}`, withHeaders())
 
       const res = await axios.get(`/api/profiles/${id}`, withHeaders())
-      this.setState({ profile: res.data})
+      this.setState({ profile: res.data })
     } catch (err) {
       console.log(err.response)
     }
@@ -232,10 +232,10 @@ class ProfileShow extends React.Component {
 
             </div>
 
-            <div className="tile is-child box groups">
+            <div className="tile is-child box">
               <article>
                 <h1 className="subtitle">I've joined...</h1>
-                {joinedGroups}
+                <div className="groups">{joinedGroups}</div>
               </article>
             </div>
 
@@ -247,20 +247,22 @@ class ProfileShow extends React.Component {
             <div className="tile is-child box">
               <div className="columns is-multiline">
                 <article className="column is-full">
-                  <h1 className="subtitle">I'd like to go to...</h1>
-                  <div className="column columns is-multiline">
+                  <div className="columns is-multiline">
+                    <h1 className="subtitle column is-full">I'd like to go to...</h1>
+                    {profile.favoritedHikes && profile.favoritedHikes.length > 0 && <Link to="/hikes" className="explore-hikes column">Explore More Hikes</Link>}
+                  </div>
+                  <div className="column columns is-multiline fav">
                     {favoritedHikes}
                   </div>
-                  {profile.favoritedHikes && profile.favoritedHikes.length > 0 && <Link to="/hikes" className="explore-hikes">Explore more Hikes</Link>}
                 </article>
               </div>
             </div>
-            <div className="tile is-child box">
+            <div className="tile is-child box bio-box">
               <div className="columns is-multiline">
                 <h1 className="subtitle column is-full">About me...</h1>
                 {this.state.edit && <p onClick={this.enableEditBio} className="edit-bio">Edit bio</p>}
                 {this.state.showBio && <div>
-                  <p>
+                  <p className="bio">
                     {profile.bio}
                   </p></div>}
                 {!this.state.showBio &&
@@ -286,11 +288,12 @@ class ProfileShow extends React.Component {
                 <article className="column is-full">
                   <h1 className="subtitle">Where I've been...</h1>
                   <div className="column columns is-multiline">
-                    {completedHikes}
+                    {isOwner(profile._id) &&
+                      <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.addCompHike} /></div>
+                    }
+                    <div className="completed">{completedHikes}</div>
+                    
                   </div>
-                  {isOwner(profile._id) &&
-                    <div className="column is-full"> <AddCompletedHike id={profile._id} handleSubmit={this.addCompHike} /></div>
-                  }
                 </article>
               </div>
             </div>

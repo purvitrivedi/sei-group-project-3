@@ -1,5 +1,5 @@
 .background-profile {
-  height: 100vh;
+  height: 94.25vh;
   // background-image: url("https://images.unsplash.com/photo-1536334916155-dd9f850d6d73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80");
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
     url("https://images.unsplash.com/photo-1464821541677-ceb53bcf1541?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80");
@@ -10,6 +10,36 @@
 }
 
 .is-ancestor {
+  max-height: 80vh;
+
+  .profile-top {
+    max-height: 35vh;
+    overflow: scroll;
+  }
+
+  .groups {
+    max-height: 28.8vh;
+    overflow: scroll;
+  }
+  .fav {
+    max-height: 30vh;
+    overflow: scroll;
+  }
+
+  .bio-box {
+    min-height: 20vh;
+    .bio {
+      max-height: 100px;
+      overflow: scroll;
+    }
+  }
+
+  .completed {
+    max-height: 50vh;
+    width: 23vw;
+    overflow: scroll;
+  }
+
   background: unset;
   h1 {
     font-family: "Amatic SC", cursive;
@@ -85,6 +115,13 @@
     font-size: 12px;
     text-align: center;
     padding: 3px 5px;
+    margin-top: 30px;
+  }
+  .explore-hikes {
+    margin-left: 10px;
   }
 
+  .group-image{
+    width: 200px;
+  }
 }

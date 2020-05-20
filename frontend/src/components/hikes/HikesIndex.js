@@ -19,8 +19,6 @@ class HikesIndex extends React.Component {
     try {
       const res = await getAllHikes()
       const search = this.props.location.search.split('=')[1]
-      console.log(search)
-
       this.setState({ hikes: res.data, search })
     } catch (err) {
       console.log(err)
@@ -110,12 +108,6 @@ class HikesIndex extends React.Component {
                 </span>
               </button>
             </p>
-
-
-
-
-
-
           </div>
 
         </div>
@@ -131,7 +123,7 @@ class HikesIndex extends React.Component {
         <section className={`${this.state.hideGrid ? 'section Hike-grid is-hidden' : 'Hike-grid'}`}>
           <div className="container">
             <div className="columns is-multiline">
-              {this.state.hikes.map(hike => {
+              {this.filteredHikes().map(hike => {
                 return (
                   <HikeCard key={`Grid${hike._id}`} {...hike} />
                 )
