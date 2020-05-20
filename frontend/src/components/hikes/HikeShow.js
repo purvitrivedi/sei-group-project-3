@@ -115,16 +115,6 @@ class HikeShow extends React.Component {
     }
   }
 
-  // handleImageChange = (event, i) => {
-  //   const images = [...this.state.hike.images]
-  //   const newImages = images.map((image, index) => {
-  //     if (i === index) return event.target.value
-  //     return image
-  //   })
-  //   const hike = { ...this.state.hike, images: newImages }
-  // this.setState({ hike })
-  // }
-
   handleImageUploadActive = () => {
     this.setState({ imageUploadActive: !this.state.imageUploadActive })
   }
