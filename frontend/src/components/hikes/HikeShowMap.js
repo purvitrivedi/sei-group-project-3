@@ -24,7 +24,7 @@ class HikeMap extends React.Component {
             longitude={hike.lon}
             closeButton={false}
             >
-              <h1>{hike.name}, {hike.country}📍</h1>
+              <h1 className="popup-text">{hike.name}, {hike.country}📍</h1>
             </Popup>
           </div>
 
