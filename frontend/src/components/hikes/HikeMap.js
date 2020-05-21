@@ -44,7 +44,7 @@ class HikeMap extends React.Component {
                   closeButton={false}
                 >
                   <div className="small-popup" onClick={this.handlePopupShow} >
-                    <h1>{hike.name}, 📍</h1>
+                    <h1>{hike.name}, <span role="img" aria-label="marker">📍</span></h1>
                     <h2>{hike.country} - {hike.distance}, {hike.timeToComplete}</h2>
                     <h3>{hike.description.length > 150 ? hike.description.substr(0, 150) + '...' : hike.description}</h3>
                     <div className="popup-image">

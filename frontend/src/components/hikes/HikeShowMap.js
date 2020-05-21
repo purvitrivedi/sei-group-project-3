@@ -1,5 +1,5 @@
 import React from 'react'
-import MapGL, { Popup, NavigationControl } from 'react-map-gl'
+import MapGL, { Popup } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 class HikeMap extends React.Component {
@@ -24,7 +24,7 @@ class HikeMap extends React.Component {
             longitude={hike.lon}
             closeButton={false}
             >
-              <h1 className="popup-text">{hike.name}, {hike.country}📍</h1>
+              <h1 className="popup-text">{hike.name}, {hike.country}<span role="img" aria-label="marker">📍</span></h1>
             </Popup>
           </div>
 
