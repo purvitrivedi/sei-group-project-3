@@ -1,9 +1,8 @@
 import React from 'react'
 import axios from 'axios'
-import Calendar from 'react-calendar'
+// import Calendar from 'react-calendar'
 import Moment from 'react-moment'
 import 'moment-timezone'
-import Popup from "reactjs-popup"
 import { Link } from 'react-router-dom'
 import { isAuthenticated, getUserId, getToken } from '../../lib/auth'
 import GroupImgNew from './GroupImgNew'
@@ -22,7 +21,7 @@ class GroupShow extends React.Component {
     displayReplyForm: false,
     replyStatus: false,
   
-    date: new Date(),
+    eventPeriod: [],
   
     member: false,
     admin: false,
@@ -109,8 +108,7 @@ class GroupShow extends React.Component {
     window.location.href = "mailto:?body="+body+"&subject="+subject          
   }
 
-  //event - calendar, delete event
-  controlCalendar = date => this.setState({ date })
+  // event - calendar, delete event
   handleEventDelete = async e => {
     e.preventDefault()
     try {
@@ -129,7 +127,7 @@ class GroupShow extends React.Component {
   }
 
 
-  // userAddedImages
+  // user added imgs
   handleUploadPhoto = async event => {
     try {
       const groupId = this.props.match.params.id
@@ -160,6 +158,7 @@ class GroupShow extends React.Component {
     }
   }
   
+  // message
   handleMessageChange = event => {
     const formData = { ...this.state.formData, [event.target.name]: event.target.value }
     this.setState({ formData })
@@ -312,6 +311,17 @@ class GroupShow extends React.Component {
               </div>
           )})
         }
+
+        // const calendars = bulmaCalendar.attach('[type="date"]', {
+        //   startDate = item.startDate,
+        //   endDate = item.endDate
+        // });
+        // const handleCalendar = (startDate, endDate) => {
+        //   const eventPeriod = [ ...this.state.eventPeriod ]
+        //   const newArray = [startDate, endDate]
+        //   eventPeriod.push(newArray)
+        //   this.setState({ eventPeriod })
+        // } 
         return (
           <section class="section box" key={item._id}>
             <div class="container">
@@ -498,7 +508,6 @@ class GroupShow extends React.Component {
       })
     }
 
-
     return (
       <div class="GroupShow">
         <section class="hero">
@@ -616,9 +625,10 @@ class GroupShow extends React.Component {
                     </p>
                   </div>
                   
-                  <Calendar
-                      onChange={this.controlCalendar}
-                      value={this.state.date} />
+                  {/* <Calendar
+                      onChange={this.handleCalendar}
+                      // value={this.state.eventPeriod}
+                      style={{ backgroundColor: 'red' }} /> */}
                   <div class="panel-block">
                     <button class="button is-link is-outlined is-fullwidth">Reset all filter</button>
                   </div>
