@@ -1,6 +1,7 @@
 import React from 'react'
 import Moment from 'react-moment'
 import 'moment-timezone'
+import ReactStars from "react-rating-stars-component"
 
 import { isOwner, getUserId, isAuthenticated } from '../../lib/auth'
 import { getUser } from '../../lib/api'
@@ -9,10 +10,8 @@ import { getUser } from '../../lib/api'
 class HikeReviews extends React.Component {
   state = {
     profileImage: '',
-    reviewData: {
-      rating: '',
-      text: ''
-    },
+    rating: '',
+    text: '',
     newDate: ''
   }
 
@@ -26,24 +25,32 @@ class HikeReviews extends React.Component {
     }
   }
 
-  handleChange = event => {    
-    const reviewData = { ...this.state.reviewData, [event.target.name]: event.target.value }
-    this.setState({ reviewData })
+  handleChange = event => {
+    const text = event.target.value
+    this.setState({ text })
+  }
+  
+  handleRatingChange = rating => {
+    this.setState({ rating })
+  }
+
+  handleSubmit = (event, rating, text) => {
+    this.props.handleSubmitReview(event, rating, text)
+    this.setState({ rating: this.props.reviewRating, text: this.props.reviewText })
   }
 
   render() {
-    const { handleReviewDelete, handleSubmitReview, reviews } = this.props
-    
+    const { handleReviewDelete, reviews, errors } = this.props
     return (
       <>
         {isAuthenticated() &&
-          <form onSubmit={(event) => { handleSubmitReview(event, this.state.reviewData) }}>
+          <form onSubmit={(event) => { this.handleSubmit(event, this.state.rating, this.state.text) }}>
             <h1 className="hikr-title">Add a HIKR Review:</h1>
             <br />
             <article className="media">
               <figure className="media-left">
                 <p className="image is-64x64">
-                  <img src={this.state.profileImage} alt="user profile pic"/>
+                  <img src={this.state.profileImage} alt="user profile pic" />
                 </p>
               </figure>
               <div className="media-content">
@@ -54,59 +61,31 @@ class HikeReviews extends React.Component {
                       placeholder="Add a review..."
                       name="text"
                       onChange={this.handleChange}
-                      value={this.state.reviewData.text}
+                      value={this.state.text}
                     >
                     </textarea>
                   </p>
+                  {errors && !errors.text && <small className="help is-danger">Review is required</small>}
                 </div>
+                {errors && !errors.rating && <small className="help is-danger">Rating is required</small>}
+
                 <div className="level">
                   <div className="level-left">
                     <div className="control">
-                      <label className="radio">
-                        <input
-                          type="radio"
-                          name="rating"
-                          value="1"
-                          onChange={this.handleChange}
-                        // checked={this.state.reviewData.rating === }
-                        />⭐️
-                    </label>
-                      <label className="radio">
-                        <input
-                          type="radio"
-                          name="rating"
-                          value="2"
-                          onChange={this.handleChange}
-                        // checked={this.state.reviewData.rating}
-                        />⭐️⭐️
-                    </label>
-                      <label className="radio">
-                        <input
-                          type="radio"
-                          name="rating"
-                          value="3"
-                          onChange={this.handleChange}
-                        // checked={this.state.reviewData.rating}
-                        />⭐️⭐️⭐️
-                    </label>
-                      <label className="radio">
-                        <input
-                          type="radio"
-                          name="rating"
-                          value="4"
-                          onChange={this.handleChange}
-                        // checked={this.state.reviewData.rating}
-                        />⭐️⭐️⭐️⭐️
-                    </label>
-                      <label className="radio">
-                        <input
-                          type="radio"
-                          name="rating"
-                          value="5"
-                          onChange={this.handleChange}
-                        // checked={this.state.reviewData.rating}
-                        />⭐️⭐️⭐️⭐️⭐️
-                    </label>
+                      <label>Rating: </label>
+                      <ReactStars
+                        count={5}
+                        size={20}
+                        half={false}
+                        name="rating"
+                        value={parseInt(this.state.rating)}
+                        // onChange={this.handleChange}
+                        onChange={newRating => {
+                          this.handleRatingChange(newRating)
+                        }}
+                        filledIcon={<i className="fas fa-mountain" />}
+                        emptyIcon={<i className="fas fa-mountain" />}
+                      />
                     </div>
                   </div>
                 </div>
@@ -129,15 +108,25 @@ class HikeReviews extends React.Component {
             <article key={review._id} className="media">
               <figure className="media-left">
                 <p className="image is-64x64">
-                  <img src={review.user.profileImage} alt="profile pic"/>
+                  <img src={review.user.profileImage} alt="profile pic" />
                 </p>
               </figure>
               <div className="media-content">
                 <div className="content">
-                  <p><strong>{review.user.fullName}</strong> <small>{'⭐️'.repeat(review.rating)} </small> <small><Moment fromNow >{review.createdAt}</Moment></small>
+                  <div>
+                    <strong>{review.user.fullName}</strong> <small><Moment fromNow >{review.createdAt}</Moment></small>
+                    <ReactStars
+                      count={5}
+                      size={12}
+                      half={false}
+                      value={review.rating}
+                      filledIcon={<i className="fas fa-mountain" />}
+                      emptyIcon={<i className="fas fa-mountain" />}
+                      edit={false}
+                    />
                     <br />
                     {review.text}
-                  </p>
+                  </div>
                 </div>
               </div>
               <div className="media-right">

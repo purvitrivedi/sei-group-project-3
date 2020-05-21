@@ -1,15 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import ReactStars from "react-rating-stars-component"
 
-import { getSingleHike, deleteHikeReview, addHikeToFavorites, reviewHike, deleteHike, addImageToHike } from '../../lib/api'
+import { getSingleHike, deleteHikeReview, addHikeToFavorites, reviewHike, deleteHike, addImageToHike, getUser, removeHikeRequest } from '../../lib/api'
 import { isAuthenticated, getUserId, isOwner } from '../../lib/auth'
 
 import HikeReviews from './HikeReviews'
 import HikeImageModal from './HikeImageModal'
 import ImageUpload from '../common/ImageUpload'
 import HikeShowMap from './HikeShowMap'
-
-
 
 
 class HikeShow extends React.Component {
@@ -19,18 +18,27 @@ class HikeShow extends React.Component {
       text: '',
       rating: ''
     },
+    reviewText: '',
+    reviewRating: '',
+    errors: '',
     averageRating: '',
     imageModalActive: false,
-    imageUploadActive: false
+    imageUploadActive: false,
+    user: '',
+    hikeIsFav: false
   }
+  //! USER ABOVE IS ACTUALLY THE CURRENT USERS ARRAY OF FAVOURITE HIKES!
 
   async componentDidMount() {
     try {
       const hikeId = this.props.match.params.id
       const res = await getSingleHike(hikeId)
-      this.setState({ hike: res.data },
+      const userId = await getUserId()
+      const user = await getUser(userId)
+      this.setState({ hike: res.data, user: user.data.favoritedHikes },
         () => {
           this.getAverageRating()
+          this.checkHikeFavorite()
         })
     } catch (err) {
       console.log(err)
@@ -47,31 +55,64 @@ class HikeShow extends React.Component {
     }
   }
 
+  checkHikeFavorite = () => {
+    const hikeId = this.props.match.params.id
+    let favArr = this.state.user
+    favArr = favArr.flatMap(item => item.hike._id)
+    const hikeIsFav = favArr.includes(hikeId)
+    this.setState({ hikeIsFav })
+  }
+
   handleAddToFavorites = async () => {
     try {
-
       const userId = getUserId()
       const hikeId = { hike: this.props.match.params.id }
+
       await addHikeToFavorites(userId, hikeId)
+      const user = await getUser(userId)
+      this.setState({ user: user.data.favoritedHikes, hikeIsFav: true })
     } catch (err) {
       console.log(err)
     }
   }
 
-  handleSubmitReview = async (event, reviewData) => {
+  handleRemoveFavorite = async () => {
+    try {
+      const hikeId = this.props.match.params.id
+      const userId = getUserId()
+      const linkName = 'favorites'
+      let favArr = this.state.user
+      favArr = favArr.map(item => (
+        [item._id, item.hike._id]
+      )
+      )
+      const favId = favArr.filter(arr => arr[1] === hikeId)
+      const id = (favId.flatMap(item => item))
+      
+      await removeHikeRequest(userId, linkName, id[0])
+      const user = await getUser(userId)
+      this.setState({ user: user.data.favoritedHikes, hikeIsFav: false })
+      
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  handleSubmitReview = async (event, rating, text) => {
     event.preventDefault()
     try {
       const hikeId = this.props.match.params.id
-      await reviewHike(hikeId, reviewData)
+      await reviewHike(hikeId, { rating: rating, text: text })
       const res = await getSingleHike(hikeId)
-      this.setState({ hike: res.data },
+      this.setState({ hike: res.data, errors: '', reviewText: '', reviewRating: '' },
         () => {
           this.getAverageRating()
         })
     } catch (err) {
-      console.log(err);
+      this.setState({ errors: JSON.parse(err.response.config.data) })
     }
   }
+
 
   handleReviewDelete = async event => {
     event.preventDefault()
@@ -123,7 +164,6 @@ class HikeShow extends React.Component {
 
   render() {
     if (!this.state.hike) return null
-
     const { hike, averageRating, imageModalActive } = this.state
     return (
       <div className="HikeShow box">
@@ -146,7 +186,17 @@ class HikeShow extends React.Component {
             </h1>
             <h1>Country: {hike.country}</h1>
             <h1>Time the hike takes: {hike.timeToComplete}</h1>
-            <h1>Average Rating: {'⭐️'.repeat(averageRating)}</h1>
+            <h1>Average Rating:
+              <ReactStars
+                count={5}
+                size={12}
+                half={false}
+                value={parseInt(averageRating)}
+                filledIcon={<i className="fas fa-mountain" />}
+                emptyIcon={<i className="fas fa-mountain" />}
+                edit={false}
+              />
+            </h1>
             <hr />
           </section>
 
@@ -154,12 +204,20 @@ class HikeShow extends React.Component {
             <div className="buttons has-addons">
               <button className="button hike-show-button is-success is-light" onClick={this.handleImageModal}>Image Gallery</button>
               {isAuthenticated() && <button className="button hike-show-button is-primary is-light" onClick={this.handleImageUploadActive}>Add an image to the gallery</button>}
-              {isAuthenticated() &&
+
+              {isAuthenticated() && !this.state.hikeIsFav &&
                 <button
                   className="button hike-show-button is-success is-light"
                   onClick={this.handleAddToFavorites}
                 >Add Hike to Favorites</button>}
+
+              {isAuthenticated() && this.state.hikeIsFav &&
+                <button
+                  className="button hike-show-button is-danger is-light"
+                  onClick={this.handleRemoveFavorite}
+                >Remove from Favorites</button>}
             </div>
+
             <div className="buttons has-addons">
               {isOwner(hike.user._id) &&
                 <Link
@@ -204,6 +262,9 @@ class HikeShow extends React.Component {
                   reviews={this.state.hike.reviews}
                   handleReviewDelete={this.handleReviewDelete}
                   handleSubmitReview={this.handleSubmitReview}
+                  errors={this.state.errors}
+                  reviewText={this.state.reviewText}
+                  reviewRating={this.state.reviewRating}
                 />
               </section>
             </div>

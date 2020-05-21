@@ -68,8 +68,6 @@ class HikeCreate extends React.Component {
   }
 
   render() {
-    console.log(this.state.errors)
-
     return (
       <section className="section background-hike-form">
         <div className="container">

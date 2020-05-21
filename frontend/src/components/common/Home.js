@@ -17,8 +17,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.state.searchTerm)
-
     return (
       <section className="Home hero is-fullheight-with-navbar is-primary is-bold">
         <div className="hero-body">
