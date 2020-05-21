@@ -9,11 +9,11 @@ class GroupCard extends React.Component {
       <Link to={`/groups/${group._id}`} className="box">
         <div className="column is-full">
           <div className="columns">
-            <img src={group.headerImage} alt={`pic ${group.name}`} className="column is-one-quarter is-mobile" />
+            <img src={group.headerImage} alt={`pic ${group.name}`} className="column group-header-image" />
             <div className="column columns is-multiline">
               <div className="column is-full columns is-multiline">
                 <h1 className="subtitle column is-full group-title">{group.name}</h1>
-                <p className="column is-full"><i className="fas fa-users"></i> {group.members.length} members</p>
+                <p className="column is-full"><i className="fas fa-users"></i> {group.members.length} hikrs</p>
                 <Link to={`/profiles/${group.createdMember._id}`}>
                   <figure className="column">
                     <img src={group.createdMember.profileImage} alt={group.createdMember.username} className="group-list-image" />
