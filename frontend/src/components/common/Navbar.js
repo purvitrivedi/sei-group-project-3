@@ -78,29 +78,29 @@ class Navbar extends React.Component {
           </div>
           <div className={`navbar-menu ${burgerIsOpen ? 'is-active' : ''}`}>
             <div className="navbar-end">
-              {!isAuthenticated() && <Link to="/hikes" className="navbar-item">Hikes</Link>}
+              {!isAuthenticated() && <Link to="/hikes"><div className="navbar-item main-nav">Hikes</div></Link>}
               {isAuthenticated() && <div className={`navbar-item has-dropdown ${hikesIsOpen ? 'is-active' : ''}`} onClick={() => this.handleToggle('hikes')}>
-                <span>Hikes</span>
+                <span className="main-nav">Hikes</span>
                 <div className="navbar-dropdown">
-                  <Link to="/hikes" className="navbar-item">All Hikes</Link>
-                  <Link to="/hikes/new" className="navbar-item">Add a New Hike</Link>
+                  <Link to="/hikes"><div className="navbar-item nav-color">All Hikes</div></Link>
+                  <Link to="/hikes/new"><div className="navbar-item nav-color">Add a New Hike</div></Link>
                 </div>
               </div>}
-              {!isAuthenticated() && <Link to="/groups" className="navbar-item">Community</Link>}
+              {!isAuthenticated() && <Link to="/groups" className="navbar-item main-nav">Community</Link>}
               {isAuthenticated() && <div className={`navbar-item has-dropdown ${communityIsOpen ? 'is-active' : ''}`} onClick={() => this.handleToggle('community')}>
-                <span>Community</span>
+                <span className="main-nav">Community</span>
                 <div className="navbar-dropdown">
-                  <Link to="/profiles" className="navbar-item">Hikrs</Link>
-                  <Link to="/groups" className="navbar-item">Groups</Link>
-                  <Link to="/groups/register" className="navbar-item">Add a New Group</Link>
+                  <Link to="/profiles"><div className="navbar-item nav-color">Hikrs</div></Link>
+                  <Link to="/groups"><div className="navbar-item nav-color">Groups</div></Link>
+                  <Link to="/groups/register"><div className="navbar-item nav-color">Add a New Group</div></Link>
                 </div>
               </div>}
-              {!isAuthenticated() && <Link to="/login" className="navbar-item">Log In</Link>}
+              {!isAuthenticated() && <Link to="/login" className="navbar-item main-nav">Log In</Link>}
               {isAuthenticated() && <div className={`navbar-item has-dropdown ${accountIsOpen ? 'is-active' : ''}`} onClick={() => this.handleToggle('account')}>
-                <span>Account</span>
+                <span className="main-nav">Account</span>
                 <div className="navbar-dropdown">
-                  <Link to={`/profiles/${userId}`} className="navbar-item">Profile</Link>
-                  <span onClick={this.handleLogout} className="navbar-item">Logout</span>
+                  <Link to={`/profiles/${userId}`}><div className="navbar-item nav-color">Profile</div></Link>
+                  <span onClick={this.handleLogout} className="navbar-item nav-color">Logout</span>
                 </div>
               </div>}
 
