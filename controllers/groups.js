@@ -186,7 +186,7 @@ async function groupsMessageCreate(req, res, next) {
     if (!group.members.some(member => member.user._id.equals(req.body.user._id))
       && !adminId.equals(req.body.user._id) ) {
       throw new Error(unauthorized)
-    } // only group members or admin can send msg
+    }
 
     group.messages.push(req.body)
     await group.save()
@@ -268,15 +268,13 @@ async function groupsEventCreate(req, res, next) {
 
     req.body.createdMember = req.currentUser
     req.body.participants = { user: req.currentUser }
-    console.log(req.body)
+
     const adminId = group.createdMember._id
     if (!group.members.some(member => member.user._id.equals(req.body.createdMember._id))
       && !adminId.equals(req.body.createdMember._id) ) {
       throw new Error(unauthorized)
     } // only group members or admin can create events
 
-    // const newParticipant = { user: req.body.createdMember._id }
-    // req.body.participants = newParticipant
     group.events.push(req.body)
 
     await group.save()
@@ -384,14 +382,14 @@ async function groupsGetEventParticipants(req, res, next) {
 async function groupsEventParticipants(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await (await Group.findById(groupId)).populate('event.participants.user')
+    const group = await Group.findById(groupId).populate('event.participants.user')
     if (!group) throw new Error(notFound)
 
     const eventId = req.params.eventId
     const eventToUpdate = group.events.id(eventId)
     if (!eventToUpdate) throw new Error(notFound)
    
-    if (eventToUpdate.participants.length > 1 && !eventToUpdate.participants.some( par => par._id.equals(req.currentUser._id)) ) {
+    if (eventToUpdate.participants.length > 1 && !eventToUpdate.participants.some(par => par._id.equals(req.currentUser._id))) {
       throw new Error('You have already joined the event')
     } 
    
@@ -399,7 +397,6 @@ async function groupsEventParticipants(req, res, next) {
     eventToUpdate.participants.push(newParticipant)
 
     await group.save()
-    console.log(group)
     res.status(202).json(group)
   } catch (err) {
     next(err)
@@ -420,15 +417,10 @@ async function groupsEventParticipantsDelete(req, res, next) {
 
     const event = group.events.id(eventId)
     if (!event) throw new Error(notFound)
-    console.log(req.params)
-    console.log(event)
 
     const parToRemove = event.participants.find( par => par.id === parId )
     if (!parToRemove) throw new Error(notFound)
 
-    // if (!parToRemove.user._id.equals(req.currentUser._id)) {
-    //   throw new Error(unauthorized) 
-    // }
     await parToRemove.remove()
     await group.save()
     res.sendStatus(204).json(group)
@@ -444,15 +436,15 @@ async function groupsEventParticipantsDelete(req, res, next) {
 async function groupsMemberCreate(req, res, next) {
   try {
     const groupId = req.params.id
-    const group = await (await Group.findById(groupId))
-      .populate('members.user')
+    const group = await Group.findById(groupId)
+    console.log(group.members)
     if (!group) throw new Error(notFound)
    
-    req.body.user = req.currentUser
-    if (group.members.some( member =>  member.user._id.equals(req.body.user._id))) throw new Error('Already exist') //avoid double reg.
-    group.members.push(req.body)
+    if (group.members.some(member =>  member.user.equals(req.currentUser._id))) {
+      return res.status(201).json(group)
+    }
+    group.members.push({ user: req.currentUser })
     await group.save()
-
     res.status(201).json(group)
   } catch (err) {
     next(err)
