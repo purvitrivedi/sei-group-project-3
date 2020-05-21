@@ -28,7 +28,7 @@ class ProfilesIndex extends React.Component {
     const { profiles, search } = this.state
     const regexp = new RegExp(search, 'i')
     return profiles.filter(profile => {
-      return regexp.test(profile.fullName)
+      return regexp.test(profile.fullName || profile.username)
     })
   }
 
