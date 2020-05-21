@@ -26,9 +26,11 @@ class ImageUpload extends React.Component {
     return (
       <div>
         {image ?
+      
           <div>
             <img className="image is-64x64" src={image} alt="selected"/>
           </div>
+          
           :
           <>
             <label className="label">Upload Image (wait for upload to finish before adding)</label>
