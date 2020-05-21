@@ -1,4 +1,4 @@
-const dbURI = 'mongodb://localhost/hikr-db-3'
+const dbURI = 'mongodb://localhost/hikr-db-4'
 const port = 8000
 const secret = 'andy kuriko purvi'
 
