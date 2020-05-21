@@ -45,4 +45,4 @@ const GroupShowInformation = ({ currentlyDisplayed, group }) => {
 
 }
 
-export default GroupShowInformation
+export default GroupShowInformation 

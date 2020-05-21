@@ -111,7 +111,6 @@ router.route('/profiles/:id/favorites')
 router.route('/profiles/:id/favorites/:favId')
   .delete(secureRoute, users.deleteFavHike)
 
-
 router.route('/profiles/:id/completed')
   .post(secureRoute, users.createCompHike)
 

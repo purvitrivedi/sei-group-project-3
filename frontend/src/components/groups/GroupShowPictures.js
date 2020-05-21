@@ -37,4 +37,4 @@ const GroupShowPictures = ({ images, name, handleDeletePhoto, currentlyDisplayed
   )
 }
 
-export default GroupShowPictures
+export default GroupShowPictures 

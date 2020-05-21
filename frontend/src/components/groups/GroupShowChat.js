@@ -12,7 +12,7 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
         display: `${currentlyDisplayed === 'chat' ? 'block' : 'none' }` 
       }}>
         <h1 className="subtitle">Chat Board</h1>
-        
+
         { messages.map( msg => {
           const numLikes = msg.likes.length
           const groupId = group._id
@@ -27,7 +27,7 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
                   >
                   x
                   </button>
-                  
+
                 </div>
               }
               <article className="media">
@@ -60,7 +60,7 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
               </article>
             </div>
           )})}
-       
+
         <article className="media">
           <div className="media-content">
             <div className="field">
@@ -83,60 +83,8 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
         </article>
       </div>
     </section>
-         
+
   )
 }
 
 export default GroupShowChat
-
-// onClick={() => handleCancelEvent(item._id, participantId._id)}
-
-// const messageId = msg._id
-        //  let likedArray = msg.likes
-        //  const handleMessageDelete = async () => {
-        //    await axios.delete(`/api/groups/${groupId}/messages/${messageId}`, {
-        //      headers: { Authorization: `Bearer ${getToken()}`}
-        //    })
-        //    const group = await axios.get(`/api/groups/${groupId}`)
-        //    this.setState({ group: group.data })
-        //  }
-        //  const handleLikes = async () => {
-        //    try {
-        //      const userId = getUserId()
-        //      if ( likedArray.length > 0 && likedArray.find( like => like.user._id === userId)) window.alert('You have already liked the comment')
-
-        //      const resUser = await axios.get(`/api/profiles/${userId}`, {
-        //        headers: { Authorization: `Bearer ${getToken()}`}
-        //      })
-        //      await axios.put(`/api/groups/${groupId}/messages/${messageId}/likes`, resUser.data, {
-        //        headers: { Authorization: `Bearer ${getToken()}`}
-        //      })
-        //      const group = await axios.get(`/api/groups/${groupId}`)
-        //      this.setState({ group: group.data })
-        //    } catch (err) {
-        //      console.log(err.response)
-        //    }  
-        //  }
-   
-        //  const handleReplyForm = () => {
-        //    const displayReplyForm = true
-        //    this.setState({ displayReplyForm })
-        //  }
-        //  const handleReplyMessage = event => {
-        //    const formData = { ...this.state.formData, [event.target.name]: event.target.value, to: msg._id }
-        //    console.log(formData)
-        //    this.setState({ formData })
-        //  }
-  
-        //  const handleReplySubmit = async event => {
-        //    event.preventDefault()
-        //    try {
-        //      await axios.post(`/api/groups/${groupId}/messages`, this.state.formData, {
-        //      headers: { Authorization: `Bearer ${getToken()}`}
-        //      })
-        //      const group = axios.get(`/api/groups/${groupId}`)
-        //      this.setState({ group: group.data, replayStaus: true, displayReplyForm: false })
-        //    } catch (err) {
-        //      console.log(err)
-        //    }
-        //  }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 
 const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete, handleJoinEvent, handleCancelEvent }) => {
-  
+
   const userId = getUserId()
 
   const isInGroup = (participants) => {
@@ -36,7 +36,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                       </button>
                     </div>
                   }
-                  
+
                   <h1 className="subtitle"><strong>{item.eventName}</strong></h1>
                   {item.hike &&
                     <>
@@ -89,4 +89,4 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
   )
 }
 
-export default GroupShowEvents
+export default GroupShowEvents 

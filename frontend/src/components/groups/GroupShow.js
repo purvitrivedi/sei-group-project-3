@@ -1,14 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { isAuthenticated, getUserId, getToken } from '../../lib/auth'
+import { getUserId, getToken } from '../../lib/auth'
 import GroupShowInformation from './GroupShowInformation'
 import GroupShowMembers from './GroupShowMembers'
 import GroupShowPictures from './GroupShowPictures'
 import GroupShowEvents from './GroupShowEvents'
 import GroupShowChat from './GroupShowChat'
-import { getSingleGroup, joinGroup, leaveGroup, deleteEvent, deletePic, uploadPic, joinEvent,  leaveEvent, sendMsg} from '../../lib/api'
-
+import { getSingleGroup, joinGroup, leaveGroup, deleteEvent, deletePic, uploadPic, joinEvent, leaveEvent, sendMsg} from '../../lib/api'
 
 class GroupShow extends React.Component {
   state = {
@@ -18,7 +17,6 @@ class GroupShow extends React.Component {
     admin: false,
     displayReplyForm: false,
     replyStatus: false,
-
     formData: {
       text: '',
       user:'',
@@ -26,12 +24,13 @@ class GroupShow extends React.Component {
     }
   }
 
+  // fetch
   getData = async () => {
     try {
       const groupId = this.props.match.params.id
       const userId = getUserId()
       const res = await getSingleGroup(groupId)
-      
+
       this.setState({ 
         group: res.data,
         member: res.data.members.some(member => member.user._id === userId), 
@@ -46,6 +45,7 @@ class GroupShow extends React.Component {
     this.getData()
   }
 
+
   // join the group
   handleJoinGroup = async () => {
     try {
@@ -57,21 +57,22 @@ class GroupShow extends React.Component {
       console.log(err.response)
     }
   }
+
   // leave the group
   handleUnsubscribe = async () => {
     try {
       const groupId = this.props.match.params.id
       const userId = getUserId()
       const memberToRemove = this.state.group.members.find(member => member.user._id === userId)
-
       if (!memberToRemove) return
-      
+
       await leaveGroup(groupId, memberToRemove._id)
       this.getData()
     } catch (err) {
       console.log(err)
     }
   }
+
 
   // control views
   handleViewChange = event => {
@@ -86,7 +87,7 @@ class GroupShow extends React.Component {
   }
 
 
-  // events
+  //events
   handleEventDelete = async e => {
     e.preventDefault()
     try {
@@ -121,7 +122,7 @@ class GroupShow extends React.Component {
   }
 
 
-  // user added imgs
+  // userAddedImages
   handleUploadPhoto = async event => {
     try {
       const groupId = this.props.match.params.id
@@ -143,14 +144,14 @@ class GroupShow extends React.Component {
     }
   }
   
-
-  // message
+  
+  // messages
   handleMessageChange = event => {
     const formData = { ...this.state.formData, [event.target.name]: event.target.value }
     this.setState({ formData })
   }
 
-  handleMessageSubmit = async event => {
+  handleMessageSubmit = async () => {
     try {
       const groupId = this.props.match.params.id
       await axios.post(`/api/groups/${groupId}/messages`, {
@@ -159,13 +160,11 @@ class GroupShow extends React.Component {
       }, {
         headers: { Authorization: `Bearer ${getToken()}`}
       })
-      
       this.getData()
     } catch (err) {
       this.setState({ errors: err })
     }
   }
-
 
   handleMessageDelete = async (groupId, messageId) => {
     try {
@@ -189,21 +188,17 @@ class GroupShow extends React.Component {
       await axios.put(`/api/groups/${groupId}/messages/${messageId}/likes`, resUser.data, {
         headers: { Authorization: `Bearer ${getToken()}`}
       })
-
       this.getData()
     } catch (err) {
       console.log(err.response)
     }  
   }
 
-
   render() {
-    console.log(this.state)
     const { group, member, admin, currentlyDisplayed, formData } = this.state
     if (!group) return null // not render until group is not null (null--render nothing, !null (second render) -render)
 
     return (
-  
       <div className="GroupShow">
         <section className="hero">
           <div className="hero-body">
@@ -276,11 +271,8 @@ class GroupShow extends React.Component {
             </button>
           </div>
         }
-
       </div>
-    
     )
   }
 }
-
 export default GroupShow

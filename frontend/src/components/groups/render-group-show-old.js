@@ -364,131 +364,126 @@ render() {
             </div>
           </div>
 
-
-      //     <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} style={{minHeight: 500}}>
-      //       <section class="section">
-      //         <div class="container">
-      //           <h1 class="title"><strong>Welcome to {group.name}! </strong></h1>
-      //           <p class="subtitle">Description</p>
-      //           <div class="content">{group.description}</div>
-      //           <br />
-      //           <p class="subtitle">Group Admin</p>
-      //           <div className="column is-full">
-      //             <div className="column is-full">
-      //               <div className="box">
-      //                 <article className="media">
-      //                   <div className="media-left">
-      //                     <figure className="image is-64x64"><img src= {admin.profileImage} alt={admin.username} /></figure>
-      //                   </div>
-      //                   <div className="media-content">
-      //                     <div className="content">
-      //                       <p>
-      //                         <strong>{admin.username}&nbsp;</strong><small>{admin.email}</small>
-      //                         <br />
-      //                         {admin.bio}
-      //                       </p>
-      //                       <Link to={`/profiles/${admin._id}`}><i className="fas fa-address-card"></i></Link>
-      //                     </div>
-      //                   </div>
-      //                 </article>
-      //               </div>
-      //             </div>
-      //           </div>
-      //         </div>
-      //       </section>
-      //     </div>
-
-      //     <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`} style={{minHeight: 500}}>
-      //       <section class="section" >
-      //           <div class="container">
-      //             <h1 class="subtitle">Group Members</h1>
-      //             { members }
-      //           </div>
-      //       </section>
-      //     </div>
-
-      //     <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{minHeight: 500}}>
-      //       <section class="section">
-      //         <div class="container">
-      //           <h1 class="subtitle">Group Pictures</h1>
-      //           <div class="columns is-multiline">
-      //             { pictures }
-      //           </div>
-      //           { this.state.member && 
-      //             <GroupImgNew
-      //               onChange={this.handleUploadPhoto}
-      //               name="images"
-      //             />
-      //           }
-      //         </div>
-      //       </section>
-      //     </div>
-        
-      //     <div class={`${this.state.display.Events ? "Events" : "is-hidden" }`} style={{minHeight: 500}}>
-      //       <section class="section" >
-      //         <div class="container">
-      //           <h1 class="subtitle">Events</h1>
-
-      //           <nav class="panel is-4">
-      //             <p class="panel-heading">Calendar Search</p>
-      //             <div class="panel-block">
-      //               <p class="control columns is-fullwidth is-multiline" style={{minHeight: 150}}>
-      //                 <div class="column">
-      //                   <label class="column is-2">From</label>
-      //                   <input class="input column is-5" type="date" placeholder="From" />
-      //                 </div>
-      //                 <div class="column">
-      //                 <label class="column is-2">To</label>
-      //                 <input class="input column is-5" type="date" placeholder="To" />
-      //                 </div>
-      //               </p>
-      //             </div>
-                  
-      //             {/* <Calendar
-      //                 onChange={this.handleCalendar}
-      //                 // value={this.state.eventPeriod}
-      //                 style={{ backgroundColor: 'red' }} /> */}
-      //             <div class="panel-block">
-      //               <button class="button is-link is-outlined is-fullwidth">Reset all filter</button>
-      //             </div>
-      //           </nav>
-      //           {/* { events } */}
-      //         </div>
-      //       </section>
-      //     </div>
-
-      //     <div class={`${this.state.display.Chat ? "Chat" : "is-hidden" }`} style={{minHeight: 500}}>
-      //       <section class="section" >
-      //         <div class="container">
-      //           <h1 class="subtitle">Chat Board</h1>
-      //           {/* { chat } */}
-      //           <article class="media">
-      //             <div class="media-content">
-      //               <div class="field">
-      //                 <p class="control">
-      //                   <textarea 
-      //                     class="textarea" 
-      //                     placeholder="Add a comment..." 
-      //                     onChange={this.handleMessageChange} 
-      //                     name='text'
-      //                     value={this.state.formData.text}
-      //                   />
-      //                 </p>
-      //               </div>
-      //               <div class="field">
-      //                 <p class="control">
-      //                   <button class="button" onClick={this.handleMessageSubmit}>Post comment</button>
-      //                 </p>
-      //               </div>
-      //             </div>
-      //           </article>
-      //         </div>
-      //       </section>
-      //     </div>
+           <div class={`${this.state.display.Information ? "Information" : "is-hidden" }`} style={{minHeight: 500}}>
+             <section class="section">
+               <div class="container">
+                 <h1 class="title"><strong>Welcome to {group.name}! </strong></h1>
+                 <p class="subtitle">Description</p>
+                 <div class="content">{group.description}</div>
+                 <br />
+                 <p class="subtitle">Group Admin</p>
+                 <div className="column is-full">
+                   <div className="column is-full">
+                     <div className="box">
+                       <article className="media">
+                         <div className="media-left">
+                           <figure className="image is-64x64"><img src= {admin.profileImage} alt={admin.username} /></figure>
+                         </div>
+                         <div className="media-content">
+                           <div className="content">
+                             <p>
+                               <strong>{admin.username}&nbsp;</strong><small>{admin.email}</small>
+                               <br />
+                               {admin.bio}
+                             </p>
+                             <Link to={`/profiles/${admin._id}`}><i className="fas fa-address-card"></i></Link>
+                           </div>
+                         </div>
+                       </article>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </section>
+           </div
+           <div class={`${this.state.display.Members ? "Members" : "is-hidden" }`} style={{minHeight: 500}}>
+             <section class="section" >
+                 <div class="container">
+                   <h1 class="subtitle">Group Members</h1>
+                   { members }
+                 </div>
+             </section>
+           </div
+           <div class={`${this.state.display.Pictures ? "Pictures" : "is-hidden" }`} style={{minHeight: 500}}>
+             <section class="section">
+               <div class="container">
+                 <h1 class="subtitle">Group Pictures</h1>
+                 <div class="columns is-multiline">
+                   { pictures }
+                 </div>
+                 { this.state.member && 
+                   <GroupImgNew
+                     onChange={this.handleUploadPhoto}
+                     name="images"
+                   />
+                 }
+               </div>
+             </section>
+           </div>
     
+           <div class={`${this.state.display.Events ? "Events" : "is-hidden" }`} style={{minHeight: 500}}>
+             <section class="section" >
+               <div class="container">
+                 <h1 class="subtitle">Events</h1>
+                 <nav class="panel is-4">
+                   <p class="panel-heading">Calendar Search</p>
+                   <div class="panel-block">
+                     <p class="control columns is-fullwidth is-multiline" style={{minHeight: 150}}>
+                       <div class="column">
+                         <label class="column is-2">From</label>
+                         <input class="input column is-5" type="date" placeholder="From" />
+                       </div>
+                       <div class="column">
+                       <label class="column is-2">To</label>
+                       <input class="input column is-5" type="date" placeholder="To" />
+                       </div>
+                     </p>
+                   </div>
+              
+                   {/* <Calendar
+                       onChange={this.handleCalendar}
+                       // value={this.state.eventPeriod}
+                       style={{ backgroundColor: 'red' }} /> */}
+                   <div class="panel-block">
+                     <button class="button is-link is-outlined is-fullwidth">Reset all filter</button>
+                   </div>
+                 </nav>
+                 {/* { events } */}
+               </div>
+             </section>
+           </div>
 
-      //     { this.state.member && <div class="buttons is-right"><button class="button is-small" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
-      //   </div>
-      // </div>
-    )
-  }
+           
+           <div class={`${this.state.display.Chat ? "Chat" : "is-hidden" }`} style={{minHeight: 500}}>
+             <section class="section" >
+               <div class="container">
+                 <h1 class="subtitle">Chat Board</h1>
+                 {/* { chat } */}
+                 <article class="media">
+                   <div class="media-content">
+                     <div class="field">
+                       <p class="control">
+                         <textarea 
+                           class="textarea" 
+                           placeholder="Add a comment..." 
+                           onChange={this.handleMessageChange} 
+                           name='text'
+                           value={this.state.formData.text}
+                         />
+                       </p>
+                     </div>
+                     <div class="field">
+                       <p class="control">
+                         <button class="button" onClick={this.handleMessageSubmit}>Post comment</button>
+                       </p>
+                     </div>
+                   </div>
+                 </article>
+               </div>
+             </section>
+           </div>
+
+           { this.state.member && <div class="buttons is-right"><button class="button is-small" onClick={this.handleUnsubscribe}>Unsubscribe</button></div>}
+         </div>
+       </div>
+  

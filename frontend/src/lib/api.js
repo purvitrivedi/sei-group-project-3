@@ -143,4 +143,3 @@ export const deletePic = (groupId, imageId) => {
 export const sendMsg = (groupId, text) => {
   return axios.post(`/api/groups/${groupId}/messages`, text, withHeaders())
 }
-
