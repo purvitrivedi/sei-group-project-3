@@ -7,7 +7,7 @@ const hikeData = require('./data/hikes')
 const userData = require('./data/users')
 // const groupData = require('./data/groups')
 
-// const faker = require('faker')
+const faker = require('faker')
 
 mongoose.connect(
   dbURI,
@@ -20,24 +20,24 @@ mongoose.connect(
     try {
       await db.dropDatabase()
 
-      const createdUsers = await User.create(userData)
+      const users = await User.create(userData)
 
-      // for (let i = 0; i < 300; i++) {
-      //   const name = faker.name.findName()
-      //   const image = faker.image.imageUrl()
-      //   users.push({
-      //     username: name.split(' ')[0].toLowerCase(),
-      //     email: `${name.split(' ').join('').toLowerCase()}@email.com`,
-      //     password: 'pass',
-      //     passwordConfirmation: 'pass',
-      //     fullName: name,
-      //     profileImage: image
+      for (let i = 0; i < 300; i++) {
+        const name = faker.name.findName()
+        const image = faker.image.avatar()
+        users.push({
+          username: name.split(' ')[0].toLowerCase(),
+          email: `${name.split(' ').join('').toLowerCase()}@email.com`,
+          password: 'pass',
+          passwordConfirmation: 'pass',
+          fullName: name,
+          profileImage: image
 
-      //   })
-      // }
+        })
+      }
 
 
-      // const createdUsers = await User.create(users)
+      const createdUsers = await User.create(users)
 
       console.log(`${createdUsers.length} Users created`)
 
