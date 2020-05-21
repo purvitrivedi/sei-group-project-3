@@ -59,16 +59,6 @@ class Navbar extends React.Component {
         burgerIsOpen: false
       })
     }
-
-    // if (prevProps.location.pathname.includes('/profiles/') && this.props.location.pathname.includes('/profiles/') ) {
-    //   if (this.props.location.pathname !== prevProps.location.pathname) {
-    //     console.log('true')
-    //     const id = this.props.location.pathname.split('/profiles/')[1]
-    //     // console.log(id)
-    //     // this.props.history.push('/profiles/5ec4ffb0c2cda58ef5c802b3')
-    //   }
-    // }
-
   }
 
   render() {

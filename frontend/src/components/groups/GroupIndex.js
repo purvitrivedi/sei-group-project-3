@@ -4,8 +4,8 @@ import GroupCard from './GroupCard'
 // import { getAllGroups } from '../../lib/api'
 
 class GroupIndex extends React.Component {
-  state = { 
-    groups: [] 
+  state = {
+    groups: []
   }
 
   async componentDidMount() {
@@ -20,22 +20,20 @@ class GroupIndex extends React.Component {
     console.log(this.state)
     return (
       <div className="GroupIndex">
-        <section className="GroupIndex hero">
+        <div className="hero is-medium">
           <div className="hero-body">
-            <div className="container">
-              <h1 className="title">The Hikr Groups</h1>
-              <h2 className="subtitle">Find your groups and join today!</h2>
-            </div>
+            <h1 className="title has-text-centered">The Hikr Groups</h1>
           </div>
-        </section>
-
-        <section className="GroupIndex section">
-          <div className="container">
-              {this.state.groups.map(group => (
-                <GroupCard key={group._id} { ...group }/>
-              ))}
-          </div>
-        </section>
+        </div>
+        <div>
+          <section className="section">
+              <div className="columns is-multiline">
+                {this.state.groups.map(group => (
+                  <GroupCard key={group._id} {...group} />
+                ))}
+              </div>
+          </section>
+        </div>
       </div>
     )
   }

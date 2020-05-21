@@ -4,54 +4,52 @@ $link: $grey-dark;
 @import "~bulma/bulma.sass";
 @import "bulma-calendar";
 
-.background-group-new, .background-group-edit {
-  height: 94.25vh;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
-    url("./assets/add-group.jpeg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+.GroupIndex {
+  .hero {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
+      url("./assets/group-index-page.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 
-  .mountain {
-    width: 15px;
-  }
-
-  h1 {
-    font-family: "Amatic SC", cursive;
-    text-align: center;
-    font-size: 40px;
-  }
-
-.container {
-  height: 80vh;
-}
-
-form {
-  margin-top: 10%;
-}
-  .field-margin {
-    margin: 20px;
-  }
-
-  .two-btns {
-    display: flex;
-
-    button {
+    h1 {
+      color: white;
       font-family: "Amatic SC", cursive;
-      background-color: rgba(49, 43, 43, 0.109);
-      font-size: 25px;
-      border: none;
-      margin: 15px 20px;
-    }
-
-    .submit {
-      flex-grow: 2;
+      font-size: 150px;
+      text-shadow: 0 0 10px #000000;
     }
   }
+
+  .group-title {
+    font-family: "Amatic SC", cursive;
+    font-size: 30px;
+  }
+  figure {
+    display: flex;
+    align-items: center;
+    .group-list-image {
+      height: auto;
+      width: auto;
+      max-height: 80px;
+      max-width: 80px;
+    }
+
+    p {
+      padding: 0px 20px;
+    }
+
+    .group-profile-link {
+      font-size: 12px;
+      color:  rgb(77, 141, 230);
+    }
+  }
+
 }
 
 
-.background-group-edit {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.198)),
-  url("./assets/edit-your-group.jpeg");
+.group-header-image {
+  height: auto;
+  width: auto;
+  max-height: 400px;
+  max-width: 400px;
 }

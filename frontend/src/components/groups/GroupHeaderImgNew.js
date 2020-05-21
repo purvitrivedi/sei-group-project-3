@@ -21,16 +21,23 @@ class GroupHeaderImgNew extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { image } = this.state
     return (
-        <>
-          <input
-            className="input image-upload"
-            type="file"
-            onChange={this.handleUpload}
-          />
-        </>
+      <div>
+        {image ?
+          <div>
+            <img className="image is-64x64" src={image} alt="selected" />
+          </div>
+          :
+          <>
+            <input
+              className="input image-upload"
+              type="file"
+              onChange={this.handleUpload}
+            />
+          </>
+        }
+      </div>
     )
   }
 }
