@@ -389,7 +389,8 @@ async function groupsEventParticipants(req, res, next) {
     const eventToUpdate = group.events.id(eventId)
     if (!eventToUpdate) throw new Error(notFound)
    
-    if (eventToUpdate.participants.length > 1 && !eventToUpdate.participants.some(par => par._id.equals(req.currentUser._id))) {
+    if (eventToUpdate.participants.length > 1 
+      && !eventToUpdate.participants.some(par => par.user._id.equals(req.currentUser._id))) {
       throw new Error('You have already joined the event')
     } 
    

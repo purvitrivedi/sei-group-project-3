@@ -216,7 +216,10 @@ class GroupShow extends React.Component {
               <figure className="image">
                 <img src={group.headerImage} alt={group.name} style={{
                   resizeMode: "cover",
+                  // height: "auto",
+                  // width: "auto",
                   maxHeight: 400
+                  // maxWidth: 600
                 }} />
               </figure>
             </div>
@@ -225,6 +228,33 @@ class GroupShow extends React.Component {
 
         <div className="TopBtnBar container">
           <div className="columns">
+            <div className="column">
+              <div className="buttons is-right">
+                {member && 
+                  <button
+                    className="button is-danger is-light" 
+                    onClick={this.triggerOutlook}
+                    style={{ fontWeight: 800}}
+                  >
+                    <i className="fas fa-user-plus"></i>
+                    &nbsp;Recommend to Friend
+                  </button>
+                }
+                {admin &&
+                  <Link 
+                    to={`/groups/${group._id}/edit`} 
+                    className="button is-light"
+                  >
+                    Edit Group
+                  </Link>
+                }
+                {(isAuthenticated() && !member) && 
+                  <button className="button is-danger" onClick={this.handleJoinGroup}>
+                    <strong>Join Group</strong>
+                  </button>}
+              </div>
+            </div>
+            
             <div className="column">
               <div className="buttons is-left is-mobile">
                 <button 
@@ -251,7 +281,7 @@ class GroupShow extends React.Component {
                   <Link to={`/groups/${group._id}/events`}>
                     <button 
                       className="button is-success is-light"
-                      style={{ width: 120 }}
+                      style={{ maxWidth: 120 }}
                     >
                       <i className="fas fa-hiking"></i>
                       &nbsp; Create Your Event
@@ -261,29 +291,7 @@ class GroupShow extends React.Component {
               </div>
             </div>
 
-            <div className="column">
-              <div className="buttons is-right is-mobile">
-                {member && 
-                  <a
-                    className="button is-danger is-light" 
-                    onClick={this.triggerOutlook}
-                    style={{ fontWeight: 800}}
-                  >
-                    <i className="fas fa-user-plus"></i>
-                    &nbsp;Recommend to Friend
-                  </a>
-                }
-                {admin &&
-                  <Link 
-                    to={`/groups/${group._id}/edit`} 
-                    className="button is-light"
-                  >
-                    Edit Group
-                  </Link>
-                }
-                {(isAuthenticated() && !member) && <a className="button is-danger" onClick={this.handleJoinGroup}><strong>Join Group</strong></a>}
-              </div>
-            </div>
+
           </div>
         </div>
 

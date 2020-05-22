@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const GroupShowInformation = ({ member, currentlyDisplayed, group, members, photos, events, handleViewChange, sendEmail }) => {
  
   return (
-    <div className="container">
+    <div className="GroupShow container">
       <div className="Information" 
           style={{ 
             display: `${currentlyDisplayed === 'information' ? 'block' : 'none' }` 
@@ -19,9 +19,7 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
             <div className="content">{group.description}</div>
             <br />
 
-            
             <div className="columns is-full">
-            
               <div className="column is-5">
                 <p className="subtitle">Group Admin</p>
                 <article className="media">
@@ -32,13 +30,14 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                   </div>
                   <div className="media-content">
                     <div className="content">
-                      <p>
-                        <strong>{group.createdMember.username}&nbsp;</strong><small style={{fontSize: 15}}>{group.createdMember.email}</small>
-                        <br />
-                        {group.createdMember.bio}
-                      </p>
+                      <div>
+                        <p>
+                          <strong>{group.createdMember.username.replace(group.createdMember.username[0], group.createdMember.username[0].toUpperCase())}&nbsp;</strong><small style={{fontSize: 15}}>{group.createdMember.email}</small>
+                        </p>
+                        <p style={{ fontSize: 12, fontFamily: "arial" }}>{group.createdMember.bio}</p>
+                      </div>
 
-                      <div className="level-left">
+                      <div className="level-left" style={{ display: 'flex' }}>
                         <Link 
                           to={`/profiles/${group.createdMember._id}`} 
                           className="level-item bio"
@@ -87,31 +86,29 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                 style={{ width: 150 }}
               >
                 <i className="fas fa-users" aria-hidden="true"></i>
-                &nbsp;&nbsp;Check More Members
+                &nbsp;&nbsp;More Members
               </button>
             </div>
 
 
             <br /><hr /><br />
 
-            <p className="subtitle">Our Photo Galary</p>
+            <p className="subtitle">Our Photo Gallery</p>
             <div
               className="container" 
               style={{ display: "flex", justifyContent: "flex-start", flexWrap: "wrap"}}>
               {/* <div className="columns"> */}
               {photos.length >= 1 ?  
                 photos.map( photo => (
-                  // <div className="column" key={photo._id}>
-                    <figure className="image">
-                      <img 
-                        src={photo.images}
-                        style={{ width: 150, height: 150, margin: 10, boxShadow: "3px 3px 3px #9E9E9E" }} 
-                      />
-                    </figure>
-                  // </div>
+                  <figure className="image" key={photo._id}>
+                    <img 
+                      src={photo.images}
+                      style={{ width: 150, height: 150, margin: 10, boxShadow: "3px 3px 3px #9E9E9E" }} 
+                    />
+                  </figure>
                 ))
                 :
-                <p style={{ fontSize: 15 }}>Comming soon...</p>
+                <p style={{ fontSize: 15 }}>Coming soon...</p>
               }
               {/* </div> */}
             </div>
@@ -124,7 +121,7 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                   style={{ width: 150 }}
                 >
                   <i className="fas fa-image" aria-hidden="true"></i>
-                  &nbsp;&nbsp;Check more photos
+                  &nbsp;&nbsp;More photos
                 </button>
               }
             </div>
@@ -167,7 +164,7 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                   style={{ width: 150 }}
                 >
                   <i className="far fa-calendar-check" aria-hidden="true"></i>
-                  &nbsp;Check more events
+                  &nbsp;See more e  vents
                 </button>
               }
             </div>
