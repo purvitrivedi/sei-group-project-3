@@ -15,7 +15,7 @@
   justify-content: center;
   align-items: center;
 
-  @media (max-width: 830px) {
+  @media (max-width: 900px) {
     height: 90vh;
     overflow: scroll;
     flex-direction: column;
@@ -24,8 +24,8 @@
   }
   .login {
 
-  @media (max-width: 830px) {
-    margin-top: 200px;
+  @media (max-width: 900px) {
+    margin-top: 400px;
   }
   @media (max-width: 450px) {
     margin-top: 500px;

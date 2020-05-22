@@ -9,10 +9,9 @@
   padding: 5% 10% 2%;
 }
 
-
-
 .is-ancestor {
   max-height: 80vh;
+  overflow: scroll;
 
   .profile-top {
     max-height: 35vh;
@@ -43,6 +42,12 @@
   }
 
   background: unset;
+  box-shadow: none;
+
+  // @media (max-width: 375) {
+  //   width: 50vw;
+  // }
+
   h1 {
     font-family: "Amatic SC", cursive;
     font-size: 40px;
@@ -139,11 +144,9 @@
   padding: 15px;
 }
 
-
-
-.list-image{
-  height: auto; 
-  width: auto; 
-  max-width: 200px; 
+.list-image {
+  height: auto;
+  width: auto;
+  max-width: 200px;
   max-height: 200px;
 }
