@@ -150,7 +150,7 @@ class HikeShow extends React.Component {
       const res = await getSingleHike(hikeId)
       this.setState({ hike: res.data },
         () => {
-          this.setState({ imageModalActive: true })
+          this.setState({ imageModalActive: false })
         })
     } catch (err) {
       console.log(err.response)
@@ -186,7 +186,8 @@ class HikeShow extends React.Component {
             </h1>
             <h1>Country: {hike.country}</h1>
             <h1>Time the hike takes: {hike.timeToComplete}</h1>
-            <h1>Average Rating:
+            
+            <h1>Average Rating: 
               <ReactStars
                 count={5}
                 size={12}
