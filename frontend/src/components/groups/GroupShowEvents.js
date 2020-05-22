@@ -53,7 +53,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                   </p>
                   {item.hike.images.length >= 1 && 
                     <figure className="image is-3by2">
-                      <img src={item.hike.images[0]} />
+                      <img src={item.hike.images[0]} alt="img" />
                     </figure>
                   }
                   <p style={{fontSize: 15, marginTop: 2}}>
@@ -98,6 +98,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                     className="level-item" 
                     aria-label="2.reply"
                     onClick={() => sendEmail(item.createdMember.email)}
+                    href="null"
                   >
                     <span className="icon is-small">
                       <i className="fas fa-reply" aria-hidden="true"></i>
@@ -126,6 +127,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                               className="is-rounded"
                               src={par.user.profileImage}
                               style={{ maxHeight: 64, maxWidth: 64, margin: 10}}
+                              alt="event"
                             />
                           </figure>
                         </div>
@@ -135,7 +137,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                 }
                 <br /><hr />
                 <p style={{ fontSize: 20, fontFamily: "Amatic SC, cursive"}}>
-                  <i class="far fa-calendar-alt"></i>&nbsp;
+                  <i className="far fa-calendar-alt"></i>&nbsp;
                   Schedule
                 </p>
                 <p>{`From ${item.startDate.slice(0, 10)} to ${item.endDate.slice(0, 10)}`}</p>

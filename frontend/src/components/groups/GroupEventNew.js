@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { getToken, getUserId } from '../../lib/auth'
+import { getToken } from '../../lib/auth'
 import Select from 'react-select'
 
 class GroupEventNew extends React.Component {
@@ -63,11 +63,6 @@ class GroupEventNew extends React.Component {
     event.preventDefault()
 
     const groupId = this.props.match.params.id
-    const userId = getUserId()
-    const user = await axios.get(`/api/profiles/${userId}`, {
-      headers: { Authorization: `Bearer ${getToken()}` }
-    })
-
     const formData = { ...this.state.formData }
     this.setState({ formData })
 

@@ -7,7 +7,7 @@ import GroupShowMembers from './GroupShowMembers'
 import GroupShowPictures from './GroupShowPictures'
 import GroupShowEvents from './GroupShowEvents'
 import GroupShowChat from './GroupShowChat'
-import { getSingleGroup, joinGroup, leaveGroup, deleteEvent, deletePic, uploadPic, joinEvent, leaveEvent, sendMsg} from '../../lib/api'
+import { getSingleGroup, joinGroup, leaveGroup, deleteEvent, deletePic, uploadPic, joinEvent, leaveEvent} from '../../lib/api'
 
 
 class GroupShow extends React.Component {
@@ -167,8 +167,8 @@ class GroupShow extends React.Component {
   }
 
   sendEmail = async email => {
-    const groupId = this.props.match.params.id
-    const res = await axios.get(`/api/groups/${groupId}`)
+    // const groupId = this.props.match.params.id
+    // const res = await axios.get(`/api/groups/${groupId}`)
     // const email = res.data.members.filter( member => member.user._id === event.target.value ).email
     const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href) 
       const subject = "Hi from Hikr.com!"
@@ -228,35 +228,9 @@ class GroupShow extends React.Component {
 
         <div className="TopBtnBar container">
           <div className="columns">
+  
             <div className="column">
-              <div className="buttons is-right">
-                {member && 
-                  <button
-                    className="button is-danger is-light" 
-                    onClick={this.triggerOutlook}
-                    style={{ fontWeight: 800}}
-                  >
-                    <i className="fas fa-user-plus"></i>
-                    &nbsp;Recommend to Friend
-                  </button>
-                }
-                {admin &&
-                  <Link 
-                    to={`/groups/${group._id}/edit`} 
-                    className="button is-light"
-                  >
-                    Edit Group
-                  </Link>
-                }
-                {(isAuthenticated() && !member) && 
-                  <button className="button is-danger" onClick={this.handleJoinGroup}>
-                    <strong>Join Group</strong>
-                  </button>}
-              </div>
-            </div>
-            
-            <div className="column">
-              <div className="buttons is-left is-mobile">
+              <div className="buttons is-left">
                 <button 
                   className="button" 
                   name="information" 
@@ -289,6 +263,33 @@ class GroupShow extends React.Component {
                   </Link>
                 }
               </div>
+              </div>
+              <div className="column">
+                <div className="buttons is-right">
+                  {member && 
+                    <button
+                      className="button is-danger is-light" 
+                      onClick={this.triggerOutlook}
+                      style={{ fontWeight: 800}}
+                    >
+                      <i className="fas fa-user-plus"></i>
+                      &nbsp;Recommend to Friend
+                    </button>
+                  }
+                  {admin &&
+                    <Link 
+                      to={`/groups/${group._id}/edit`} 
+                      className="button is-light"
+                    >
+                      Edit Group
+                    </Link>
+                  }
+                  {(isAuthenticated() && !member) && 
+                    <button className="button is-danger" onClick={this.handleJoinGroup}>
+                      <strong>Join Group</strong>
+                    </button>
+                  }
+                </div>
             </div>
 
 

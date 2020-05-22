@@ -46,7 +46,7 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
                         <p style={{ fontColor: 'grey', fontSize: 15}}>{numLikes}&nbsp;members liked this comment ❤︎</p> }
                       { msg.user._id !== getUserId() && 
                         <small>
-                          <a onClick={() => handleLikes(groupId, msg._id, msg.likes)}>Like</a> · 
+                          <a onClick={() => handleLikes(groupId, msg._id, msg.likes)} href="null">Like</a> · 
                           {/* <a onClick={handleReplyForm}> Reply</a> ·  */}
                           Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago
                         </small> 

@@ -21,7 +21,6 @@ class GroupImgNew extends React.Component {
   }
 
   render() {
-    const { image } = this.state
     return (
       <>
         <input

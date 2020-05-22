@@ -31,9 +31,9 @@ class GroupIndex extends React.Component {
         <div>
           <section className="GroupCard section">
               <div className="columns is-multiline is-fullwidth">
-                {groups.map(group => (
+                {groups.map( (group, index) => (
                   <GroupCard
-                    key={group._id} 
+                    key={index}
                     group={group}
                     members={group.members}
                   />

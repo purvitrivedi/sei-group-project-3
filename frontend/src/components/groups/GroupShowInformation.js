@@ -25,7 +25,7 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                 <article className="media">
                   <div className="media-left">
                     <figure className="image is-64x64">
-                      <img src= {group.createdMember.profileImage} className="is-rounded" />
+                      <img src= {group.createdMember.profileImage} className="is-rounded" alt={group.createdMember._id} />
                       </figure>
                   </div>
                   <div className="media-content">
@@ -45,10 +45,11 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                         >
                           See profile
                         </Link>
-                        <a 
+                        <a
                           className="level-item" 
                           aria-label="2.reply"
                           onClick={() => sendEmail(group.createdMember.email)}
+                          href="null"
                         >
                           <span className="icon is-small">
                             <i className="fas fa-reply" aria-hidden="true"></i>
@@ -69,7 +70,7 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                     <Link to={`/profiles/${member._id}`} key={member._id}>
                       <div className="column" style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
                         <figure className="image is-64x64" key={member._id}>
-                          <img src={member.user.profileImage} className="is-rounded"/>
+                          <img src={member.user.profileImage} className="is-rounded" alt="img"/>
                         </figure>
                         <p style={{ fontSize: 20}}>{member.user.username}</p>
                       </div>
@@ -104,6 +105,7 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                     <img 
                       src={photo.images}
                       style={{ width: 150, height: 150, margin: 10, boxShadow: "3px 3px 3px #9E9E9E" }} 
+                      alt="img"
                     />
                   </figure>
                 ))
@@ -146,13 +148,13 @@ const GroupShowInformation = ({ member, currentlyDisplayed, group, members, phot
                     <p><strong>{event.eventName}</strong></p>
                     <p style={{fontSize: 20}}><i className="fas fa-mountain"></i>&nbsp;{event.hike.name}</p>
                     <figure className="image is-128x128">
-                      <img src={event.hike.images[0]} />
+                      <img src={event.hike.images[0]} alt="img" />
                     </figure>
                     <p style={{fontSize: 18}}>On&nbsp;{event.startDate.slice(0, 10)}</p>
                   </div>
                 ))
                 :
-                <p style={{ fontSize: 15 }}>Coming soon...</p>
+                <p style={{ fontSize: 15 }}>&nbsp;&nbsp;&nbsp;&nbsp;Coming soon...</p>
               } 
             </div>
             <div className="buttons is-right">
