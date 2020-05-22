@@ -11,8 +11,8 @@ class HikesIndex extends React.Component {
     hikes: null,
     search: '',
     hideMap: true,
-    hideGrid: true,
-    hideList: false
+    hideGrid: false,
+    hideList: true
   }
 
   async componentDidMount() {
@@ -72,7 +72,7 @@ class HikesIndex extends React.Component {
           </div>
 
           <div className="view-change buttons field has-addons">
-            <p className="control">
+            <p className="control list-view-button">
               <button
                 className="button"
                 name="showList"
