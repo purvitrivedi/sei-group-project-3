@@ -78,7 +78,7 @@ mongoose.connect(
         }
       ]
 
-      for (let i = 0; i < 300; i++) {
+      for (let i = 0; i < 100; i++) {
         const name = faker.name.findName()
         const image = faker.image.avatar()
         users.push({

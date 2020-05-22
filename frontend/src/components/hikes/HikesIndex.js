@@ -67,7 +67,7 @@ class HikesIndex extends React.Component {
               type="text"
               placeholder="Search for a Hike, Country, Season or Difficulty..."
               onChange={this.handleChange}
-              value={this.state.search}
+              // value={this.state.searchTer}
             />
           </div>
 

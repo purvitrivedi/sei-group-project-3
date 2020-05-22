@@ -252,7 +252,7 @@ module.exports = [
     country: 'Cinque Terre, Italy',
     lat: 44.1461,
     lon: 9.6439,
-    images: ['https://cdn-assets.alltrails.com/uploads/photo/image/14382095/extra_large_f56004e425be8c2b7d6583f90b7bb072.jpg, https://cdn-assets.alltrails.com/uploads/photo/image/25173190/extra_large_ac0b9850a21ee028dacfe6303db9998f.jpg', 'https://cdn-assets.alltrails.com/uploads/photo/image/25173178/extra_large_d034b1fbafcb1cce041256b6226e69c1.jpg'],
+    images: ['https://cdn-assets.alltrails.com/uploads/photo/image/14382095/extra_large_f56004e425be8c2b7d6583f90b7bb072.jpg', 'https://cdn-assets.alltrails.com/uploads/photo/image/25173190/extra_large_ac0b9850a21ee028dacfe6303db9998f.jpg', 'https://cdn-assets.alltrails.com/uploads/photo/image/25173178/extra_large_d034b1fbafcb1cce041256b6226e69c1.jpg'],
     timeToComplete: '4 hours',
     distance: '12km',
     seasons: ['Spring', 'Summer', 'Autumn']

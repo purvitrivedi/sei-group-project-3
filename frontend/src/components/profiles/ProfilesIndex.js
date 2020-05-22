@@ -46,7 +46,7 @@ class ProfilesIndex extends React.Component {
                 type="text"
                 placeholder="Search for a Hikr"
                 onChange={this.handleChange}
-                value={this.state.searchTerm}
+                // value={this.state.searchTerm}
               />
             </div>
           </div>
