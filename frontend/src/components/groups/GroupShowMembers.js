@@ -1,16 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Moment from 'react-moment'
+import 'moment-timezone'
 
-const GroupShowMembers = ({group, currentlyDisplayed}) => {
+const GroupShowMembers = ({group, currentlyDisplayed, sendEmail}) => {
   return (
-    <section class="section" >
-      <div class="container"
+      <div className="container"
       style={{ 
         minHeight: 500,
-        display: `${currentlyDisplayed === 'members' ? 'block' : 'none' }` 
+        display: `${currentlyDisplayed === 'members' ? 'block' : 'none' }` ,
+        marginTop: 20,
+        marginLeft: "auto",
+        marginRight: "auto"
       }}>
-      <h1 class="subtitle">Group Members</h1>
       {group.members.map(member => {
+        const hike = member.user.favoriteHikes
         return (
           <article className="media" key={member.user._id}>
             <div className="media-left">
@@ -20,23 +24,42 @@ const GroupShowMembers = ({group, currentlyDisplayed}) => {
             </div>
             <div className="media-content">
               <div className="content">
-                <p>
-                <strong>{member.user.username.replace(member.user.username.charAt(0), member.user.username.charAt(0).toUpperCase())}&nbsp;</strong><small>{member.user.email}</small>
+                <div>
+                <strong>{member.user.username.replace(member.user.username.charAt(0), member.user.username.charAt(0).toUpperCase())}</strong>
+                {/* <small>{member.user.email}</small> */}
                   <br />
-                  {member.user.bio}
-                </p>
+
+                  <p style={{ fontStyle: 'italic', fontSize: 15}}>{member.user.bio}</p>
+                
+
+                  <br />
+                  {hike && <p>Favorite Hikes:&nbsp;{member.user.favoriteHikes[0]}</p>}
+
+                  <br />
+                  <p style={{ fontSize: 10}}>
+                    Member since&nbsp;<Moment format="MM/YYYY">{member.createdAt}</Moment>
+                  </p>
+                </div>
               </div>
+
+
 
               <nav className="level is-mobile">
                 <div className="level-left">
-
-                  <Link to={`/profiles/${member.user._id}`} className="level-item" aria-label="1.profile">
-                    <span className="icon is-small">
-                      <i className="fas fa-address-card"></i>
-                    </span>
+                  <Link 
+                    to={`/profiles/${member.user._id}`} 
+                    className="level-item" 
+                    aria-label="1.profile"
+                    style={{ fontSize: 10, color: 'blue', fontFamily: "arial"}}
+                  >
+                    See profile
                   </Link>
 
-                  <a className="level-item" aria-label="2.reply">
+                  <a 
+                    className="level-item" 
+                    aria-label="2.reply"
+                    onClick={() => sendEmail(member.user.email)}
+                  >
                     <span className="icon is-small">
                       <i className="fas fa-reply" aria-hidden="true"></i>
                     </span>
@@ -59,7 +82,6 @@ const GroupShowMembers = ({group, currentlyDisplayed}) => {
           </article>
         )})}
       </div>
-    </section>
   )
 }
 

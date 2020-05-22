@@ -1,11 +1,10 @@
 import React from 'react'
 import axios from 'axios'
 import GroupCard from './GroupCard'
-// import { getAllGroups } from '../../lib/api'
 
 class GroupIndex extends React.Component {
   state = {
-    groups: []
+    groups: null
   }
 
   async componentDidMount() {
@@ -18,6 +17,10 @@ class GroupIndex extends React.Component {
   }
   render() {
     console.log(this.state)
+
+    const { groups } = this.state
+    if (!groups) return null
+
     return (
       <div className="GroupIndex">
         <div className="hero is-medium">
@@ -26,10 +29,14 @@ class GroupIndex extends React.Component {
           </div>
         </div>
         <div>
-          <section className="section">
-              <div className="columns is-multiline">
-                {this.state.groups.map(group => (
-                  <GroupCard key={group._id} {...group} />
+          <section className="GroupCard section">
+              <div className="columns is-multiline is-fullwidth">
+                {groups.map(group => (
+                  <GroupCard
+                    key={group._id} 
+                    group={group}
+                    members={group.members}
+                  />
                 ))}
               </div>
           </section>

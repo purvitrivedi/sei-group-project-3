@@ -23,13 +23,14 @@ class GroupImgNew extends React.Component {
   render() {
     const { image } = this.state
     return (
-        <>
-          <input
-            className="input image-upload"
-            type="file"
-            onChange={this.handleUpload}
-          />
-        </>
+      <>
+        <input
+          className="input image-upload"
+          type="file"
+          onChange={this.handleUpload}
+          style={{ fontSize: 15}}
+        />
+      </>
     )
   }
 }

@@ -5,29 +5,27 @@ import 'moment-timezone'
 
 const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChange, text, handleMessageSubmit, handleMessageDelete, handleLikes }) => {
   return(
-    <section className="section" >
-      <div className="container"
-      style={{ 
-        minHeight: 500,
-        display: `${currentlyDisplayed === 'chat' ? 'block' : 'none' }` 
-      }}>
-        <h1 className="subtitle">Chat Board</h1>
-
+      <div 
+        className="container Chat"
+        style={{ 
+          minHeight: 500,
+          display: `${currentlyDisplayed === 'chat' ? 'block' : 'none' }` ,
+          marginTop: 20,
+          marginLeft: "auto",
+          marginRight: "auto"
+        }}
+      >
         { messages.map( msg => {
           const numLikes = msg.likes.length
           const groupId = group._id
 
           return (
-            <div className="Chat" key={msg._id}>
+            <div key={msg._id}>
               { getUserId() === msg.user._id && 
-                <div className="buttons is-right">
-                  <button 
-                    className="button is-small" 
-                    onClick={() => handleMessageDelete(groupId, msg._id)}
-                  >
-                  x
+                <div className="buttons is-right" style={{ height: 5}}>
+                  <button onClick={() => handleMessageDelete(groupId, msg._id)}>
+                    x
                   </button>
-
                 </div>
               }
               <article className="media">
@@ -44,7 +42,8 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
                       <br />
                       {msg.text}
                       <br />
-                      { numLikes >= 1 && <small><p>{numLikes}&nbsp;members liked this comment ❤︎</p></small> }
+                      { numLikes >= 1 && 
+                        <small><p style={{ fontColor: 'grey'}}>{numLikes}&nbsp;members liked this comment ❤︎</p></small> }
                       { msg.user._id !== getUserId() && 
                         <small>
                           <a onClick={() => handleLikes(groupId, msg._id, msg.likes)}>Like</a> · 
@@ -56,8 +55,8 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
                     </p>
                   </div>
                 </div>
-                <hr />
               </article>
+              <hr />
             </div>
           )})}
 
@@ -68,6 +67,7 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
                 <textarea 
                   className="textarea" 
                   placeholder="Add a comment..." 
+                  style={{ fontSize: 15 }}
                   onChange={handleMessageChange} 
                   name='text'
                   value={text}
@@ -82,8 +82,6 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
           </div>
         </article>
       </div>
-    </section>
-
   )
 }
 

@@ -1,0 +1,39 @@
+$link: $grey-dark;
+@import "~bulma/bulma.sass";
+
+.GroupShow {
+  margin: 0 5%;
+
+  .hero {
+    figure {
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+    button, Link, a {
+      font-family: 'Amatic SC', cursive;
+    }
+    button:focus {
+      color: rgba(62, 65, 62, 1);
+    }
+  
+
+  .Information {
+    h1 {
+      font-family: 'Amatic SC', cursive;
+      text-align: center;
+      font-size: 40px;
+    }
+
+    
+    p {
+      font-family: 'Amatic SC', cursive;
+      font-size: 28px;
+    }
+  }
+
+  // .Chat {
+    
+  // }
+}

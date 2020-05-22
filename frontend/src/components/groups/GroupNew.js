@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import { getToken } from '../../lib/auth'
 import GroupHeaderImgNew from './GroupHeaderImgNew'
-import { Link } from 'react-router-dom'
 
 class GroupNew extends React.Component {
   state = {
@@ -41,7 +40,7 @@ class GroupNew extends React.Component {
       this.setState({ errors: err })
     }
   }
-
+  
   render() {
     console.log(this.state)
     console.log(this.props)

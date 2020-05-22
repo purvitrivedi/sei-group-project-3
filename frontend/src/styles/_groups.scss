@@ -1,8 +1,5 @@
-// $default-font: font-family: 'Amatic SC', cursive;
-
 $link: $grey-dark;
 @import "~bulma/bulma.sass";
-@import "bulma-calendar";
 
 .GroupIndex {
   .hero {
@@ -20,36 +17,42 @@ $link: $grey-dark;
     }
   }
 
-  .group-title {
-    font-family: "Amatic SC", cursive;
-    font-size: 30px;
-  }
-  figure {
-    display: flex;
-    align-items: center;
-    .group-list-image {
+  .box {
+    margin: 0 2%;
+    min-width: 95%;
+  
+    .group-header-image {
       height: auto;
       width: auto;
-      max-height: 80px;
-      max-width: 80px;
+      max-height: 400px;
+      max-width: 400px;
+      @media (max-width: 375px) {
+        max-height: 90%;
+        max-width: 90%;
+      }
     }
-
-    p {
-      padding: 0px 20px;
+    .group-title {
+      font-family: "Amatic SC", cursive;
+      font-size: 30px;
     }
+    figure {
+      display: flex;
+      align-items: center;
+      .group-list-image {
+        height: auto;
+        width: auto;
+        max-height: 80px;
+        max-width: 80px;
+      }
 
-    .group-profile-link {
-      font-size: 12px;
-      color:  rgb(77, 141, 230);
+      p {
+        padding: 0px 20px;
+      }
+
+      .group-profile-link {
+        font-size: 12px;
+        color:  rgb(77, 141, 230);
+      }
     }
   }
-
-}
-
-
-.group-header-image {
-  height: auto;
-  width: auto;
-  max-height: 400px;
-  max-width: 400px;
 }
