@@ -15,7 +15,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
 
   return (
     <div 
-      className="container"    
+      className="Event container"    
         style={{ 
           minHeight: 500,
           display: `${currentlyDisplayed === 'events' ? 'block' : 'none' }`,
@@ -40,7 +40,6 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
               </div>
             }
 
-
             <h1 className="subtitle" style={{ fontSize: 30, fontFamily: "Amatic SC, cursive"}}><strong>{item.eventName}</strong></h1>
             <p style={{fontSize: 18}}>~&nbsp;{item.description}~</p>
             <br />
@@ -54,12 +53,24 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                   </p>
                   {item.hike.images.length >= 1 && 
                     <figure className="image is-3by2">
-                      <img src={item.hike.images[0]} />
+                      <img src={item.hike.images[0]} alt="img" />
                     </figure>
                   }
-                  <p style={{fontSize: 15, marginTop: 2}}>&nbsp;&nbsp;&nbsp;<i className="fas fa-hiking"></i>&nbsp;{item.hike.difficulty}</p>
-                  <p style={{fontSize: 15}}>&nbsp;&nbsp;&nbsp;<i className="fas fa-globe"></i>&nbsp;{item.hike.country}</p>
-                  <p style={{fontSize: 15}}>&nbsp;&nbsp;&nbsp;<i className="fas fa-info-circle"></i>&nbsp;{item.hike.description}</p>
+                  <p style={{fontSize: 15, marginTop: 2}}>
+                    &nbsp;&nbsp;&nbsp;
+                    <i className="fas fa-hiking"></i>
+                    &nbsp;{item.hike.difficulty}
+                  </p>
+                  <p style={{fontSize: 15}}>
+                    &nbsp;&nbsp;&nbsp;
+                    <i className="fas fa-globe"></i>
+                    &nbsp;{item.hike.country}
+                  </p>
+                  <p className="HikeDescription" style={{ fontSize: 15, maxHeight: 300, overflow: "auto" }}>
+                    &nbsp;&nbsp;&nbsp;
+                    <i className="fas fa-info-circle"></i>
+                    &nbsp;{item.hike.description}
+                  </p>
   
                   <p>
                     <Link to={`/hikes/${item.hike._id}`} style={{ fontSize: 10, color: 'blue', fontFamily: "arial"}}>
@@ -71,14 +82,15 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
 
               <div className="column">
                 <p style={{ fontSize: 20, fontFamily: "Amatic SC, cursive"}}>
+                  <i className="fas fa-user"></i>&nbsp;
                   Event Host:&nbsp;
                   {item.createdMember.username.replace(item.createdMember.username[0], item.createdMember.username[0].toUpperCase())}
                 </p>
-                <div className="level-left">
+                <div className="level-left" style={{ display: "flex"}}>
                   <Link 
                     to={`/profiles/${item.createdMember._id}`} 
                     className="level-item bio"
-                    style={{ fontSize: 10, color: 'blue', fontFamily: "arial"}}
+                    style={{ fontSize: 10, color: 'blue', fontFamily: "arial", marginRight: 10}}
                   >
                     See profile
                   </Link>
@@ -86,6 +98,7 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                     className="level-item" 
                     aria-label="2.reply"
                     onClick={() => sendEmail(item.createdMember.email)}
+                    href="null"
                   >
                     <span className="icon is-small">
                       <i className="fas fa-reply" aria-hidden="true"></i>
@@ -105,12 +118,17 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                   <p style={{fontSize: 15}}>Be the first participant!</p>
                 }
                 {numOfPs > 1 && 
-                  <div className="columns">
+                  <div className="columns" style={{ display: "flex" }}>
                     {item.participants.map(par => {
                       return (
                         <div className="column" key={par._id}>
-                          <figure className="image is-128x128">
-                            <img className="is-rounded" src={par.user.profileImage} />
+                          <figure className="image">
+                            <img 
+                              className="is-rounded"
+                              src={par.user.profileImage}
+                              style={{ maxHeight: 64, maxWidth: 64, margin: 10}}
+                              alt="event"
+                            />
                           </figure>
                         </div>
                       )})
@@ -118,7 +136,10 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                   </div>
                 }
                 <br /><hr />
-                <p style={{ fontSize: 20, fontFamily: "Amatic SC, cursive"}}>Schedule</p>
+                <p style={{ fontSize: 20, fontFamily: "Amatic SC, cursive"}}>
+                  <i className="far fa-calendar-alt"></i>&nbsp;
+                  Schedule
+                </p>
                 <p>{`From ${item.startDate.slice(0, 10)} to ${item.endDate.slice(0, 10)}`}</p>
                 <div style={{ margin: 20}}>
                   <Calendar
@@ -141,7 +162,13 @@ const GroupShowEvents = ({ events, group, currentlyDisplayed, handleEventDelete,
                 </button>
               }
               {isInGroup(item.participants) &&
-                <button className="button is-small" onClick={() => handleCancelEvent(item._id, participantId._id)}>Leave</button>
+                <button 
+                  className="button is-small" 
+                  onClick={() => handleCancelEvent(item._id, participantId._id)}
+                  style={{ fontSize: 15}}
+                >
+                  Leave Event
+                </button>
               }
             </div>
           </div>

@@ -37,22 +37,22 @@ const GroupShowChat = ({ group, messages, currentlyDisplayed, handleMessageChang
 
                 <div className="media-content">
                   <div className="content">
-                    <p>
+                    <div>
                       <strong>{msg.user.username.replace(msg.user.username[0], msg.user.username[0].toUpperCase())}</strong>
                       <br />
                       {msg.text}
                       <br />
                       { numLikes >= 1 && 
-                        <small><p style={{ fontColor: 'grey'}}>{numLikes}&nbsp;members liked this comment ❤︎</p></small> }
+                        <p style={{ fontColor: 'grey', fontSize: 15}}>{numLikes}&nbsp;members liked this comment ❤︎</p> }
                       { msg.user._id !== getUserId() && 
                         <small>
-                          <a onClick={() => handleLikes(groupId, msg._id, msg.likes)}>Like</a> · 
+                          <a onClick={() => handleLikes(groupId, msg._id, msg.likes)} href="null">Like</a> · 
                           {/* <a onClick={handleReplyForm}> Reply</a> ·  */}
                           Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago
                         </small> 
                       }
                       { msg.user._id === getUserId() &&<small>Posted <Moment fromNow ago>{msg.createdAt}</Moment> ago</small> }
-                    </p>
+                    </div>
                   </div>
                 </div>
               </article>

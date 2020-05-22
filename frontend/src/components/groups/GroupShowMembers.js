@@ -59,13 +59,14 @@ const GroupShowMembers = ({group, currentlyDisplayed, sendEmail}) => {
                     className="level-item" 
                     aria-label="2.reply"
                     onClick={() => sendEmail(member.user.email)}
+                    href="null"
                   >
                     <span className="icon is-small">
                       <i className="fas fa-reply" aria-hidden="true"></i>
                     </span>
                   </a>
 
-                  <a className="level-item" aria-label="3.favHike">
+                  <a className="level-item" aria-label="3.favHike" href="null">
                     <span className="icon is-small">
                       { member.user.favoriteHikes ? 
                         <Link to={`/hikes/${member.user.favoriteHikes[0]._id}`}>
