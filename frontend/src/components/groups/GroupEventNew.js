@@ -86,30 +86,18 @@ class GroupEventNew extends React.Component {
     console.log(this.props)
     console.log(this.state)
     return (
-      <section className="ContentNew section">
+      <section className="EventNew section">
         <div className="container">
-          <header>
-              <div className='columns'>
-                <div className='column'>
-                  <figure className="image is-128x128">
-                    <img src="https://blog-assets.thedyrt.com/uploads/2018/06/outdoor-event-hiking-group-1263x560.jpg" />
-                  </figure>
-                </div>
-                <div className='column is-12' >
-                  <p style={{fontSize: 30}}>Update the event</p>
-                  <p>* Required</p>
-                  <br />
-                  <p style={{fontSize: 20}}>If you are not our member, please register your information <a href="/login">here</a>!</p>
-                  <br />
-                  <p>For more infomation, visit <a href='#' style={{fontColor: 'red'}}>our site</a></p>
-                </div>
-              </div>
-            </header>
-
-
-            <form onSubmit={this.handleSubmit} className="columns box">
+          <form onSubmit={this.handleSubmit} className="columns box">
             <div className="column">
-
+              <h1>
+                <i className="fas fa-mountain mountain" style={{ height: 20}}></i>
+                  Create Your Event
+                <i className="fas fa-mountain mountain" style={{ height: 20}}></i>
+              </h1>
+              <br />
+              <hr />
+              <br />
               <div className="field">
                 <div className="control">
                   <div className='columns'>
@@ -196,11 +184,17 @@ class GroupEventNew extends React.Component {
                 </div>
               </div>
 
-              <div className="field">
-                <div className="buttons is-right">
-                  <button className="button is-link is-hovered" onClick={this.handleClear}>Clear Input</button>
-                  <button type='submit' className="button is-danger is-hovered">SUBMIT</button>
-                </div>
+              <div className="buttons is-right">
+                <button 
+                  type='submit'
+                  className="Submit button is-light"
+                  style={{ minWidth: 100 }}
+                >
+                  Create Event
+                </button>
+                <button className="button is-light" onClick={this.handleClear} style={{ minWidth: 70 }}>
+                  Clear
+                </button>
               </div>
 
             </div>

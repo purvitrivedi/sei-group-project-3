@@ -81,35 +81,22 @@ class GroupEventEdit extends React.Component {
 
   render() {
     return (
-      <section className="ContentNew section">
+      <section className="EventEdit section">
         <div className="container">
-          <header>
-              <div className='columns'>
-                <div className='column'>
-                  <figure className="image is-128x128">
-                    <img src="https://blog-assets.thedyrt.com/uploads/2018/06/outdoor-event-hiking-group-1263x560.jpg" />
-                  </figure>
-                </div>
-                <div className='column is-12' >
-                  <p style={{fontSize: 30}}>Update the event</p>
-                  <p>* Required</p>
-                  <br />
-                  <p style={{fontSize: 20}}>If you are not our member, please register your information <a href="/login">here</a>!</p>
-                  <br />
-                  <p>For more infomation, visit <a href='#' style={{fontColor: 'red'}}>our site</a></p>
-                </div>
-              </div>
-            </header>
-
-
             <form onSubmit={this.handleSubmit} className="columns box">
             <div className="column">
-
+              <h1>
+                <i className="fas fa-mountain mountain" style={{ height: 20}}></i>
+                  Update Your Event
+                <i className="fas fa-mountain mountain" style={{ height: 20}}></i>
+              </h1>
+              <br />
+              <hr />
+              <br />
               <div className="field">
                 <div className="control">
                   <div className='columns'>
-
-                      <div className='column is-3'><label><strong>Event Name*:</strong></label></div>
+                      <div className='column is-3'><label><strong>Event Name:</strong></label></div>
                         <div className='column is-8'>
                           <input
                             className={`input ${!this.state.errors.eventName ?  '' : 'is-danger'}`}
@@ -193,8 +180,8 @@ class GroupEventEdit extends React.Component {
 
               <div className="field">
                 <div className="buttons is-right">
-                  <button className="button is-link is-hovered" onClick={this.handleClear}>Clear Input</button>
-                  <button type='submit' className="button is-danger is-hovered">SUBMIT</button>
+                <button type='submit' className="button is-light" style={{ minWidth: 100 }}>Update Event</button>
+                  <button className="button is-light" onClick={this.handleClear} style={{ minWidth: 70 }}>Clear</button>
                 </div>
               </div>
 
