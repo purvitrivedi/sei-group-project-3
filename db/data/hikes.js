@@ -734,9 +734,9 @@ module.exports = [
     country: 'Co Antrim, Ireland',
     lat: 55.0223,
     lon: -6.1251,
-    images: [''],
-    timeToComplete: '',
-    distance: '',
+    images: ['https://discovernorthernireland.com/contentassets/7f9f812f612b46e096099ada2037fb5c/httpwww.walkni.comiwalks2772.jpg?height=670&width=1190&mode=resize'],
+    timeToComplete: '1 day',
+    distance: '5-10km',
     seasons: ['spring', 'summer', 'autumn', 'winter']
   },
   {

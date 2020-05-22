@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
 class HikeMap extends React.Component {
   state = {
     viewport: {
-      latitude: 50,
-      longitude: 7,
+      latitude: 51,
+      longitude: 5,
       zoom: 4,
       bearing: 0,
       pitch: 0
