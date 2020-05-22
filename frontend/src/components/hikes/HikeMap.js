@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
 class HikeMap extends React.Component {
   state = {
     viewport: {
-      latitude: 50,
-      longitude: 7,
+      latitude: 51,
+      longitude: 5,
       zoom: 4,
       bearing: 0,
       pitch: 0
@@ -48,7 +48,7 @@ class HikeMap extends React.Component {
                     <h2>{hike.country} - {hike.distance}, {hike.timeToComplete}</h2>
                     <h3>{hike.description.length > 150 ? hike.description.substr(0, 150) + '...' : hike.description}</h3>
                     <div className="popup-image">
-                      <img src={hike.images[0]} alt={hike.name} />
+                      <img className="index-image" src={hike.images[0]} alt={hike.name} />
                     </div>
                     <Link to={`/hikes/${hike._id}`}>
                       <p>See more...</p>

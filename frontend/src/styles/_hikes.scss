@@ -38,6 +38,9 @@
       color: #ffffff;
     }
   }
+  .index-image {
+    object-fit: cover;
+  }
   .hike-index-title {
     font-family: 'Amatic SC', cursive;
     font-size: 30px;
@@ -165,6 +168,9 @@
       flex-direction: column;
       justify-content: space-between;
     }
+  }
+  .list-view-button {
+    display: none;
   }
 }
 

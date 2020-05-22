@@ -184,8 +184,8 @@ class HikeShow extends React.Component {
               return `${season}, `
             })}
             </h1>
-            <h1>Country: {hike.country}</h1>
             <h1>Time the hike takes: {hike.timeToComplete}</h1>
+            <h1>Distance: {hike.distance}</h1>
             
             <h1>Average Rating: 
               <ReactStars
@@ -251,7 +251,7 @@ class HikeShow extends React.Component {
           <hr />
           <div className="columns is-multiline">
             <div className="column is-half-desktop">
-              <h1 className="hikr-title">Location:</h1>
+              <h1 className="hikr-title">Location: {hike.country}</h1>
               <br />
               <HikeShowMap
                 hike={this.state.hike}
