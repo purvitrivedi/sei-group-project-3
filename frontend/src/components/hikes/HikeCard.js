@@ -8,7 +8,7 @@ const HikeCard = ({ name, description, difficulty, country, distance, timeToComp
       <div className="card">
         <div className="card-image">
           <figure className="image is-4by3">
-            <img src={images[0]} alt={name} />
+            <img className="index-image" src={images[0]} alt={name} />
           </figure>
         </div>
         <div className="card-content">

@@ -7,7 +7,7 @@ const HikeListCard = ({ name, description, difficulty, country, timeToComplete, 
     <Link to={`/hikes/${_id}`} className="box">
       <div className="column is-full HikeListCard">
         <div className="columns">
-          <img src={images[0]} alt={name} className="column is-one-quarter is-mobile" />
+          <img src={images[0]} alt={name} className="column is-one-quarter is-mobile index-image" />
           <div className="column columns is-multiline">
             <div className="column is-full">
               <h1 className="subtitle hike-index-title">{name}, {country}</h1>

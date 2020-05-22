@@ -18,7 +18,7 @@ class HikeMap extends React.Component {
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         >
 
-          <div className="">
+          <div>
             <Popup
             latitude={hike.lat}
             longitude={hike.lon}
