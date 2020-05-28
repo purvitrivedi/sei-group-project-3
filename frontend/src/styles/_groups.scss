@@ -23,7 +23,7 @@ $link: $grey-dark;
   .box {
     margin: 0 2%;
     min-width: 95%;
-  
+
     .group-header-image {
       height: auto;
       width: auto;
@@ -54,25 +54,12 @@ $link: $grey-dark;
 
       .group-profile-link {
         font-size: 12px;
-        color:  rgb(77, 141, 230);
+        color: rgb(77, 141, 230);
       }
     }
   }
 }
 
-.TopBtnBar.container {
-  @media (max-width: 400px) {
-    button, Link {
-      font-size: 10px;
-      padding: 5px;
-    }
-  }
-  .buttons.is-right.is-mobile {
-    @media (max-width: 400px) {
-      a, Link {
-        font-size: 10px;
-        padding: 5px;
-      }
-    }
-  }
-}
+
+
+

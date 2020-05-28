@@ -1,7 +1,5 @@
 import React from 'react'
-
 import { Link } from 'react-router-dom'
-
 const HikeCard = ({ name, description, difficulty, country, distance, timeToComplete, images, _id }) => {
   return (
     <Link to={`/hikes/${_id}`} className="column is-one-third-desktop is-half-tablet">
@@ -16,7 +14,9 @@ const HikeCard = ({ name, description, difficulty, country, distance, timeToComp
             <div className="media-content">
               <p className="title is-4 hike-index-title">{name}, {country}</p>
               <p className="is-6">Distance: {distance}</p>
-              <p className="is-6">Difficulty: {difficulty}</p>
+              <p>Difficulty: {difficulty.map(difficulty => {
+              return `${difficulty} `
+            })}</p>
               <p className="is-6">Time it takes: {timeToComplete}</p>
             </div>
           </div>
@@ -29,5 +29,4 @@ const HikeCard = ({ name, description, difficulty, country, distance, timeToComp
     </Link>
   )
 }
-
 export default HikeCard

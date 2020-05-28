@@ -7,7 +7,7 @@ import GroupShowMembers from './GroupShowMembers'
 import GroupShowPictures from './GroupShowPictures'
 import GroupShowEvents from './GroupShowEvents'
 import GroupShowChat from './GroupShowChat'
-import { getSingleGroup, joinGroup, leaveGroup, deleteEvent, deletePic, uploadPic, joinEvent, leaveEvent} from '../../lib/api'
+import { getSingleGroup, joinGroup, leaveGroup, deleteEvent, deletePic, uploadPic, joinEvent, leaveEvent } from '../../lib/api'
 
 
 class GroupShow extends React.Component {
@@ -18,11 +18,11 @@ class GroupShow extends React.Component {
     admin: false,
     formData: {
       text: '',
-      user:'',
+      user: '',
       to: ''
     }
   }
-  
+
 
   // fetch
   getData = async () => {
@@ -31,9 +31,9 @@ class GroupShow extends React.Component {
       const userId = getUserId()
       const res = await getSingleGroup(groupId)
 
-      this.setState({ 
+      this.setState({
         group: res.data,
-        member: res.data.members.some(member => member.user._id === userId), 
+        member: res.data.members.some(member => member.user._id === userId),
         admin: res.data.createdMember._id === userId
       })
     } catch (err) {
@@ -81,9 +81,9 @@ class GroupShow extends React.Component {
 
   // send email
   triggerOutlook = () => {
-    const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href)     
+    const body = escape(window.document.title + String.fromCharCode(13) + window.location.href)
     const subject = "Take a look at this group from Hikr.com!"
-    window.location.href = "mailto:?body="+body+"&subject="+subject          
+    window.location.href = "mailto:?body=" + body + "&subject=" + subject
   }
 
 
@@ -143,7 +143,7 @@ class GroupShow extends React.Component {
       console.log(err)
     }
   }
-  
+
 
   // messages
   handleMessageChange = event => {
@@ -158,7 +158,7 @@ class GroupShow extends React.Component {
         text: this.state.formData.text,
         user: getUserId()
       }, {
-        headers: { Authorization: `Bearer ${getToken()}`}
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       this.getData()
     } catch (err) {
@@ -170,15 +170,15 @@ class GroupShow extends React.Component {
     // const groupId = this.props.match.params.id
     // const res = await axios.get(`/api/groups/${groupId}`)
     // const email = res.data.members.filter( member => member.user._id === event.target.value ).email
-    const body = escape(window.document.title + String.fromCharCode(13)+ window.location.href) 
-      const subject = "Hi from Hikr.com!"
-      window.location.href =  "mailto:"+email+"?body="+body+"&subject="+subject    
+    const body = escape(window.document.title + String.fromCharCode(13) + window.location.href)
+    const subject = "Hi from Hikr.com!"
+    window.location.href = "mailto:" + email + "?body=" + body + "&subject=" + subject
   }
 
   handleMessageDelete = async (groupId, messageId) => {
     try {
       await axios.delete(`/api/groups/${groupId}/messages/${messageId}`, {
-        headers: { Authorization: `Bearer ${getToken()}`}
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       this.getData()
     } catch (err) {
@@ -189,166 +189,144 @@ class GroupShow extends React.Component {
   handleLikes = async (groupId, messageId, likes) => {
     try {
       const userId = getUserId()
-      if ( likes.length > 0 && likes.find( like => like.user._id === userId)) return
+      if (likes.length > 0 && likes.find(like => like.user._id === userId)) return
 
       const resUser = await axios.get(`/api/profiles/${userId}`, {
-        headers: { Authorization: `Bearer ${getToken()}`}
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       await axios.put(`/api/groups/${groupId}/messages/${messageId}/likes`, resUser.data, {
-        headers: { Authorization: `Bearer ${getToken()}`}
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       this.getData()
     } catch (err) {
       console.log(err.response)
-    }  
+    }
   }
 
-  
+
   render() {
     const { group, member, admin, currentlyDisplayed, formData } = this.state
     if (!group) return null // not render until group is not null (null--render nothing, !null (second render) -render)
 
     return (
-      <div className="GroupShow">
-        <section className="hero">
-          <div className="hero-body">
-            <div className="container">
-              <figure className="image">
-                <img src={group.headerImage} alt={group.name} style={{
-                  resizeMode: "cover",
-                  // height: "auto",
-                  // width: "auto",
-                  maxHeight: 400
-                  // maxWidth: 600
-                }} />
-              </figure>
-            </div>
-          </div>
-        </section>
-
-        <div className="TopBtnBar container">
-          <div className="columns">
-  
-            <div className="column">
-              <div className="buttons is-left">
-                <button 
-                  className="button" 
-                  name="information" 
-                  onClick={this.handleViewChange}
-                >
-                  <i className="fas fa-mountain"></i>
-                  &nbsp;&nbsp;Home
-                </button>
-
-                {member &&
-                  <button 
-                    className="button"
-                    name="chat"
-                    onClick={this.handleViewChange}
-                  >
-                    <i className="fas fa-comments"></i>
-                    &nbsp;&nbsp;Group Chat
-                  </button>
-                }
-
-                {member && 
-                  <Link to={`/groups/${group._id}/events`}>
-                    <button 
-                      className="button is-success is-light"
-                      style={{ maxWidth: 120 }}
-                    >
-                      <i className="fas fa-hiking"></i>
-                      &nbsp; Create Your Event
-                    </button>
-                  </Link>
-                }
-              </div>
-              </div>
-              <div className="column">
-                <div className="buttons is-right">
-                  {member && 
-                    <button
-                      className="button is-danger is-light" 
-                      onClick={this.triggerOutlook}
-                      style={{ fontWeight: 800}}
-                    >
-                      <i className="fas fa-user-plus"></i>
-                      &nbsp;Recommend to Friend
-                    </button>
-                  }
-                  {admin &&
-                    <Link 
-                      to={`/groups/${group._id}/edit`} 
-                      className="button is-light"
-                    >
-                      Edit Group
-                    </Link>
-                  }
-                  {(isAuthenticated() && !member) && 
-                    <button className="button is-danger" onClick={this.handleJoinGroup}>
-                      <strong>Join Group</strong>
-                    </button>
-                  }
-                </div>
-            </div>
-
-
+      <div className="GroupShow box">
+        <div className="hero is-medium is-success">
+          <div className="hero-body" style={{ backgroundImage: `url(${group.headerImage})` }}>
+            <h1 className="title-logo">{group.name}</h1>
           </div>
         </div>
+        <div className="box">
+          <section className="group-show-buttons">
+            <div className="buttons has-addons">
+              <button
+                className="button is-warning is-light group-show-button"
+                name="information"
+                onClick={this.handleViewChange}
+              >
+                Group Home
+                </button>
 
-        <GroupShowInformation
-          group={group}
-          members={group.members}
-          photos={group.userAddedImages}
-          events={group.events}
-          member={member}
-          currentlyDisplayed={currentlyDisplayed}
-          handleViewChange={this.handleViewChange}
-          sendEmail={this.sendEmail}
-        />
-        <GroupShowMembers
-          currentlyDisplayed={currentlyDisplayed} 
-          group={group}
-          sendEmail={this.sendEmail}
-        />
-        <GroupShowPictures 
-          currentlyDisplayed={currentlyDisplayed}
-          images={group.userAddedImages} 
-          name={group.name}
-          handleDeletePhoto={this.handleDeletePhoto}
-          member={member}
-          handleUploadPhoto={this.handleUploadPhoto}
-        />
-        <GroupShowEvents
-          group={group}
-          events={group.events}
-          currentlyDisplayed={currentlyDisplayed}
-          handleEventDelete={this.handleEventDelete}
-          handleJoinEvent={this.handleJoinEvent}
-          handleCancelEvent={this.handleCancelEvent}
-          sendEmail={this.sendEmail}
-         />
-        <GroupShowChat
-          group={group}
-          messages={group.messages}
-          text={formData.text}
-          currentlyDisplayed={currentlyDisplayed}
-          handleMessageChange={this.handleMessageChange}
-          handleMessageSubmit={this.handleMessageSubmit}
-          handleMessageDelete={this.handleMessageDelete}
-          handleLikes={this.handleLikes}
-        />
+              {member &&
+                <button
+                  className="button  is-primary is-light group-show-button"
+                  name="chat"
+                  onClick={this.handleViewChange}
+                >
+                  Group Chat
+                  </button>
+              }
 
-        {member && 
-          <div className="buttons is-right">
-            <button 
-              className="button is-small" 
-              onClick={this.handleUnsubscribe}
-            >
-              Leave Group
+              {member &&
+                <Link to={`/groups/${group._id}/events`}>
+                  <button
+                    className="button is-success is-light  group-show-button"
+                  >
+                    <i className="fas fa-hiking"></i>
+                      &nbsp; Create Your Event
+                    </button>
+                </Link>
+              }
+            </div>
+            <div className="buttons has-addons">
+              {member &&
+                <button
+                  className="button group-show-button is-info is-light"
+                  onClick={this.triggerOutlook}
+                >
+                  <i className="fas fa-user-plus"></i>
+                      &nbsp;Recommend to Friend
+                    </button>
+              }
+              {admin &&
+                <Link
+                  to={`/groups/${group._id}/edit`}
+                  className="button is-light group-show-button"
+                >
+                  Edit Group
+                    </Link>
+              }
+              {(isAuthenticated() && !member) &&
+                <button className="button group-show-button is-info" onClick={this.handleJoinGroup}>
+                  <strong>Join Group</strong>
+                </button>
+              }
+              {member &&
+                
+                  <button
+                    className="button is-light is-danger group-show-button"
+                    onClick={this.handleUnsubscribe}
+                  >
+                    Leave Group
             </button>
-          </div>
-        }
+              }
+            </div>
+          </section>
+
+
+          <GroupShowInformation
+            group={group}
+            members={group.members}
+            photos={group.userAddedImages}
+            events={group.events}
+            member={member}
+            currentlyDisplayed={currentlyDisplayed}
+            handleViewChange={this.handleViewChange}
+            sendEmail={this.sendEmail}
+          />
+          <GroupShowMembers
+            currentlyDisplayed={currentlyDisplayed}
+            group={group}
+            sendEmail={this.sendEmail}
+          />
+          <GroupShowPictures
+            currentlyDisplayed={currentlyDisplayed}
+            images={group.userAddedImages}
+            name={group.name}
+            handleDeletePhoto={this.handleDeletePhoto}
+            member={member}
+            handleUploadPhoto={this.handleUploadPhoto}
+          />
+          <GroupShowEvents
+            group={group}
+            events={group.events}
+            currentlyDisplayed={currentlyDisplayed}
+            handleEventDelete={this.handleEventDelete}
+            handleJoinEvent={this.handleJoinEvent}
+            handleCancelEvent={this.handleCancelEvent}
+            sendEmail={this.sendEmail}
+          />
+          <GroupShowChat
+            group={group}
+            messages={group.messages}
+            text={formData.text}
+            currentlyDisplayed={currentlyDisplayed}
+            handleMessageChange={this.handleMessageChange}
+            handleMessageSubmit={this.handleMessageSubmit}
+            handleMessageDelete={this.handleMessageDelete}
+            handleLikes={this.handleLikes}
+          />
+
+        </div>
       </div>
     )
   }

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const GroupCard = ({ key, group, members} ) => {
+const GroupCard = ({ group, members} ) => {
 
   return (
-    <Link to={`/groups/${group._id}`} className="box" key={key}>
+    <Link to={`/groups/${group._id}`} className="box">
       <div className="column is-full">
 
         <div className="columns">
