@@ -15,13 +15,19 @@ class HikeReviews extends React.Component {
     newDate: ''
   }
 
+
   async componentDidMount() {
     try {
       const userId = getUserId()
-      const res = await getUser(userId)
-      this.setState({ profileImage: res.data.profileImage })
+      const loggedIn = await isAuthenticated()
+      if (!loggedIn) {
+        this.setState({ profileImage: '' })
+      } else {
+        const res = await getUser(userId)
+        this.setState({ profileImage: res.data.profileImage })
+      }
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 

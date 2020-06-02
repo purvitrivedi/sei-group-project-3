@@ -33,13 +33,22 @@ class HikeShow extends React.Component {
     try {
       const hikeId = this.props.match.params.id
       const res = await getSingleHike(hikeId)
-      const userId = await getUserId()
-      const user = await getUser(userId)
-      this.setState({ hike: res.data, user: user.data.favoritedHikes },
-        () => {
-          this.getAverageRating()
-          this.checkHikeFavorite()
-        })
+      const loggedIn = await isAuthenticated() 
+
+      if (!loggedIn) {
+        this.setState({ hike: res.data, user: '' },
+          () => {
+            this.getAverageRating()
+          })
+      } else {
+        const userId = await getUserId()
+        const user = await getUser(userId)
+        this.setState({ hike: res.data, user: user.data.favoritedHikes },
+          () => {
+            this.getAverageRating()
+            this.checkHikeFavorite()
+          })
+      }
     } catch (err) {
       console.log(err)
     }
