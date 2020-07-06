@@ -19,6 +19,7 @@ A group project to design a full-stack React app using Node.js, Express & MongoD
 - Axios
 - React Mapbox GL
 - Nodemon
+- HTTP-proxy-middleware
 - Bcrypt
 - Body-parser
 - jsonwebtoken
@@ -57,13 +58,13 @@ Like project-2, we also planned out the user journey of Hikr on Miro.
 
 <img src="frontend/src/styles/assets/README/hikr-home-miro.png" alt="home-page-miro" width="300" /> <img src="frontend/src/styles/assets/README/hike-index-miro.png" alt="hikr-index-miro" width="300" /> <img src="frontend/src/styles/assets/README/hike-show-miro.png" alt="hike-show-miro" width="300" /> <img src="frontend/src/styles/assets/README/login-miro.png" alt="login-miro" width="300" /> <img src="frontend/src/styles/assets/README/profile-miro.png" alt="profile-miro" width="300" /> <img src="frontend/src/styles/assets/README/group-miro.png" alt="group-miro" width="300" />
 
-## Process
+# Process
 
 As each of us had our own Backend areas to workon, we first planned out what models, controllers & routes each of us will be creating before moving on to code session. We also decided on which aspects of our models will be embedded or referenced.
 
 Our notes are outlined in the next section with code examples.
 
-### Backend
+## Backend (Day 1 to 3)
 
 We had a strong start as the three of us finished the Backend within the first two days. On Day one, each of us worked on our models, controller and routes. On Day 2, we helped each other test and troubleshoot bugs.
 
@@ -72,17 +73,18 @@ We had a strong start as the three of us finished the Backend within the first t
 **From initial notes**:
 
 > **Hike**
+>
 > - Name | Location (lat/long)| Country | Description | Distance | Difficulty | Duration | Images | Seasons | User images (referenced) | Reviews(embedded) |Ratings (embedded)
 
 > **Group**:
+>
 > - Group Name | Group Members (referenced))| Events: name, date, duration, selection of hikes (referenced) | image | User Images (embedded) | group chat (embedded)
 
 > **User**:
-> - Username | Email | Password & validation | Image | Bio | Completed Hikes(embedded) | Favourite Hikes (embedded) | Groups Joined (referenced) 
+>
+> - Username | Email | Password & validation | Image | Bio | Completed Hikes(embedded) | Favourite Hikes (embedded) | Groups Joined (referenced)
 
-
-Each model had embedded and referenced data in them. For example, for user model I added favorited and completed as embedded data:
-
+Each model had embedded and referenced data in them. For example, for user model I added favorited and completed hikes as embedded data:
 
         const favoriteHikesSchema = new mongoose.Schema({
           hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true }
@@ -99,11 +101,10 @@ Each model had embedded and referenced data in them. For example, for user model
           fullName: { type: String },
           bio: { type: String },
           profileImage: { type: String },
-          favoritedHikes: [favoriteHikesSchema], 
+          favoritedHikes: [favoriteHikesSchema],
           completedHikes: [completedHikesSchema]
         }
         )
-
 
 Andy then referenced the favorited & completed hikes in the Hike model to show a logged in user if they had taken any actions with the hike they were viewing:
 
@@ -114,8 +115,9 @@ Andy then referenced the favorited & completed hikes in the Hike model to show a
         foreignField: 'favoritedHikes'
       })
 
+**Another example:**
 
-Another example us when Kuriko created the groups schema, with members in them:
+Kuriko created the group model, with members as embedded data:
 
     const groupMemberSchema = new mongoose.Schema({
       user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
@@ -127,7 +129,7 @@ Another example us when Kuriko created the groups schema, with members in them:
       name: { type: String, required: true, unique: true },
       createdMember: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
       members: [ groupMemberSchema ],
-      headerImage: { type: String, required: true }, 
+      headerImage: { type: String, required: true },
       description: { type: String, required: true, maxlength: 500 },
       userAddedImages: [ userAddedImageSchema ],
       messages: [ groupMessageSchema ],
@@ -136,8 +138,7 @@ Another example us when Kuriko created the groups schema, with members in them:
       timestamps: true
     })
 
-
-I was then able to reference the Group model, so a profile would include what groups were joined by the user:
+I was then able to reference the Group model, so a profile would include the list of groups joined by the user:
 
         // * for groups joined by user
         userSchema
@@ -147,76 +148,109 @@ I was then able to reference the Group model, so a profile would include what gr
             foreignField: 'members.user'
           })
 
-
 ### Controllers
 
-**From initial notes**:
+> Create, Read, Update and Delete Methods were written for:
+>
+> - Hikes, Reviews and Hike Images
+> - Groups, Group Images, Chats, Events, Members
+> - Login, Register, Profiles, user favorited Hikes and completed hikes
 
-> Create, Read, Update and Delete Methods need to be written for:
-> * Hikes, Reviews and Hike Images
-> * Groups, Group Images, Chats, Events, Members
-> * Login, Register, Profiles, user favorited Hikes and completed hikes
+Since we had a lot of embedded and referenced data, we used array methods such as <code>flatMap</code> and <code>reduce</code> so we didn't populate unneccesary data in a request. For examples, in order to simply get the id of the groups a user has joined, I wrote this inside the <code>userShow</code> function:
+  
+    if (user.joinedGroups) {
+      user.joinedGroups = user.joinedGroups.flatMap(item => item.\_id).reduce((arr,curr)  => {
+      if (arr.length === 0) {
+      arr.push(curr)
+      }
+      if (!arr.find(item => item.\_id === curr.\_id)) {
+      arr.push(curr)
+      }
+      return arr
+    }, [])
+
+## Frontend (Day 4 to 8)
+
+On day 4, we moved on to Frontend after setting up the React App, installing HTTP proxy middleware and Nodemon, we began our work on Hikes(Andy), Groups (Kuriko) and Users (me!).
+
+For Authentication, I wanted a user to design the process like [Ableton's](https://www.ableton.com/en/login/), which meant:
+
+- The Login and Register options were on the same page and;
+- The used for logged in automatically after they registered.
+
+To do this I ensured that the register and login controllers, both returned a token on the backend. On the frontend, once a user registered - I looged them and sent them to the Hikes page:
+
+    handleSubmit = async (event, path) => {
+      event.preventDefault()
+      try {
+        const res = await registerUser(this.state.formData)
+        setToken(res.data.token)
+        path.push('/hikes')
+
+      } catch (err) {
+        this.setState({ errors: err.response.data.errors })
+
+      }
+    }
+
+For User Profile, I took the opportunity to explore **conditional rendering**. This meant:
+
+- The user would never the leave the page when they wanted to make edits.
+- The page would show different things based on a users actions
+
+For example, on for the Bio on the user profile page:
+
+    <div className="columns is-multiline">
+      <h1 className="subtitle column is-full">About me...</h1>
+
+      // * If "profile edit" is enabled, show the Edit Bio button 
+
+      {this.state.edit && <p onClick={this.enableEditBio} className="edit-bio">Edit bio</p>}
+
+      // * If showBio is true (i.e Edit Bio has not been clicked) - Show the Bio
+
+      {this.state.showBio && <div>
+      <p className="bio">
+      {profile.bio}
+      </p></div>}
+
+      // * If showBio is false, then show a text area input wher user can edit the bio:
+
+      {!this.state.showBio &&
+        <div className="columns is-multiline">
+            <textarea
+            className="textarea column"
+            value={this.state.bio}
+            onChange={this.handleChange}
+            name="bio"
+            />
+            <p className="edit-bio-btn column is-centered" onClick={this.   sendPutRequest}>Submit</p>
+        </div>}
+    </div>
 
 
+The user profile page also showed different things based on whether the user was the owner of the profile. Fo example, for completed Hikes, the owner got an option to add Hikes from their profile page:
 
+    <article className="column is-full">
+      <h1 className="subtitle">Where I've been...</h1>
+      <div className="column columns is-multiline">
 
+      //* if user is the owner, give option to add Hikes:
 
+        {isOwner(profile._id) &&
+        _id} handleSubmit={this.addCompHike} /></div>
+        }
 
-
-
-
-### Routes
-
-> - /hikes | Index page | GET/POST
-> - /hikes/:id | Hike show page |  GET/PUT/DELETE
-> - /hikes/:id/comments | Hike reviews | POST
-> - /hikes/:id/comments/:id | Delete review | DELETE
-
-> - /groups groups | Index page | GET/POST
-> - /groups/:id group | Profile page | GET/PUT/DELETE
-> - /groups/:id/messages Groups chat |  POST
-> - /groups/:id/messages/:id | delete/edit chat | DELETE/PUT
-> - /groups/:id/events | Index and Create events | GET/POST  
-> - /groups/:id/events/:id | See/edit/delete event | GET/PUT/DELETE
-
-> - /profiles | index of users | GET
-> - /profiles/:username | Users profile pages |  GET/POST/PUT/DELETE
-> - /register - POST
-> - /login - POST
-
-
-
-
-
-
-
-
-
-
-
-
-### Frontend
-
-
-
-
-
-
-
+        <div className="completed">{completedHikes}</div>
+      </div>
+    </article>
 
 
 
 
 ## Wins
 
-
-
 ## Challenges
-
-
-
-
-
 
 ### App Pages
 
@@ -244,8 +278,4 @@ Explore other Hikr Profiles:
 
 <img src="frontend/src/styles/assets/README/profile-index.png" alt="hikr-community" width="500" />
 
-
-
 ## Future Improvements
-
-

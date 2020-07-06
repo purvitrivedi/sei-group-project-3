@@ -32,6 +32,8 @@ async function userShow(req, res, next) {
       }, [])
 
     }
+
+    
     // if (user.eventsGoing) {
     //   user.eventsGoing = user.eventsGoing.flatMap(item => item._id).reduce((arr, curr) => {
     //     if (arr.length === 0) {
