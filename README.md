@@ -37,16 +37,21 @@ Registered users can also create & join Hiking Communities where they can chat w
 
 https://hikrr.herokuapp.com/
 
+Please use the following login credentials to explore the app:
+
+- Email: _purvi@email_
+- Password: _pass_
+
 ## Code Installation
 
 https://github.com/purvitrivedi/sei-group-project-3
 
 - Clone or download the repo
-- Install npm i in Terminal
-- Start the database by running mongodb
-- Start the server by running nodemon
+- Install dependencies by running <code>npm i in</code> Terminal
+- Start the database by running <code>mongod --dbpath ~/data/db</code>
+- Start the server by running <code>nodemon</code>
 - Go to frontend folder using <code>cd frontend</code> terminal command
-- Run the frontend using npm run start
+- Run the frontend using <code>npm run start</code>
 
 ## Planning
 
@@ -56,7 +61,7 @@ Since we were three group members, each of us decided to take ownership (Backend
 
 Like project-2, we also planned out the user journey of Hikr on Miro.
 
-<img src="frontend/src/styles/assets/README/hikr-home-miro.png" alt="home-page-miro" width="300" /> <img src="frontend/src/styles/assets/README/hike-index-miro.png" alt="hikr-index-miro" width="300" /> <img src="frontend/src/styles/assets/README/hike-show-miro.png" alt="hike-show-miro" width="300" /> <img src="frontend/src/styles/assets/README/login-miro.png" alt="login-miro" width="300" /> <img src="frontend/src/styles/assets/README/profile-miro.png" alt="profile-miro" width="300" /> <img src="frontend/src/styles/assets/README/group-miro.png" alt="group-miro" width="300" />
+<img src="frontend/src/styles/assets/README/hikr-home-miro.png" alt="home-page-miro" width="400" /> <img src="frontend/src/styles/assets/README/hike-index-miro.png" alt="hikr-index-miro" width="400" /> <img src="frontend/src/styles/assets/README/hike-show-miro.png" alt="hike-show-miro" width="400" /> <img src="frontend/src/styles/assets/README/login-miro.png" alt="login-miro" width="400" /> <img src="frontend/src/styles/assets/README/profile-miro.png" alt="profile-miro" width="400" /> <img src="frontend/src/styles/assets/README/group-miro.png" alt="group-miro" width="400" />
 
 # Process
 
@@ -84,13 +89,9 @@ We had a strong start as the three of us finished the Backend within the first t
 >
 > - Username | Email | Password & validation | Image | Bio | Completed Hikes(embedded) | Favourite Hikes (embedded) | Groups Joined (referenced)
 
-Each model had embedded and referenced data in them. For example, for user model I added favorited and completed hikes as embedded data:
+Each model had embedded and referenced data in them. For example, for user model I added favorited hikes as embedded data:
 
         const favoriteHikesSchema = new mongoose.Schema({
-          hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true }
-        })
-
-        const completedHikesSchema = new mongoose.Schema({
           hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true }
         })
 
@@ -157,7 +158,7 @@ I was then able to reference the Group model, so a profile would include the lis
 > - Login, Register, Profiles, user favorited Hikes and completed hikes
 
 Since we had a lot of embedded and referenced data, we used array methods such as <code>flatMap</code> and <code>reduce</code> so we didn't populate unneccesary data in a request. For examples, in order to simply get the id of the groups a user has joined, I wrote this inside the <code>userShow</code> function:
-  
+
     if (user.joinedGroups) {
       user.joinedGroups = user.joinedGroups.flatMap(item => item.\_id).reduce((arr,curr)  => {
       if (arr.length === 0) {
@@ -177,6 +178,8 @@ For Authentication, I wanted a user to design the process like [Ableton's](https
 
 - The Login and Register options were on the same page and;
 - The used for logged in automatically after they registered.
+
+<img src="frontend/src/styles/assets/README/login.png" alt="login-page" />
 
 To do this I ensured that the register and login controllers, both returned a token on the backend. On the frontend, once a user registered - I looged them and sent them to the Hikes page:
 
@@ -198,12 +201,14 @@ For User Profile, I took the opportunity to explore **conditional rendering**. T
 - The user would never the leave the page when they wanted to make edits.
 - The page would show different things based on a users actions
 
+ <img src="frontend/src/styles/assets/README/profile.png" alt="profile-page" />
+
 For example, on for the Bio on the user profile page:
 
     <div className="columns is-multiline">
       <h1 className="subtitle column is-full">About me...</h1>
 
-      // * If "profile edit" is enabled, show the Edit Bio button 
+      // * If "profile edit" is enabled, show the Edit Bio button
 
       {this.state.edit && <p onClick={this.enableEditBio} className="edit-bio">Edit bio</p>}
 
@@ -224,58 +229,91 @@ For example, on for the Bio on the user profile page:
             onChange={this.handleChange}
             name="bio"
             />
-            <p className="edit-bio-btn column is-centered" onClick={this.   sendPutRequest}>Submit</p>
+            <p className="edit-bio-btn column is-centered" onClick={this.sendPutRequest}>Submit</p>
         </div>}
     </div>
 
-
 The user profile page also showed different things based on whether the user was the owner of the profile. Fo example, for completed Hikes, the owner got an option to add Hikes from their profile page:
 
-    <article className="column is-full">
-      <h1 className="subtitle">Where I've been...</h1>
-      <div className="column columns is-multiline">
+    <div className="column columns is-multiline"
+    //* if user is the owner, give option to add Hikes
 
-      //* if user is the owner, give option to add Hikes:
+      {isOwner(profile._id) &&_id} handleSubmit={this.addCompHike} /></div>
+      <div className="completed">{completedHikes}</div>
 
-        {isOwner(profile._id) &&
-        _id} handleSubmit={this.addCompHike} /></div>
-        }
+    </div>
 
-        <div className="completed">{completedHikes}</div>
-      </div>
-    </article>
+Other than working on app navigation, I also pair programmed with Andy on:
 
+- Adding "Add to Favorites" button & 'Average Rating" on Hike Show Page
+- Error handling and styling of forms on Hike and User profile pages.
 
+An interesting thing we did for Average rating is use a **callback function**. This is so the average rating would not be calculated until we posted the rating AND recieved the updated Hike data from the backend.
 
+    handleSubmitReview = async (event, rating, text) => {
+      event.preventDefault()
+      try {
+        const hikeId = this.props.match.params.id
+        await reviewHike(hikeId, { rating: rating, text: text })
+        const res = await getSingleHike(hikeId)
+        this.setState({ hike: res.data, errors: '', reviewText: '', reviewRating: '' },
+          () => {
+            this.getAverageRating()
+          })
+      } catch (err) {
+        this.setState({ errors: JSON.parse(err.response.config.data) })
+      }
+    }
 
-## Wins
+## Seeding (Day 9)
+
+The final day was spent population the database with Hikes, Groups and Users. We ensured that Hikes and Groups were created by random users by writing this script in seeds.js:
+
+    const hikesWithUsers = hikeData.map(hike => {
+      return { ...hike, user: createdUsers[Math.floor(Math.random() * createdUsers.length)]._id }
+    })
+
+    const groupsWithUsers = groupData.map(group => {
+      return { ...group, createdMember: createdUsers[Math.floor(Math.random() * createdUsers.length)]._id }
+    })
 
 ## Challenges
 
-### App Pages
+**Planning**:
 
-On Homepage, search for a country:
+While we did a great job planning as a team, it was a slightly challenging as I was still full trying to understand the difference between Embedded and Referenced Data. Fortunately, this was the perfect project to solidify my understanding.
 
-<img src="frontend/src/styles/assets/README/hikr-home-italy.png" alt="home-page-miro" width="500" />
+**Navigating from one user profile to another**:
 
-Explore Hikes in different views:
+This was an interesting challenge and I very much enjoyed solving it. 
 
-<img src="frontend/src/styles/assets/README/hikr-card.png" alt="hike-card-view" width="400" /><img src="frontend/src/styles/assets/README/hikr-list.png" alt="hike-list-view" width="400" /><img src="frontend/src/styles/assets/README/hikr-map.png" alt="hike-map-view" width="400" />
+**The problem **: If a user was checking out another user and then attempted to go to their own profile from the Navbar, they couldn't as the link structure was similar: /profile/:id
 
-Login or register to unlock more features and view your profile:
+**Solution**: Using <code>componentDidUpdate</code> on the Profile component:
 
-<img src="frontend/src/styles/assets/README/login.png" alt="login-page" width="400" /> <img src="frontend/src/styles/assets/README/profile.png" alt="profile-page" width="400" />
+    componentDidUpdate = async (prevProps) => {
+       if (prevProps.location.pathname.includes('/profiles/') && this.props.location.pathname.includes('/profiles/')) {
+         if (this.props.location.pathname !== prevProps.location.pathname) {
+           const id = this.props.match.params.id
+           const res = await getUser(id)
+           this.setState({ profile: res.data, bio: res.data.bio, image: res.data.profileImage, fullName: res.data.fullName })
+         }
+       }
+     }
 
-View Hike in detail, leave rating & reviews, add to favorites:
+## Wins
 
-<img src="frontend/src/styles/assets/README/hike-show-top.png" alt="hike-show-top" width="400" /> <img src="frontend/src/styles/assets/README/hike-show-bottom.png" alt="hike-show-bottom" width="400" />
+Planning ✍️ : This one comes in under challenges and wins! While getting the right answer took some time, spending our Day 1 on planning alone meant we made a strong start and finished the backend in two days.
 
-Join or create a group:
+Features ✨: I'm very happy with the amount of work we got done in 9 days. The app offers tons of functionality whilst still having a strong user journey.
 
-<img src="frontend/src/styles/assets/README/group.png" alt="group-page" width="500" /> <img src="frontend/src/styles/assets/README/add-group.png" alt="add-group" width="500" />
-
-Explore other Hikr Profiles:
-
-<img src="frontend/src/styles/assets/README/profile-index.png" alt="hikr-community" width="500" />
+Styling 📱: The app is slick and responsive, something we were every keen on acheieving since Hiking websites don't usually have "beautiful" styling.
 
 ## Future Improvements
+
+* Creating Group seeds with Group members: A challenge I wanted to solve but we ran out of time.
+* Events Page Styling: Make this inline-with other pages
+* Error Handling on the frontend
+
+
+
