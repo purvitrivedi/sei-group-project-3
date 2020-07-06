@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
 }
 )
 
-// * for images added by users on the Hike page
+// * for groups joined by user
 userSchema
   .virtual('joinedGroups', {
     ref: 'Group',

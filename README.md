@@ -57,42 +57,19 @@ Like project-2, we also planned out the user journey of Hikr on Miro.
 
 <img src="frontend/src/styles/assets/README/hikr-home-miro.png" alt="home-page-miro" width="300" /> <img src="frontend/src/styles/assets/README/hike-index-miro.png" alt="hikr-index-miro" width="300" /> <img src="frontend/src/styles/assets/README/hike-show-miro.png" alt="hike-show-miro" width="300" /> <img src="frontend/src/styles/assets/README/login-miro.png" alt="login-miro" width="300" /> <img src="frontend/src/styles/assets/README/profile-miro.png" alt="profile-miro" width="300" /> <img src="frontend/src/styles/assets/README/group-miro.png" alt="group-miro" width="300" />
 
-### App Pages
-
-On Homepage, search for a country:
-
-<img src="frontend/src/styles/assets/README/hikr-home-italy.png" alt="home-page-miro" width="500" />
-
-Explore Hikes in different views:
-
-<img src="frontend/src/styles/assets/README/hikr-card.png" alt="hike-card-view" width="300" /><img src="frontend/src/styles/assets/README/hikr-list.png" alt="hike-list-view" width="300" /><img src="frontend/src/styles/assets/README/hikr-map.png" alt="hike-map-view" width="300" />
-
-Login or register to unlock more features and view your profile:
-
-<img src="frontend/src/styles/assets/README/login.png" alt="login-page" width="500" /> <img src="frontend/src/styles/assets/README/profile.png" alt="profile-page" width="500" />
-
-View Hike in detail, leave rating & reviews, add to favorites:
-
-<img src="frontend/src/styles/assets/README/hike-show-top.png" alt="hike-show-top" width="500" /> <img src="frontend/src/styles/assets/README/hike-show-bottom.png" alt="hike-show-bottom" width="500" />
-
-Join or create a group:
-
-<img src="frontend/src/styles/assets/README/group.png" alt="group-page" width="500" /> <img src="frontend/src/styles/assets/README/add-group.png" alt="add-group" width="500" />
-
-Explore other Hikr Profiles:
-
-<img src="frontend/src/styles/assets/README/profile-index.png" alt="hikr-community" width="500" />
-
 ## Process
 
-As each of us had our own Backend areas to workon, we first planned out what models, controllers & routes each of us will be creating before moving on to code session.
+As each of us had our own Backend areas to workon, we first planned out what models, controllers & routes each of us will be creating before moving on to code session. We also decided on which aspects of our models will be embedded or referenced.
+
+Our notes are outlined in the next section with code examples.
 
 ### Backend
 
-We had a strong start with Backend as the three of us finished the Backend within the first two days.
-
+We had a strong start as the three of us finished the Backend within the first two days. On Day one, each of us worked on our models, controller and routes. On Day 2, we helped each other test and troubleshoot bugs.
 
 ### Models
+
+**From initial notes**:
 
 > **Hike**
 > - Name | Location (lat/long)| Country | Description | Distance | Difficulty | Duration | Images | Seasons | User images (referenced) | Reviews(embedded) |Ratings (embedded)
@@ -101,29 +78,88 @@ We had a strong start with Backend as the three of us finished the Backend withi
 > - Group Name | Group Members (referenced))| Events: name, date, duration, selection of hikes (referenced) | image | User Images (embedded) | group chat (embedded)
 
 > **User**:
-> - Username | Email | Password & validation | Image | Bio | Completed Hikes(embedded) | Favourite Hikes (embedded)
+> - Username | Email | Password & validation | Image | Bio | Completed Hikes(embedded) | Favourite Hikes (embedded) | Groups Joined (referenced) 
 
 
+Each model had embedded and referenced data in them. For example, for user model I added favorited and completed as embedded data:
 
 
+        const favoriteHikesSchema = new mongoose.Schema({
+          hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true }
+        })
+
+        const completedHikesSchema = new mongoose.Schema({
+          hike: { type: mongoose.Schema.ObjectId, ref: 'Hike', required: true }
+        })
+
+        const userSchema = new mongoose.Schema({
+          username: { type: String, required: true, unique: true, maxlength: 50 },
+          email: { type: String, required: true, unique: true },
+          password: { type: String, required: true },
+          fullName: { type: String },
+          bio: { type: String },
+          profileImage: { type: String },
+          favoritedHikes: [favoriteHikesSchema], 
+          completedHikes: [completedHikesSchema]
+        }
+        )
 
 
+Andy then referenced the favorited & completed hikes in the Hike model to show a logged in user if they had taken any actions with the hike they were viewing:
+
+    hikeSchema
+      .virtual('usersFavorited', {
+        ref: 'User',
+        localField: '_id',
+        foreignField: 'favoritedHikes'
+      })
 
 
+Another example us when Kuriko created the groups schema, with members in them:
 
+    const groupMemberSchema = new mongoose.Schema({
+      user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
+    }, {
+      timestamps: true
+    })
+
+    const groupSchema = new mongoose.Schema({
+      name: { type: String, required: true, unique: true },
+      createdMember: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+      members: [ groupMemberSchema ],
+      headerImage: { type: String, required: true }, 
+      description: { type: String, required: true, maxlength: 500 },
+      userAddedImages: [ userAddedImageSchema ],
+      messages: [ groupMessageSchema ],
+      events: [ eventSchema ]
+    }, {
+      timestamps: true
+    })
+
+
+I was then able to reference the Group model, so a profile would include what groups were joined by the user:
+
+        // * for groups joined by user
+        userSchema
+          .virtual('joinedGroups', {
+            ref: 'Group',
+            localField: '_id',
+            foreignField: 'members.user'
+          })
 
 
 ### Controllers
 
-> **Hikes**:
-> - Create | Find by Id | Update | Delete | Review & Rating | Add image
+**From initial notes**:
 
-> **Groups**:
-> - Create | Find by Id | Update | Delete | Chat | Add Event
+> Create, Read, Update and Delete Methods need to be written for:
+> * Hikes, Reviews and Hike Images
+> * Groups, Group Images, Chats, Events, Members
+> * Login, Register, Profiles, user favorited Hikes and completed hikes
 
-> **User**:
 
-> - Read all users | Find by Id one User | Update User | Delete User | Add Fav & Completed Hikes | Delete Fav & Completed Hikes | Login | Register
+
+
 
 
 
@@ -168,12 +204,45 @@ We had a strong start with Backend as the three of us finished the Backend withi
 
 
 
+
+
+
 ## Wins
 
 
 
 ## Challenges
 
+
+
+
+
+
+### App Pages
+
+On Homepage, search for a country:
+
+<img src="frontend/src/styles/assets/README/hikr-home-italy.png" alt="home-page-miro" width="500" />
+
+Explore Hikes in different views:
+
+<img src="frontend/src/styles/assets/README/hikr-card.png" alt="hike-card-view" width="400" /><img src="frontend/src/styles/assets/README/hikr-list.png" alt="hike-list-view" width="400" /><img src="frontend/src/styles/assets/README/hikr-map.png" alt="hike-map-view" width="400" />
+
+Login or register to unlock more features and view your profile:
+
+<img src="frontend/src/styles/assets/README/login.png" alt="login-page" width="400" /> <img src="frontend/src/styles/assets/README/profile.png" alt="profile-page" width="400" />
+
+View Hike in detail, leave rating & reviews, add to favorites:
+
+<img src="frontend/src/styles/assets/README/hike-show-top.png" alt="hike-show-top" width="400" /> <img src="frontend/src/styles/assets/README/hike-show-bottom.png" alt="hike-show-bottom" width="400" />
+
+Join or create a group:
+
+<img src="frontend/src/styles/assets/README/group.png" alt="group-page" width="500" /> <img src="frontend/src/styles/assets/README/add-group.png" alt="add-group" width="500" />
+
+Explore other Hikr Profiles:
+
+<img src="frontend/src/styles/assets/README/profile-index.png" alt="hikr-community" width="500" />
 
 
 
