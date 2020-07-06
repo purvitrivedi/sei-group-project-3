@@ -1,4 +1,4 @@
-# General Assembly Project 2: Search + Play
+# General Assembly Project 2: Hikr
 
 **_Timeframe_**
 
