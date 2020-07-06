@@ -1,4 +1,9 @@
-# General Assembly Project 2: Hikr
+# General Assembly Project 3: Hikr
+
+**Project Members**:
+Andy Bradshaw
+Kuriko Iwai
+Purvi Trivedi
 
 **_Timeframe_**
 
@@ -285,7 +290,7 @@ While we did a great job planning as a team, it was slightly challenging as I wa
 
 **Navigating from one user profile to another**:
 
-This was an interesting challenge and I very much enjoyed solving it. 
+This was an interesting challenge and I very much enjoyed solving it.
 
 **The problem **: If a user was checking out another user and then attempted to go to their own profile from the Navbar, they couldn't as the link structure was similar: /profile/:id
 
@@ -311,9 +316,6 @@ Styling 📱: The app is slick and responsive, something we were every keen on a
 
 ## Future Improvements
 
-* Creating Group seeds with Group members: A challenge I wanted to solve but we ran out of time.
-* Events Page Styling: Make this inline-with other pages
-* Error Handling on the frontend
-
-
-
+- Creating Group seeds with Group members: A challenge I wanted to solve but we ran out of time.
+- Events Page Styling: Make this inline-with other pages
+- Error Handling on the frontend
