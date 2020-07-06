@@ -281,7 +281,7 @@ The final day was spent population the database with Hikes, Groups and Users. We
 
 **Planning**:
 
-While we did a great job planning as a team, it was a slightly challenging as I was still full trying to understand the difference between Embedded and Referenced Data. Fortunately, this was the perfect project to solidify my understanding.
+While we did a great job planning as a team, it was slightly challenging as I was still full trying to understand the difference between Embedded and Referenced Data. Fortunately, this was the perfect project to solidify my understanding in this area.
 
 **Navigating from one user profile to another**:
 
