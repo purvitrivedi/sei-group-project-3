@@ -1,9 +1,9 @@
 # General Assembly Project 3: Hikr
 
 **Project Members**:
-Andy Bradshaw
-Kuriko Iwai
-Purvi Trivedi
+* Andy Bradshaw: https://github.com/andy8radshaw
+* Kuriko Iwai: https://github.com/krik1009
+* Purvi Trivedi: https://github.com/purvitrivedi
 
 **_Timeframe_**
 
@@ -186,7 +186,7 @@ For Authentication, I wanted a user to design the process like [Ableton's](https
 
 <img src="frontend/src/styles/assets/README/login.png" alt="login-page" />
 
-To do this I ensured that the register and login controllers, both returned a token on the backend. On the frontend, once a user registered - I looged them and sent them to the Hikes page:
+To do this I ensured that the register and login controllers, both returned a token on the backend. On the frontend, once a user registered - I logged them in and sent them to the Hikes page:
 
     handleSubmit = async (event, path) => {
       event.preventDefault()
@@ -272,7 +272,7 @@ An interesting thing we did for Average rating is use a **callback function**. T
 
 ## Seeding (Day 9)
 
-The final day was spent population the database with Hikes, Groups and Users. We ensured that Hikes and Groups were created by random users by writing this script in seeds.js:
+The final day was spent populating the database with Hikes, Groups and Users. We ensured that Hikes and Groups were created by random users by writing this script in seeds.js:
 
     const hikesWithUsers = hikeData.map(hike => {
       return { ...hike, user: createdUsers[Math.floor(Math.random() * createdUsers.length)]._id }
