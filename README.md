@@ -32,9 +32,9 @@ A group project to design a full-stack React app using Node.js, Express & MongoD
 
 # Hikr
 
-A MERN-Stack Hike search & community app. Visitors can look up beautiful hikes in Europe and once registered they can leave reviews, ratings & add them to favourites or completed Hikes.
+A MERN-Stack Hike search & community app. Visitors can look up beautiful hikes in Europe and once registered they can leave reviews, ratings & add them to their favorites or completed Hikes.
 
-Registered users can also create & join Hiking Communities where they can chat with other members & create hiking events.
+Registered users can also create & join hiking Groups where they can chat with other members & create hiking events.
 
 ![Hikr Home Page](frontend/src/styles/assets/README/hikr-home.png)
 
@@ -60,23 +60,23 @@ https://github.com/purvitrivedi/sei-group-project-3
 
 ## Planning
 
-Since we were three group members, each of us decided to take ownership (Backend & Frontend) of the app. Andy did Hikes, Kuriko did Groups and I did user Authentication, Profiles & App Navigation.
+Since we were three group members, each of us decided to take ownership of one Backend & Frontend aspect of the app. Andy did Hikes, Kuriko did Groups and I did user Authentication, Profiles & App Navigation.
 
-### App Layout
+### Wireframe
 
-Like project-2, we also planned out the user journey of Hikr on Miro.
+Like project-2, we also planned out the basic look of Hikr on Miro.
 
 <img src="frontend/src/styles/assets/README/hikr-home-miro.png" alt="home-page-miro" width="400" /> <img src="frontend/src/styles/assets/README/hike-index-miro.png" alt="hikr-index-miro" width="400" /> <img src="frontend/src/styles/assets/README/hike-show-miro.png" alt="hike-show-miro" width="400" /> <img src="frontend/src/styles/assets/README/login-miro.png" alt="login-miro" width="400" /> <img src="frontend/src/styles/assets/README/profile-miro.png" alt="profile-miro" width="400" /> <img src="frontend/src/styles/assets/README/group-miro.png" alt="group-miro" width="400" />
 
 # Process
 
-As each of us had our own Backend areas to workon, we first planned out what models, controllers & routes each of us will be creating before moving on to code session. We also decided on which aspects of our models will be embedded or referenced.
+As each of us had our own Backend areas to work on, we first planned out what models, controllers & routes each of us will be creating before moving on to the code session. We also decided on which aspects of our models will be embedded or referenced.
 
 Our notes are outlined in the next section with code examples.
 
 ## Backend (Day 1 to 3)
 
-We had a strong start as the three of us finished the Backend within the first two days. On Day one, each of us worked on our models, controller and routes. On Day 2, we helped each other test and troubleshoot bugs.
+We had a strong start as the three of us finished the Backend by the end of Day 3. On Day 2, each of us worked on our models, controller and routes. On Day 3, we helped each other test and troubleshoot bugs.
 
 ### Models
 
@@ -156,6 +156,7 @@ I was then able to reference the Group model, so a profile would include the lis
 
 ### Controllers
 
+**From initial notes**:
 > Create, Read, Update and Delete Methods were written for:
 >
 > - Hikes, Reviews and Hike Images
@@ -177,16 +178,16 @@ Since we had a lot of embedded and referenced data, we used array methods such a
 
 ## Frontend (Day 4 to 8)
 
-On day 4, we moved on to Frontend after setting up the React App, installing HTTP proxy middleware and Nodemon, we began our work on Hikes(Andy), Groups (Kuriko) and Users (me!).
+On day 4, we moved on to Frontend. After setting up the React App, installing HTTP proxy middleware and Nodemon, we began our work on Hikes(Andy), Groups(Kuriko) and Users(me!).
 
 For Authentication, I wanted a user to design the process like [Ableton's](https://www.ableton.com/en/login/), which meant:
 
 - The Login and Register options were on the same page and;
-- The used for logged in automatically after they registered.
+- The used was logged in automatically after they registered.
 
 <img src="frontend/src/styles/assets/README/login.png" alt="login-page" />
 
-To do this I ensured that the register and login controllers, both returned a token on the backend. On the frontend, once a user registered - I logged them in and sent them to the Hikes page:
+To do this I ensured that both register and login controllers returned a token on the backend. On the frontend, once a user registered - I logged them in and sent them to the Hikes Index page:
 
     handleSubmit = async (event, path) => {
       event.preventDefault()
@@ -201,14 +202,14 @@ To do this I ensured that the register and login controllers, both returned a to
       }
     }
 
-For User Profile, I took the opportunity to explore **conditional rendering**. This meant:
+For User Profile, I took the opportunity to explore **conditional rendering** further. This meant:
 
 - The user would never the leave the page when they wanted to make edits.
-- The page would show different things based on a users actions
+- The page would show different things based on a user's actions
 
  <img src="frontend/src/styles/assets/README/profile.png" alt="profile-page" />
 
-For example, on for the Bio on the user profile page:
+For example, on for the Bio on the user's profile page:
 
     <div className="columns is-multiline">
       <h1 className="subtitle column is-full">About me...</h1>
@@ -238,7 +239,7 @@ For example, on for the Bio on the user profile page:
         </div>}
     </div>
 
-The user profile page also showed different things based on whether the user was the owner of the profile. Fo example, for completed Hikes, the owner got an option to add Hikes from their profile page:
+The profile page also showed different things based on whether the user was the owner of the profile. For example, the owner got an option to add more completed hikes from their profile page:
 
     <div className="column columns is-multiline"
     //* if user is the owner, give option to add Hikes
@@ -253,7 +254,7 @@ Other than working on app navigation, I also pair programmed with Andy on:
 - Adding "Add to Favorites" button & 'Average Rating" on Hike Show Page
 - Error handling and styling of forms on Hike and User profile pages.
 
-An interesting thing we did for Average rating is use a **callback function**. This is so the average rating would not be calculated until we posted the rating AND recieved the updated Hike data from the backend.
+For Average ratingm we used a **callback function**. This ensured the average rating would not be calculated until we posted the rating AND recieved the updated Hike data from the backend.
 
     handleSubmitReview = async (event, rating, text) => {
       event.preventDefault()
@@ -292,7 +293,7 @@ While we did a great job planning as a team, it was slightly challenging as I wa
 
 This was an interesting challenge and I very much enjoyed solving it.
 
-**The problem **: If a user was checking out another user and then attempted to go to their own profile from the Navbar, they couldn't as the link structure was similar: /profile/:id
+**The problem **: If a user was a different user's profile page and then attempted to go to their own profile from the Navbar, they couldn't as the link structure was similar: /profile/:id. This meant that while the link would change in the address bar, the page would not re-render.
 
 **Solution**: Using <code>componentDidUpdate</code> on the Profile component:
 
@@ -312,7 +313,13 @@ Planning ✍️ : This one comes in under challenges and wins! While getting the
 
 Features ✨: I'm very happy with the amount of work we got done in 9 days. The app offers tons of functionality whilst still having a strong user journey.
 
-Styling 📱: The app is slick and responsive, something we were every keen on acheieving since Hiking websites don't usually have "beautiful" styling.
+Styling 📱: The app is slick and responsive, something we were very keen on acheieving since Hiking websites don't usually have "beautiful" styling.
+
+## Key Learnings
+
+* When to use Embedded vs Referenced data
+* How to use callback function & ComponentDidUpdate in React
+* How to working with a team-member who works in a different time-zone - something that is very much possible as companies moves towards remote working.
 
 ## Future Improvements
 
