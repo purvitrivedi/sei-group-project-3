@@ -295,7 +295,7 @@ While we did a great job planning as a team, it was slightly challenging as I wa
 
 This was an interesting challenge and I very much enjoyed solving it.
 
-**The problem **: If a user was a different user's profile page and then attempted to go to their own profile from the Navbar, they couldn't as the link structure was similar: /profile/:id. This meant that while the link would change in the address bar, the page would not re-render.
+**The problem**: If a user was a different user's profile page and then attempted to go to their own profile from the Navbar, they couldn't as the link structure was similar: /profile/:id. This meant that while the link would change in the address bar, the page would not re-render.
 
 **Solution**: Using <code>componentDidUpdate</code> on the Profile component:
 
