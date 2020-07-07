@@ -62,7 +62,7 @@ https://github.com/purvitrivedi/sei-group-project-3
 
 Since we were three group members, each of us decided to take ownership of one Backend & Frontend aspect of the app. Andy did Hikes, Kuriko did Groups and I did user Authentication, Profiles & App Navigation. We used Trello to organise what each of us should aim to finish on each day:
 
-<img src="frontend/src/styles/assets/README/trello.png" alt="trello board" width="500px">
+<img src="frontend/src/styles/assets/README/trello.png" alt="trello board" />
 
 ### Wireframe
 
