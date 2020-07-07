@@ -60,7 +60,9 @@ https://github.com/purvitrivedi/sei-group-project-3
 
 ## Planning
 
-Since we were three group members, each of us decided to take ownership of one Backend & Frontend aspect of the app. Andy did Hikes, Kuriko did Groups and I did user Authentication, Profiles & App Navigation.
+Since we were three group members, each of us decided to take ownership of one Backend & Frontend aspect of the app. Andy did Hikes, Kuriko did Groups and I did user Authentication, Profiles & App Navigation. We used Trello to organise what each of us should aim to finish on each day:
+
+<img src="frontend/src/styles/assets/README/trello.png" alt="trello board" width="500px">
 
 ### Wireframe
 
@@ -70,7 +72,7 @@ Like project-2, we also planned out the basic look of Hikr on Miro.
 
 # Process
 
-As each of us had our own Backend areas to work on, we first planned out what models, controllers & routes each of us will be creating before moving on to the code session. We also decided on which aspects of our models will be embedded or referenced.
+As each of us had our Backend areas to work on, we first planned out what models, controllers & routes each of us will be writing before moving on to the code session. We also decided on which aspects of our models will be embedded or referenced.
 
 Our notes are outlined in the next section with code examples.
 
@@ -112,7 +114,7 @@ Each model had embedded and referenced data in them. For example, for user model
         }
         )
 
-Andy then referenced the favorited & completed hikes in the Hike model to show a logged in user if they had taken any actions with the hike they were viewing:
+Andy then referenced the favorited & completed hikes in the Hike model to show a logged-in user if they had taken any actions with the hike they were viewing:
 
     hikeSchema
       .virtual('usersFavorited', {
@@ -204,7 +206,7 @@ To do this I ensured that both register and login controllers returned a token o
 
 For User Profile, I took the opportunity to explore **conditional rendering** further. This meant:
 
-- The user would never the leave the page when they wanted to make edits.
+- The user would never leave the page when they wanted to make edits.
 - The page would show different things based on a user's actions
 
  <img src="frontend/src/styles/assets/README/profile.png" alt="profile-page" />
@@ -242,7 +244,7 @@ For example, on for the Bio on the user's profile page:
 The profile page also showed different things based on whether the user was the owner of the profile. For example, the owner got an option to add more completed hikes from their profile page:
 
     <div className="column columns is-multiline"
-    //* if user is the owner, give option to add Hikes
+    //* if the user is the owner, give option to add Hikes
 
       {isOwner(profile._id) &&_id} handleSubmit={this.addCompHike} /></div>
       <div className="completed">{completedHikes}</div>
@@ -254,7 +256,7 @@ Other than working on app navigation, I also pair programmed with Andy on:
 - Adding "Add to Favorites" button & 'Average Rating" on Hike Show Page
 - Error handling and styling of forms on Hike and User profile pages.
 
-For Average ratingm we used a **callback function**. This ensured the average rating would not be calculated until we posted the rating AND recieved the updated Hike data from the backend.
+For Average ratings, we used a **callback function**. This ensured the average rating would not be calculated until we posted the rating AND received the updated Hike data from the backend.
 
     handleSubmitReview = async (event, rating, text) => {
       event.preventDefault()
@@ -313,13 +315,13 @@ Planning ✍️ : This one comes in under challenges and wins! While getting the
 
 Features ✨: I'm very happy with the amount of work we got done in 9 days. The app offers tons of functionality whilst still having a strong user journey.
 
-Styling 📱: The app is slick and responsive, something we were very keen on acheieving since Hiking websites don't usually have "beautiful" styling.
+Styling 📱: The app is slick and responsive, something we were very keen on achieving since Hiking websites don't usually have "beautiful" styling.
 
 ## Key Learnings
 
 * When to use Embedded vs Referenced data
 * How to use callback function & ComponentDidUpdate in React
-* How to working with a team-member who works in a different time-zone - something that is very much possible as companies moves towards remote working.
+* How to working with a team member who works in a different time-zone - something that is very much possible as companies move towards remote working.
 
 ## Future Improvements
 
