@@ -28,10 +28,6 @@
         "properties": "never"
       }
     ],
-    "comma-dangle": [
-      "error",
-      "never"
-    ],
     "func-call-spacing": [
       "error",
       "never"
@@ -53,13 +49,6 @@
       "always"
     ],
     "eqeqeq": "warn",
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
     "key-spacing": [
       "error",
       {

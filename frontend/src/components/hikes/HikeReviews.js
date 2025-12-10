@@ -1,56 +1,61 @@
-import React from 'react'
-import Moment from 'react-moment'
-import 'moment-timezone'
-import ReactStars from "react-rating-stars-component"
+import React from "react";
+import Moment from "react-moment";
+import "moment-timezone";
+import ReactStars from "react-rating-stars-component";
 
-import { isOwner, getUserId, isAuthenticated } from '../../lib/auth'
-import { getUser } from '../../lib/api'
-
+import { isOwner, getUserId, isAuthenticated } from "../../lib/auth";
+import { getUser } from "../../lib/api";
 
 class HikeReviews extends React.Component {
   state = {
-    profileImage: '',
-    rating: '',
-    text: '',
-    newDate: ''
-  }
-
+    profileImage: "",
+    rating: "",
+    text: "",
+    newDate: "",
+  };
 
   async componentDidMount() {
     try {
-      const userId = getUserId()
-      const loggedIn = await isAuthenticated()
+      const userId = getUserId();
+      const loggedIn = await isAuthenticated();
       if (!loggedIn) {
-        this.setState({ profileImage: '' })
+        this.setState({ profileImage: "" });
       } else {
-        const res = await getUser(userId)
-        this.setState({ profileImage: res.data.profileImage })
+        const res = await getUser(userId);
+        this.setState({ profileImage: res.data.profileImage });
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
-  handleChange = event => {
-    const text = event.target.value
-    this.setState({ text })
-  }
-  
-  handleRatingChange = rating => {
-    this.setState({ rating })
-  }
+  handleChange = (event) => {
+    const text = event.target.value;
+    this.setState({ text });
+  };
+
+  handleRatingChange = (rating) => {
+    this.setState({ rating });
+  };
 
   handleSubmit = (event, rating, text) => {
-    this.props.handleSubmitReview(event, rating, text)
-    this.setState({ rating: this.props.reviewRating, text: this.props.reviewText })
-  }
+    this.props.handleSubmitReview(event, rating, text);
+    this.setState({
+      rating: this.props.reviewRating,
+      text: this.props.reviewText,
+    });
+  };
 
   render() {
-    const { handleReviewDelete, reviews, errors } = this.props
+    const { handleReviewDelete, reviews, errors } = this.props;
     return (
       <>
-        {isAuthenticated() &&
-          <form onSubmit={(event) => { this.handleSubmit(event, this.state.rating, this.state.text) }}>
+        {isAuthenticated() && (
+          <form
+            onSubmit={(event) => {
+              this.handleSubmit(event, this.state.rating, this.state.text);
+            }}
+          >
             <h1 className="hikr-title">Add a HIKR Review:</h1>
             <br />
             <article className="media">
@@ -68,12 +73,15 @@ class HikeReviews extends React.Component {
                       name="text"
                       onChange={this.handleChange}
                       value={this.state.text}
-                    >
-                    </textarea>
+                    ></textarea>
                   </p>
-                  {errors && !errors.text && <small className="help is-danger">Review is required</small>}
+                  {errors && !errors.text && (
+                    <small className="help is-danger">Review is required</small>
+                  )}
                 </div>
-                {errors && !errors.rating && <small className="help is-danger">Rating is required</small>}
+                {errors && !errors.rating && (
+                  <small className="help is-danger">Rating is required</small>
+                )}
 
                 <div className="level">
                   <div className="level-left">
@@ -86,8 +94,8 @@ class HikeReviews extends React.Component {
                         name="rating"
                         value={parseInt(this.state.rating)}
                         // onChange={this.handleChange}
-                        onChange={newRating => {
-                          this.handleRatingChange(newRating)
+                        onChange={(newRating) => {
+                          this.handleRatingChange(newRating);
                         }}
                         filledIcon={<i className="fas fa-mountain" />}
                         emptyIcon={<i className="fas fa-mountain" />}
@@ -98,18 +106,24 @@ class HikeReviews extends React.Component {
                 <nav className="level">
                   <div className="level-left">
                     <div className="level-item">
-                      <button type="submit" className="button hike-show-button is-success">Submit Review!</button>
+                      <button
+                        type="submit"
+                        className="button hike-show-button is-success"
+                      >
+                        Submit Review!
+                      </button>
                     </div>
                   </div>
                 </nav>
                 <hr />
               </div>
             </article>
-          </form>}
+          </form>
+        )}
         <article className="media">
           <h1 className="hikr-title">HIKR Reviews:</h1>
         </article>
-        {reviews.map(review => {
+        {reviews.map((review) => {
           return (
             <article key={review._id} className="media">
               <figure className="media-left">
@@ -120,7 +134,10 @@ class HikeReviews extends React.Component {
               <div className="media-content">
                 <div className="content">
                   <div>
-                    <strong>{review.user.fullName}</strong> <small><Moment fromNow >{review.createdAt}</Moment></small>
+                    <strong>{review.user.fullName}</strong>{" "}
+                    <small>
+                      <Moment fromNow>{review.createdAt}</Moment>
+                    </small>
                     <ReactStars
                       count={5}
                       size={12}
@@ -137,15 +154,17 @@ class HikeReviews extends React.Component {
               </div>
               <div className="media-right">
                 <form onSubmit={handleReviewDelete} id={review._id}>
-                  {isOwner(review.user._id) && <button type="submit" className="delete"></button>}
+                  {isOwner(review.user._id) && (
+                    <button type="submit" className="delete"></button>
+                  )}
                 </form>
               </div>
             </article>
-          )
+          );
         })}
       </>
-    )
+    );
   }
 }
 
-export default HikeReviews
+export default HikeReviews;

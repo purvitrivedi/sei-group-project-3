@@ -9,7 +9,6 @@ const GroupShowInformation = ({
   photos,
   events,
   handleViewChange,
-  sendEmail,
 }) => {
   return (
     <div className="GroupShow container">

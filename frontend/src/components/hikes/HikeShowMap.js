@@ -1,11 +1,10 @@
-import React from 'react'
-import MapGL, { Popup } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import React from "react";
+import MapGL, { Popup } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 class HikeMap extends React.Component {
-
   render() {
-    const hike = this.props.hike
+    const hike = this.props.hike;
     return (
       <div className="hike-show-map">
         <MapGL
@@ -17,21 +16,20 @@ class HikeMap extends React.Component {
           zoom={11}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         >
-
           <div>
-            <Popup
-            latitude={hike.lat}
-            longitude={hike.lon}
-            closeButton={false}
-            >
-              <h1 className="popup-text">{hike.name}, {hike.country}<span role="img" aria-label="marker">📍</span></h1>
+            <Popup latitude={hike.lat} longitude={hike.lon} closeButton={false}>
+              <h1 className="popup-text">
+                {hike.name}, {hike.country}
+                <span role="img" aria-label="marker">
+                  📍
+                </span>
+              </h1>
             </Popup>
           </div>
-
         </MapGL>
       </div>
-    )
+    );
   }
 }
 
-export default HikeMap
+export default HikeMap;

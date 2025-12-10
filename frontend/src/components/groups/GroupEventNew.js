@@ -35,9 +35,9 @@ class GroupEventNew extends React.Component {
   };
 
   handleHikeOptions = () => {
-    let options = [];
+    const options = [];
     this.state.hikes.map((hike) => {
-      let obj = { value: "", label: "" };
+      const obj = { value: "", label: "" };
       obj.value = hike._id;
       obj.label = hike.name;
       return options.push(obj);

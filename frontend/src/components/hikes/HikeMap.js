@@ -1,7 +1,7 @@
-import React from 'react'
-import MapGL, { Popup, NavigationControl } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import { Link } from 'react-router-dom'
+import React from "react";
+import MapGL, { Popup, NavigationControl } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { Link } from "react-router-dom";
 
 class HikeMap extends React.Component {
   state = {
@@ -10,20 +10,20 @@ class HikeMap extends React.Component {
       longitude: 5,
       zoom: 4,
       bearing: 0,
-      pitch: 0
-    }
-  }
+      pitch: 0,
+    },
+  };
 
-  handlePopupShow = event => {
+  handlePopupShow = (event) => {
     if (event.currentTarget.className === "small-popup") {
-      event.currentTarget.className = "large-popup"
+      event.currentTarget.className = "large-popup";
     } else {
-      event.currentTarget.className = "small-popup"
+      event.currentTarget.className = "small-popup";
     }
-  }
+  };
 
   render() {
-    const hikes = this.props.hikes
+    const hikes = this.props.hikes;
     return (
       <div className="HikeMap box">
         <MapGL
@@ -31,11 +31,11 @@ class HikeMap extends React.Component {
           width="95vw"
           height="95vh"
           mapStyle="mapbox://styles/mapbox/outdoors-v11"
-          onViewportChange={viewport => this.setState({ viewport })}
+          onViewportChange={(viewport) => this.setState({ viewport })}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
           scrollZoom={false}
         >
-          {hikes.map(hike => {
+          {hikes.map((hike) => {
             return (
               <div key={`popup${hike._id}`}>
                 <Popup
@@ -43,12 +43,27 @@ class HikeMap extends React.Component {
                   longitude={hike.lon}
                   closeButton={false}
                 >
-                  <div className="small-popup" onClick={this.handlePopupShow} >
-                    <h1>{hike.name}, <span role="img" aria-label="marker">📍</span></h1>
-                    <h2>{hike.country} - {hike.distance}, {hike.timeToComplete}</h2>
-                    <h3>{hike.description.length > 150 ? hike.description.substr(0, 150) + '...' : hike.description}</h3>
+                  <div className="small-popup" onClick={this.handlePopupShow}>
+                    <h1>
+                      {hike.name},{" "}
+                      <span role="img" aria-label="marker">
+                        📍
+                      </span>
+                    </h1>
+                    <h2>
+                      {hike.country} - {hike.distance}, {hike.timeToComplete}
+                    </h2>
+                    <h3>
+                      {hike.description.length > 150
+                        ? hike.description.substr(0, 150) + "..."
+                        : hike.description}
+                    </h3>
                     <div className="popup-image">
-                      <img className="index-image" src={hike.images[0]} alt={hike.name} />
+                      <img
+                        className="index-image"
+                        src={hike.images[0]}
+                        alt={hike.name}
+                      />
                     </div>
                     <Link to={`/hikes/${hike._id}`}>
                       <p>See more...</p>
@@ -56,14 +71,17 @@ class HikeMap extends React.Component {
                   </div>
                 </Popup>
               </div>
-            )
+            );
           })}
-          <NavigationControl showZoom position='top-left' className="map-controls" />
+          <NavigationControl
+            showZoom
+            position="top-left"
+            className="map-controls"
+          />
         </MapGL>
       </div>
-
-    )
+    );
   }
 }
 
-export default HikeMap
+export default HikeMap;

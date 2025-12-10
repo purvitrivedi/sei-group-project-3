@@ -1,10 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const ProfileEdit = () => {
-return (
-  <h1>File not needed</h1>
-)
-}
+  return <h1>File not needed</h1>;
+};
 
-
-export default ProfileEdit
+export default ProfileEdit;

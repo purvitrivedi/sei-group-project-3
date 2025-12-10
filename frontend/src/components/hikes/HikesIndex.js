@@ -1,56 +1,60 @@
-import React from 'react'
+import React from "react";
 
-import { getAllHikes } from '../../lib/api'
+import { getAllHikes } from "../../lib/api";
 
-import HikeListCard from './HikeListCard'
-import HikeCard from './HikeCard'
-import HikeMap from './HikeMap'
+import HikeListCard from "./HikeListCard";
+import HikeCard from "./HikeCard";
+import HikeMap from "./HikeMap";
 
 class HikesIndex extends React.Component {
   state = {
     hikes: null,
-    search: '',
+    search: "",
     hideMap: true,
     hideGrid: false,
-    hideList: true
-  }
+    hideList: true,
+  };
 
   async componentDidMount() {
     try {
-      const res = await getAllHikes()
-      const search = this.props.location.search.split('=')[1]
-      this.setState({ hikes: res.data, search })
+      const res = await getAllHikes();
+      const search = this.props.location.search.split("=")[1];
+      this.setState({ hikes: res.data, search });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
-
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   filteredHikes = () => {
-    const { hikes, search } = this.state
-    const regexp = new RegExp(search, 'i')
-    return hikes.filter(hike => {
-      return regexp.test(hike.name) || regexp.test(hike.country) || regexp.test(hike.difficulty) || regexp.test(hike.seasons)
-    })
-  }
+    const { hikes, search } = this.state;
+    const regexp = new RegExp(search, "i");
+    return hikes.filter((hike) => {
+      return (
+        regexp.test(hike.name) ||
+        regexp.test(hike.country) ||
+        regexp.test(hike.difficulty) ||
+        regexp.test(hike.seasons)
+      );
+    });
+  };
 
-  handleViewChange = event => {
-    event.preventDefault()
-    if (event.currentTarget.name === 'showList') {
-      this.setState({ hideList: false, hideGrid: true, hideMap: true })
-    } else if (event.currentTarget.name === 'showGrid') {
-      this.setState({ hideList: true, hideGrid: false, hideMap: true })
+  handleViewChange = (event) => {
+    event.preventDefault();
+    if (event.currentTarget.name === "showList") {
+      this.setState({ hideList: false, hideGrid: true, hideMap: true });
+    } else if (event.currentTarget.name === "showGrid") {
+      this.setState({ hideList: true, hideGrid: false, hideMap: true });
     } else {
-      this.setState({ hideList: true, hideGrid: true, hideMap: false })
+      this.setState({ hideList: true, hideGrid: true, hideMap: false });
     }
-  }
+  };
 
   render() {
-    if (!this.state.hikes) return null
+    if (!this.state.hikes) return null;
 
     return (
       <div className="HikesIndex">
@@ -76,11 +80,10 @@ class HikesIndex extends React.Component {
               <button
                 className="button"
                 name="showList"
-                onClick={this.handleViewChange}>
+                onClick={this.handleViewChange}
+              >
                 <span className="icon is-small">
-                  <i
-                    className="fas fa-list"
-                  ></i>
+                  <i className="fas fa-list"></i>
                 </span>
               </button>
             </p>
@@ -88,11 +91,10 @@ class HikesIndex extends React.Component {
               <button
                 className="button"
                 name="showGrid"
-                onClick={this.handleViewChange}>
+                onClick={this.handleViewChange}
+              >
                 <span className="icon is-small">
-                  <i
-                    className="fas fa-th"
-                  ></i>
+                  <i className="fas fa-th"></i>
                 </span>
               </button>
             </p>
@@ -100,45 +102,51 @@ class HikesIndex extends React.Component {
               <button
                 className="button"
                 name="showMap"
-                onClick={this.handleViewChange}>
+                onClick={this.handleViewChange}
+              >
                 <span className="icon is-small">
-                  <i
-                    className="fas fa-map-pin"
-                  ></i>
+                  <i className="fas fa-map-pin"></i>
                 </span>
               </button>
             </p>
           </div>
-
         </div>
-        <section className={`${this.state.hideList ? 'section Hike-list is-hidden' : 'section Hike-list'}`}>
+        <section
+          className={`${
+            this.state.hideList
+              ? "section Hike-list is-hidden"
+              : "section Hike-list"
+          }`}
+        >
           <div className="colmns is-multiline">
-            {this.filteredHikes().map(hike => {
-              return (
-                <HikeListCard key={`List${hike._id}`} {...hike} />
-              )
+            {this.filteredHikes().map((hike) => {
+              return <HikeListCard key={`List${hike._id}`} {...hike} />;
             })}
           </div>
         </section>
-        <section className={`${this.state.hideGrid ? 'section Hike-grid is-hidden' : 'Hike-grid'}`}>
+        <section
+          className={`${
+            this.state.hideGrid ? "section Hike-grid is-hidden" : "Hike-grid"
+          }`}
+        >
           <div className="container">
             <div className="columns is-multiline">
-              {this.filteredHikes().map(hike => {
-                return (
-                  <HikeCard key={`Grid${hike._id}`} {...hike} />
-                )
+              {this.filteredHikes().map((hike) => {
+                return <HikeCard key={`Grid${hike._id}`} {...hike} />;
               })}
             </div>
           </div>
         </section>
-        <section className={`${this.state.hideMap ? 'section Hike-map is-hidden' : 'Hike-map'}`}>
-          <HikeMap
-            hikes={this.filteredHikes()}
-          />
+        <section
+          className={`${
+            this.state.hideMap ? "section Hike-map is-hidden" : "Hike-map"
+          }`}
+        >
+          <HikeMap hikes={this.filteredHikes()} />
         </section>
       </div>
-    )
+    );
   }
 }
 
-export default HikesIndex
+export default HikesIndex;
