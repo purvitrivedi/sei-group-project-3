@@ -1,83 +1,93 @@
-import React from 'react'
-import { registerUser } from '../../lib/api'
-import { setToken } from '../../lib/auth'
-
+import React from "react";
+import { registerUser } from "../../lib/api";
+import { setToken } from "../../lib/auth";
 
 class Register extends React.Component {
-
   state = {
     formData: {
-      username: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
     },
-    errors: {}
-  }
-
+    errors: {},
+  };
 
   handleChange = (e) => {
-    const formData = { ...this.state.formData, [e.target.name]: e.target.value }
-    this.setState({ formData })
-  }
+    const formData = {
+      ...this.state.formData,
+      [e.target.name]: e.target.value,
+    };
+    this.setState({ formData });
+  };
 
   handleSubmit = async (event, path) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const res = await registerUser(this.state.formData)
-      console.log(res.data.token)
-      setToken(res.data.token)
-      path.push('/hikes')
-
+      const res = await registerUser(this.state.formData);
+      console.log(res);
+      setToken(res.data.token);
+      path.push("/hikes");
     } catch (err) {
-      this.setState({ errors: err.response.data.errors })
-
+      this.setState({ errors: err.response.data.errors });
     }
-  }
-
+  };
 
   render() {
-
-    const { formData, errors } = this.state
+    const { formData, errors } = this.state;
     return (
       <div className="register">
         <section className="section">
           <div className="container box ">
-            <h1 className="title"><i className="fas fa-mountain mountain"></i> Register <i className="fas fa-mountain mountain"></i></h1>
+            <h1 className="title">
+              <i className="fas fa-mountain mountain"></i> Register{" "}
+              <i className="fas fa-mountain mountain"></i>
+            </h1>
             <hr />
             <div className="columns">
-              <form onSubmit={(event) => this.handleSubmit(event, this.props.history)} className="column">
+              <form
+                onSubmit={(event) =>
+                  this.handleSubmit(event, this.props.history)
+                }
+                className="column"
+              >
                 <div className="field">
                   <label className="label">Username</label>
                   <div className="control">
                     <input
-                      className={`input ${errors.username ? 'is-danger' : ''}`}
+                      className={`input ${errors.username ? "is-danger" : ""}`}
                       placeholder="Username"
                       name="username"
                       onChange={this.handleChange}
                       value={formData.username}
                     />
                   </div>
-                  {errors.username && <small className="help is-danger">Username is required</small>}
+                  {errors.username && (
+                    <small className="help is-danger">
+                      Username is required
+                    </small>
+                  )}
                 </div>
                 <div className="field">
                   <label className="label">Email</label>
                   <div className="control">
                     <input
-                      className={`input ${errors.email ? 'is-danger' : ''}`}
+                      className={`input ${errors.email ? "is-danger" : ""}`}
                       placeholder="Email"
                       name="email"
                       onChange={this.handleChange}
                       value={formData.email}
                     />
                   </div>
-                  {errors.email && <small className="help is-danger">Email is required</small>}
+                  {errors.email && (
+                    <small className="help is-danger">Email is required</small>
+                  )}
                 </div>
                 <div className="field">
                   <label className="label">Password</label>
                   <div className="control">
                     <input
-                      className={`input ${errors.password ? 'is-danger' : ''}`}
+                      className={`input ${errors.password ? "is-danger" : ""}`}
                       type="password"
                       placeholder="Password"
                       name="password"
@@ -85,35 +95,44 @@ class Register extends React.Component {
                       value={formData.password}
                     />
                   </div>
-                  {errors.password && <small className="help is-danger">Password is required</small>}
+                  {errors.password && (
+                    <small className="help is-danger">
+                      Password is required
+                    </small>
+                  )}
                 </div>
                 <div className="field">
                   <label className="label">Password Confirmation</label>
                   <div className="control">
                     <input
                       type="password"
-                      className={`input ${errors.passwordConfirmation ? 'is-danger' : ''}`}
+                      className={`input ${
+                        errors.passwordConfirmation ? "is-danger" : ""
+                      }`}
                       placeholder="Password Confirmation"
                       name="passwordConfirmation"
                       onChange={this.handleChange}
                       value={formData.passwordConfirmation}
                     />
                   </div>
-                  {errors.passwordConfirmation && <small className="help is-danger">Passwords do not match</small>}
+                  {errors.passwordConfirmation && (
+                    <small className="help is-danger">
+                      Passwords do not match
+                    </small>
+                  )}
                 </div>
                 <div className="field">
-                  <button
-                    type="submit"
-                    className="button is-fullwidth">Register</button>
+                  <button type="submit" className="button is-fullwidth">
+                    Register
+                  </button>
                 </div>
               </form>
-
             </div>
           </div>
         </section>
       </div>
-    )
+    );
   }
 }
 
-export default Register
+export default Register;

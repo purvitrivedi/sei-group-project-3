@@ -12,7 +12,7 @@
     "eslint:recommended",
     "plugin:react/recommended"
   ],
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 7,
@@ -69,13 +69,9 @@
     "no-console": "off",
     "no-fallthrough": "warn",
     "prefer-const": "error",
-    "quotes": [
-      "error",
-      "single"
-    ],
     "semi": [
       "error",
-      "never"
+      "always"
     ],
     "react/prop-types": [
       0

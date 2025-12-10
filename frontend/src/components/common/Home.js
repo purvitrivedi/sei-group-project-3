@@ -1,20 +1,19 @@
-import React from 'react'
+import React from "react";
 // import { Link } from 'react-router-dom'
 
 class Home extends React.Component {
   state = {
-    searchTerm: ''
-  }
-
+    searchTerm: "",
+  };
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-  handleSubmit = event => {
-    event.preventDefault()
-    this.props.history.push(`/hikes?searchQuery=${this.state.searchTerm}`)
-  }
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.props.history.push(`/hikes?searchQuery=${this.state.searchTerm}`);
+  };
 
   render() {
     return (
@@ -25,7 +24,8 @@ class Home extends React.Component {
             <div className="columns">
               <form
                 onSubmit={this.handleSubmit}
-                className="column is-half is-offset-one-quarter search-section">
+                className="column is-half is-offset-one-quarter search-section"
+              >
                 <div className="field searchbar">
                   <div className="control">
                     <input
@@ -39,16 +39,19 @@ class Home extends React.Component {
                   </div>
                 </div>
                 <div className="field search-button">
-                  <input type="submit" className="button is-rounded is-primary" value="Go!"/>
+                  <input
+                    type="submit"
+                    className="button is-rounded is-primary"
+                    value="Go!"
+                  />
                 </div>
               </form>
             </div>
           </div>
         </div>
       </section>
-    )
+    );
   }
-
 }
 
-export default Home
+export default Home;
